@@ -1,0 +1,47 @@
+body {
+ line-height: 1.2;
+ background: #DCDCDC;
+}
+#pagebox {
+ background: #ffffff;
+ margin:50px;
+ max-width: 800px;
+ margin: 3% auto;
+ margin-bottom: 10%;
+ padding: 0 1em 0 1em;
+}
+#quotebox {
+ background: #f9f9f9;
+ border-left: 10px solid #ccc;
+ margin: 1.5em 10px;
+ padding: 0.5em 10px;
+ quotes: "\201C""\201D""\2018""\2019";
+}
+#quotebox:before {
+ color: #ccc;
+ content: open-quote;
+ font-size: 4em;
+ line-height: 0.1em;
+ margin-right: 0.25em;
+ vertical-align: -0.4em;
+}
+#quotebox p {
+ display: inline;
+}
+
+.divTable{
+	display: table;
+	width: 100%;
+}
+.divTableRow {
+	display: table-row;
+}
+.divTableCell{
+	border: 0px solid #999999;
+	display: table-cell;
+	padding: 3px 10px;
+  vertical-align: text-top;
+}
+.divTableBody {
+	display: table-row-group;
+}
