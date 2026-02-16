@@ -1,0 +1,157 @@
+{
+  "dimensions": ["Exit", "Voice", "Virtue", "Consequentialist", "Deontological"],
+  "archetypes": {
+    "exit":  ["Legalist", "Contrarian", "Hacker"],
+    "voice": ["Holy Warrior", "Operator", "Investigator"]
+  },
+  "archetypePages": {
+    "Legalist": "legalist.html",
+    "Contrarian": "contrarian.html",
+    "Hacker": "hacker.html",
+    "Holy Warrior": "holywarrior.html",
+    "Operator": "operator.html",
+    "Investigator": "investigator.html"
+  },
+  "questions": [
+    {
+      "a": "The way things are often make me angry",
+      "b": "The way things are often make me restless",
+      "weights": { "a": [0,1,0,0,0], "b": [1,0,0,0,0] }
+    },
+    {
+      "a": "Curiosity about something new often distracts me from my goals",
+      "b": "Doubts about what I am doing often derails me from my goals",
+      "weights": { "a": [1,0,0,0,0], "b": [0,1,0,0,0] }
+    },
+    {
+      "a": "Fear makes me limit myself",
+      "b": "Cynicism makes me limit myself",
+      "weights": { "a": [0,1,0,0,0], "b": [1,0,0,0,0] }
+    },
+    {
+      "a": "I sometimes do what is expected out of resignation or because I am too tired to fight",
+      "b": "I sometimes do what is expected out of guilt or shame relative to people who matter to me",
+      "weights": { "a": [1,0,0,0,0], "b": [0,1,0,0,0] }
+    },
+    {
+      "a": "I like games of skill like chess and clever puzzles",
+      "b": "I like getting lucky or finding an unfair advantage to win",
+      "weights": { "a": [0,1,0,0,0], "b": [1,0,0,0,0] }
+    },
+    {
+      "a": "I prefer leaders with a clear internal sense of doing the right thing",
+      "b": "I prefer leaders who respect due process based on shared moral principles",
+      "weights": { "a": [0,1,1,0,0], "b": [1,0,0,1,0] }
+    },
+    {
+      "a": "When things go wrong, I like to improvise an alternative solution first",
+      "b": "When things go wrong, I like to figure out what is wrong before proceeding",
+      "weights": { "a": [1,0,0,0,0], "b": [0,1,0,0,0] }
+    },
+    {
+      "a": "Meeting a tough deadline is exhilarating and the best part of a challenge",
+      "b": "It will take as long as it takes, no point being first with the wrong answer",
+      "weights": { "a": [0,0,0,1,0], "b": [0,0,0,0,1] }
+    },
+    {
+      "a": "Anger often gets me moving again when I am at a low point",
+      "b": "Boredom gets me moving again when I am at a low point",
+      "weights": { "a": [0,1,0,0,0], "b": [1,0,0,0,0] }
+    },
+    {
+      "a": "The ends justify the means",
+      "b": "The ends do not justify the means",
+      "weights": { "a": [0,0,0,1,0], "b": [0,0,0,0,1] }
+    },
+    {
+      "a": "When one project ends, I like to line up a new one and jump in quickly",
+      "b": "When one project ends I like to think hard before jumping into a new one",
+      "weights": { "a": [0,0,0,0,0], "b": [0,0,1,0,0] }
+    },
+    {
+      "a": "When I see or experience injustice, I get even",
+      "b": "When I see or experience injustice, I get outraged",
+      "weights": { "a": [1,0,0,0,0], "b": [0,1,0,0,0] }
+    },
+    {
+      "a": "I like understanding things through analogies and stories",
+      "b": "I like understanding things through first principles analysis",
+      "weights": { "a": [0,1,0,0,0], "b": [1,0,0,0,0] }
+    },
+    {
+      "a": "When in doubt I like to pick a direction that plays to my strengths",
+      "b": "When in doubt, I like to follow the example of people who seem to have figured it out",
+      "weights": { "a": [0,0,0,0,1], "b": [0,0,1,0,0] }
+    },
+    {
+      "a": "Join the right tribe, then figure out where to go",
+      "b": "Figure out where to go, then join a tribe going there",
+      "weights": { "a": [0,1,0,0,0], "b": [1,0,0,0,0] }
+    },
+    {
+      "a": "I cannot stand doing futile things even if they are lucrative",
+      "b": "I cannot stand working with people I dislike even if the work is meaningful",
+      "weights": { "a": [1,0,0,0,0], "b": [0,1,0,0,0] }
+    },
+    {
+      "a": "I succeed by analyzing problems and weighing decisions more carefully than most people",
+      "b": "I succeed by diving in hands-on and getting things done faster than most people",
+      "weights": { "a": [0,0,0,1,0], "b": [0,0,0,0,1] }
+    },
+    {
+      "a": "I get motivated about a new project when I recognize what is exciting or worthwhile about it",
+      "b": "I get motivated about a new project when I recognize a good, concrete first step I can take",
+      "weights": { "a": [0,0,0,1,0], "b": [0,0,0,0,1] }
+    },
+    {
+      "a": "If I cannot trust the process, I cannot believe in the project",
+      "b": "If I cannot trust the leader, I cannot believe in the project",
+      "weights": { "a": [1,0,0,0,0], "b": [0,1,0,0,0] }
+    },
+    {
+      "a": "I dislike figuring out political equations and influencing them",
+      "b": "I enjoy figuring out political situations and influencing them",
+      "weights": { "a": [0,0,1,0,0], "b": [0,0,0,1,0] }
+    },
+    {
+      "a": "When politics gets toxic, it is usually time to get rid of the toxic people to protect the project",
+      "b": "When politics gets toxic, it is usually time to get out of the project and look for a better one",
+      "weights": { "a": [0,1,0,0,0], "b": [1,0,0,0,0] }
+    },
+    {
+      "a": "Loyalty to real friends is more important than being consistent with principles",
+      "b": "Being consistent with principles is more important than loyalty to friends",
+      "weights": { "a": [0,1,0,0,0], "b": [1,0,0,0,0] }
+    },
+    {
+      "a": "Building a sustainable civilization is possible if we all do our share",
+      "b": "Sustainability is an illusion, take care of today and tomorrow will take care of itself",
+      "weights": { "a": [0,0,1,0,0], "b": [0,0,0,0,0] }
+    },
+    {
+      "a": "The right strategy may cost you in the short term, but you will win in the long term",
+      "b": "Winning the game you are in is what matters, in the long term we are all dead",
+      "weights": { "a": [0,0,0,0,1], "b": [0,0,0,1,0] }
+    },
+    {
+      "a": "The best way to do good things is to follow the example of good people",
+      "b": "The best way to do good things is to work on problems that make a difference",
+      "weights": { "a": [0,0,1,0,0], "b": [0,0,0,1,0] }
+    },
+    {
+      "a": "The best way to do good things is to seek out and learn from the top masters",
+      "b": "The best way to do good things is to continuously challenge yourself",
+      "weights": { "a": [0,0,1,0,0], "b": [0,0,0,0,1] }
+    },
+    {
+      "a": "To understand me, you have to understand where I am coming from",
+      "b": "I am pretty open. You can understand me just by hanging out with me for a bit",
+      "weights": { "a": [0,0,0,0,1], "b": [0,0,1,0,0] }
+    },
+    {
+      "a": "A sense of justice is what makes us human",
+      "b": "Believing the world is, or can be fair is naive",
+      "weights": { "a": [1,0,0,0,0], "b": [0,1,0,0,0] }
+    }
+  ]
+}

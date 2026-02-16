@@ -1,36 +1,71 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Quadrantology: The Investigator</title>
-  <link rel="stylesheet" type="text/css" href="quadrantology.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quadrantology: The Hacker</title>
+  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="quadrantology.css">
 </head>
 <body>
-<a name="top">
-  <div id="pagebox">
-  <h1>Investigator</h1>
-  <hr />
-  <div class="divTable">
-    <div class="divTableBody">
-      <div class="divTableRow">
-        <div class="divTableCell"><img src="images/hackerfemaleweb.png" width=200></div>
-        <div class="divTableCell">
-          <img src="images/hackerweb.png" width=200>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">Quadrantology</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+    <ul class="nav-links">
+      <li><a href="test.html">The Test</a></li>
+      <li><a href="theory.html">The Theory</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="game.html">How to Play</a></li>
+      <li class="nav-dropdown">
+        <a href="#archetypes">Archetypes &#9662;</a>
+        <div class="nav-dropdown-content">
+          <div class="dropdown-exit">Exit</div>
+          <a href="hacker.html">Hacker</a>
+          <a href="contrarian.html">Contrarian</a>
+          <a href="legalist.html">Legalist</a>
+          <div class="dropdown-voice">Voice</div>
+          <a href="investigator.html">Investigator</a>
+          <a href="holywarrior.html">Holy Warrior</a>
+          <a href="operator.html">Operator</a>
         </div>
-        <div class="divTableCell"><img src="images/hackermaleweb.png" width=200></div>
-      </div>
-    </div>
-  </div>
-    <p>Habit-oriented disruptor; breaks things to get something done. You get stuck in chaos. You like utilizing skills in your comfort zone and doing things, but in a creative way, improvising a good deal. You don’t think too often about bigger end goals so long as the work is challenging and absorbing. You get impatient with ideological debates and easily annoyed by people who get into such debates. You often find yourself agreeing with contrarian positions, often being argued by people you don’t like much. You sometimes get stuck in chaos of your own making. You sometimes find yourself cast as the reluctant hero, leading the way because nobody else will. The story of the hacker is the reluctant hero’s tale, who leads a rebellion because nobody else will.</p>
-
-    <ul>
-      <li>Exit-oriented</li>
-      <li>Defined by subversion of rules</li>
-      <li>Nemesis: <a href="holywarrior.html">Holy Warrior</a></li>
-      <li>Frenemy: <a href="investigator.html">Investigator</a></li>
-      <li>Evil Triplet: <a href="contrarian.html">Contrarian</a></li>
+      </li>
     </ul>
-<hr />
-<a href="index.html">Home</a>
+  </div>
+</nav>
 
-</div>
+<main class="content">
+
+  <div class="archetype-header">
+    <h1>Hacker</h1>
+    <span class="badge badge-exit">Exit</span>
+  </div>
+
+  <div class="archetype-images">
+    <img src="images/hackerfemaleweb.png" alt="Hacker archetype">
+    <img src="images/hackerweb.png" alt="Hacker archetype">
+    <img src="images/hackermaleweb.png" alt="Hacker archetype">
+  </div>
+
+  <p>Habit-oriented disruptor; breaks things to get something done. You get stuck in chaos. You like utilizing skills in your comfort zone and doing things, but in a creative way, improvising a good deal. You don't think too often about bigger end goals so long as the work is challenging and absorbing. You get impatient with ideological debates and easily annoyed by people who get into such debates. You often find yourself agreeing with contrarian positions, often being argued by people you don't like much. You sometimes get stuck in chaos of your own making. You sometimes find yourself cast as the reluctant hero, leading the way because nobody else will. The story of the hacker is the reluctant hero's tale, who leads a rebellion because nobody else will.</p>
+
+  <ul class="archetype-meta">
+    <li><strong>Orientation:</strong> Exit</li>
+    <li><strong>Defined by:</strong> Subversion of rules</li>
+    <li><strong>Nemesis:</strong> <a href="holywarrior.html">Holy Warrior</a></li>
+    <li><strong>Frenemy:</strong> <a href="investigator.html">Investigator</a></li>
+    <li><strong>Evil Triplet:</strong> <a href="contrarian.html">Contrarian</a></li>
+  </ul>
+
+  <div class="archetype-cta">
+    <a href="test.html" class="btn btn-primary">Take the Test</a>
+  </div>
+
+</main>
+
+<footer class="site-footer">&copy; Quadrantology</footer>
+
 </body>
+</html>

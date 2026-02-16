@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quadrantology Test</title>
+  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="quadrantology.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">Quadrantology</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+    <ul class="nav-links">
+      <li><a href="test.html">The Test</a></li>
+      <li><a href="theory.html">The Theory</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="game.html">How to Play</a></li>
+      <li class="nav-dropdown">
+        <a href="#archetypes">Archetypes &#9662;</a>
+        <div class="nav-dropdown-content">
+          <div class="dropdown-exit">Exit</div>
+          <a href="hacker.html">Hacker</a>
+          <a href="contrarian.html">Contrarian</a>
+          <a href="legalist.html">Legalist</a>
+          <div class="dropdown-voice">Voice</div>
+          <a href="investigator.html">Investigator</a>
+          <a href="holywarrior.html">Holy Warrior</a>
+          <a href="operator.html">Operator</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main class="content">
+  <div class="test-container">
+
+    <div id="question-view">
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progress-bar" style="width: 0%"></div>
+      </div>
+      <p class="progress-text" id="progress-text"></p>
+      <p class="question-prompt">Choose the statement that resonates more with you:</p>
+      <button class="choice-btn" id="btn-a" onclick="answer('a')"></button>
+      <button class="choice-btn" id="btn-b" onclick="answer('b')"></button>
+      <button class="back-btn" id="back-btn" onclick="goBack()" style="display:none;">&#8592; Back</button>
+    </div>
+
+    <div id="results-view" class="results-section" style="display:none;">
+      <h2>Your Results</h2>
+      <div id="result-icon"></div>
+      <p class="archetype-result-name" id="archetype-name"></p>
+      <div class="result-links" id="archetype-link"></div>
+      <div id="ev-bias-summary"></div>
+      <h3>Dimension Scores</h3>
+      <div class="score-bars" id="score-bars"></div>
+      <p style="margin-top:1.5rem;"><a href="understand.html">Understanding your results &rarr;</a></p>
+      <div class="result-actions">
+        <a href="test.html" class="btn btn-primary">Take Again</a>
+        <a href="index.html" class="btn btn-secondary">Home</a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer">&copy; Quadrantology</footer>
+
+<script>
+(function() {
+  var data = null;
+  var current = 0;
+  var answers = [];
+
+  fetch('data/questions.json')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      data = d;
+      showQuestion();
+    });
+
+  function showQuestion() {
+    if (!data) return;
+    var q = data.questions[current];
+    var total = data.questions.length;
+    var pct = ((current) / total * 100).toFixed(0);
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('progress-text').textContent = 'Question ' + (current + 1) + ' of ' + total;
+    document.getElementById('btn-a').textContent = q.a;
+    document.getElementById('btn-b').textContent = q.b;
+    document.getElementById('back-btn').style.display = current > 0 ? 'inline-block' : 'none';
+    document.getElementById('question-view').style.display = '';
+    document.getElementById('results-view').style.display = 'none';
+  }
+
+  window.answer = function(choice) {
+    answers[current] = choice;
+    current++;
+    if (current < data.questions.length) {
+      showQuestion();
+    } else {
+      computeResults();
+    }
+  };
+
+  window.goBack = function() {
+    if (current > 0) {
+      current--;
+      showQuestion();
+    }
+  };
+
+  function computeResults() {
+    var resultsVec = [0, 0, 0, 0, 0];
+    for (var i = 0; i < data.questions.length; i++) {
+      var w = data.questions[i].weights[answers[i]];
+      for (var j = 0; j < 5; j++) {
+        resultsVec[j] += w[j];
+      }
+    }
+
+    var exitScore = resultsVec[0];
+    var voiceScore = resultsVec[1];
+    var evBias;
+    if (exitScore > voiceScore) evBias = 1;
+    else if (voiceScore > exitScore) evBias = 2;
+    else evBias = 0;
+
+    var ethicsScores = [resultsVec[2], resultsVec[3], resultsVec[4]];
+    var maxEthics = Math.max.apply(null, ethicsScores);
+    var maxStates = [];
+    for (var k = 0; k < 3; k++) {
+      if (ethicsScores[k] === maxEthics) maxStates.push(k);
+    }
+
+    var exitArchetypes = data.archetypes.exit;
+    var voiceArchetypes = data.archetypes.voice;
+
+    var stateString;
+    if (maxStates.length === 1 && evBias > 0) {
+      stateString = (evBias === 1 ? exitArchetypes : voiceArchetypes)[maxStates[0]];
+    } else if (maxStates.length === 1 && evBias === 0) {
+      stateString = exitArchetypes[maxStates[0]] + ' / ' + voiceArchetypes[maxStates[0]];
+    } else if (maxStates.length === 2 && evBias > 0) {
+      var row = evBias === 1 ? exitArchetypes : voiceArchetypes;
+      stateString = row[maxStates[0]] + ' / ' + row[maxStates[1]];
+    } else {
+      stateString = 'No preferred state (high adaptability)';
+    }
+
+    showResults(resultsVec, stateString, evBias);
+  }
+
+  function showResults(resultsVec, stateString, evBias) {
+    document.getElementById('question-view').style.display = 'none';
+    document.getElementById('results-view').style.display = '';
+    document.getElementById('progress-bar').style.width = '100%';
+
+    // Result icon
+    var iconDiv = document.getElementById('result-icon');
+    iconDiv.innerHTML = '';
+    var names = stateString.split(' / ');
+    for (var n = 0; n < names.length; n++) {
+      var slug = names[n].toLowerCase().replace(/\s+/g, '');
+      var img = document.createElement('img');
+      img.src = 'images/' + slug + 'web.png';
+      img.alt = names[n];
+      img.className = 'result-archetype-icon';
+      iconDiv.appendChild(img);
+    }
+
+    var nameEl = document.getElementById('archetype-name');
+    nameEl.textContent = stateString;
+
+    // Add orientation badge
+    if (evBias === 1) {
+      nameEl.innerHTML += ' <span class="badge badge-exit">Exit</span>';
+    } else if (evBias === 2) {
+      nameEl.innerHTML += ' <span class="badge badge-voice">Voice</span>';
+    }
+
+    // Exit/Voice bias summary
+    var evSummary = document.getElementById('ev-bias-summary');
+    var exitScore = resultsVec[0];
+    var voiceScore = resultsVec[1];
+    var biasLabel, biasClass;
+    if (evBias === 1) {
+      biasLabel = 'Exit-oriented';
+      biasClass = 'badge-exit';
+    } else if (evBias === 2) {
+      biasLabel = 'Voice-oriented';
+      biasClass = 'badge-voice';
+    } else {
+      biasLabel = 'Balanced';
+      biasClass = '';
+    }
+    evSummary.innerHTML =
+      '<p class="ev-bias-text">' +
+      '<span class="badge ' + biasClass + '">' + biasLabel + '</span> ' +
+      'Exit ' + exitScore + ' &ndash; Voice ' + voiceScore +
+      '</p>';
+
+    // Build archetype links
+    var linkDiv = document.getElementById('archetype-link');
+    linkDiv.innerHTML = '';
+    var names = stateString.split(' / ');
+    for (var i = 0; i < names.length; i++) {
+      var page = data.archetypePages[names[i]];
+      if (page) {
+        var a = document.createElement('a');
+        a.href = page;
+        a.textContent = 'Read about the ' + names[i];
+        linkDiv.appendChild(a);
+        if (i < names.length - 1) {
+          linkDiv.appendChild(document.createTextNode(' | '));
+        }
+      }
+    }
+
+    // Score bars
+    var labels = ['Exit', 'Voice', 'Virtue Ethics', 'Consequentialist Ethics', 'Deontological Ethics'];
+    var barClasses = ['exit-bar', 'voice-bar', 'ethics-bar', 'ethics-bar', 'ethics-bar'];
+    var maxVal = Math.max.apply(null, resultsVec);
+    if (maxVal === 0) maxVal = 1;
+
+    var container = document.getElementById('score-bars');
+    container.innerHTML = '';
+    for (var j = 0; j < 5; j++) {
+      var pct = (resultsVec[j] / maxVal * 100).toFixed(0);
+      var row = document.createElement('div');
+      row.className = 'score-bar-row';
+      row.innerHTML =
+        '<div class="score-bar-label"><span>' + labels[j] + '</span><span>' + resultsVec[j] + '</span></div>' +
+        '<div class="score-bar-track"><div class="score-bar-value ' + barClasses[j] + '" style="width: 0%"></div></div>';
+      container.appendChild(row);
+      // Animate in
+      (function(el, w) {
+        setTimeout(function() { el.querySelector('.score-bar-value').style.width = w + '%'; }, 50);
+      })(row, pct);
+    }
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,52 +1,88 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quadrantology: Archetypes for the Anthropocene</title>
-  <meta name="theme-color" content="#ffffff">  <link rel="stylesheet" type="text/css" href="quadrantology.css">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="quadrantology.css">
 </head>
 <body>
-<a name="top">
-  <div id="pagebox">
-  <h1>Quadrantology</h1>
-  <hr />
-  <a name="top">
-  <p> Quadrantology is a social physics model for organiztional analysis, management problem-solving, and game design. The model began life as <a href="https://www.ribbonfarm.com/2014/09/03/how-to-fall-off-the-wagon/">an essay</a> on ribbonfarm exploring how individuals "fall off the wagon" when trying to change themselves. This then led to a 2x2 diagram (hence the name) and a personality test designed to unpack how individuals change along with their environments. So far, a couple of hundred people have taken the test, and an online version is under development.</p>
-<img src="images/quadrantology.png" width=600 align="center">
 
-<h2>The Model</h2>
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">Quadrantology</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+    <ul class="nav-links">
+      <li><a href="test.html">The Test</a></li>
+      <li><a href="theory.html">The Theory</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="game.html">How to Play</a></li>
+      <li class="nav-dropdown">
+        <a href="#archetypes">Archetypes &#9662;</a>
+        <div class="nav-dropdown-content">
+          <div class="dropdown-exit">Exit</div>
+          <a href="hacker.html">Hacker</a>
+          <a href="contrarian.html">Contrarian</a>
+          <a href="legalist.html">Legalist</a>
+          <div class="dropdown-voice">Voice</div>
+          <a href="investigator.html">Investigator</a>
+          <a href="holywarrior.html">Holy Warrior</a>
+          <a href="operator.html">Operator</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
 
-<p> Quadrantology is a simplified model of organizational creative destruction. It attempts to capture how people and organizations change together, in coupled ways, through the process of responding seemingly intractable problems that pose an existential threat to institutions. Quadrantology models the systemic response as two competing patterns of change, based loosely on Albert. O. Hirschman's classic, <a href=""><em>Exit, Loyalty, and Voice</em></a>: A <em>disruption</em> pattern driven by <em>exit</em> motives, and a <em>reform</em> pattern driven by <em>voice</em> motives. The two patterns of change form a yin-yang duality pair. The outcome of the creative-destruction process depends on their relative strengths in a given situation.<p>
+<main class="content">
 
-<p>These two modeled patterns lead to 6 archetypal roles involved in driving institutional evolution, grouped into two sets of 3 archetypes each: <em>exit</em> archetypes, and <em>voice</em> archetypes.</p>
+  <div class="hero">
+    <h1>Quadrantology</h1>
+    <p class="subtitle">Archetypes for the Anthropocene</p>
+    <a href="test.html" class="btn btn-primary">Take the Test</a>
+  </div>
 
-<p>These archetypes define roles rather than individuals. Individuals will be more or less comfortable in each of the six roles, and may play different roles depending on the context, and the strengths and weaknesses of people around them.</p>
+  <p>Quadrantology is a personality test and social physics model that explores how individuals and organizations change together through creative destruction. Six archetypes capture the roles people play — three driven by <em>exit</em> (disruption) and three by <em>voice</em> (reform). <a href="theory.html">Read the full theory &rarr;</a></p>
 
-<h3>The Exit Archetypes </h3>
+  <img src="images/quadrantology.png" alt="Quadrantology diagram" class="diagram">
 
-<p>In quadrantology, disruption is modeled as a 3-stage cycle that bootstraps new organizations. The cycle begins with a stuck organization, where a hacker finds an innovative, expedient solution to an intractable problem that involves breaking a rule. A contrarian then emerges to champion a heterodox philosophy for the institution based on legitimizing the hacked solution as the beginning of a whole new way of doing things. Finally, a legalist codifies the heterdox solution into new rules, defining a new organization.</p>
-<ul>
-<li><a href="hacker.html">Hacker</a></li>
-<li><a href="contrarian.html">Contrarian</a></li>
-<li><a href="legalist.html">Legalist</a></li>
-</ul>
+  <div class="archetype-section-title exit">Exit Archetypes</div>
+  <div class="card-grid">
+    <div class="card">
+      <img src="images/hackerweb.png" alt="Hacker">
+      <a href="hacker.html">Hacker</a>
+    </div>
+    <div class="card">
+      <img src="images/contrarianweb.png" alt="Contrarian">
+      <a href="contrarian.html">Contrarian</a>
+    </div>
+    <div class="card">
+      <img src="images/legalistweb.png" alt="Legalist">
+      <a href="legalist.html">Legalist</a>
+    </div>
+  </div>
 
-<h3>The Voice Archetypes </h3>
+  <div class="archetype-section-title voice">Voice Archetypes</div>
+  <div class="card-grid">
+    <div class="card">
+      <img src="images/investigatorweb.png" alt="Investigator">
+      <a href="investigator.html">Investigator</a>
+    </div>
+    <div class="card">
+      <img src="images/holywarriorweb.png" alt="Holy Warrior">
+      <a href="holywarrior.html">Holy Warrior</a>
+    </div>
+    <div class="card">
+      <img src="images/operatorweb.png" alt="Operator">
+      <a href="operator.html">Operator</a>
+    </div>
+  </div>
 
-<p> In quadrantology, reformation is modeled as a 3-stage cycle, the mirror image of the disruption/exit cycle, which reforms institutions in trouble. The cycle again begins with a stuck organization, often one facing external disruption. A principled investigator traces the source of a specific intractable problem to systemic corruption and decay. A holy warrior then emerges to champion a return to the "true" values of the institution via a reformation mission. Finally, an operator completes the cycle by driving the reformation through, by reconstructing the organization in accordance to the reformation values.</p>
-<ul>
-<li><a href="investigator.html">Investigator</a></li>
-<li><a href="holywarrior.html">Holy Warrior</a></li>
-<li><a href="operator.html">Operator</a></li>
-</ul>
+</main>
 
-<h2>Using the Model</h2>
+<footer class="site-footer">&copy; Quadrantology</footer>
 
-Individuals can use the quadrantology model to assess their own situational personalities, and pick a side in an evolving institutional landscape.
-
-Analysts can use the quadrantology model for predict winners and losers in ongoing creative destruction.
-
-Organizations can use the model to guide internal reform efforts and external disruption efforts.
-
-We will be gradually adding material and tools to support each of these uses of the model.
-</div>
 </body>
+</html>

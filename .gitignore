@@ -1,0 +1,11 @@
+# macOS
+.DS_Store
+
+# Local-only heavy assets (card deck PSDs, booklet masters, etc.)
+assets/
+
+# Archived historical materials (legacy Matlab scripts, Typeform data, old PDFs)
+history/
+
+# Claude Code working files
+.claude/
