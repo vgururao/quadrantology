@@ -85,6 +85,7 @@
 
   function showQuestion() {
     if (!data) return;
+    if (document.activeElement) document.activeElement.blur();
     var q = data.questions[current];
     var total = data.questions.length;
     var pct = ((current) / total * 100).toFixed(0);
