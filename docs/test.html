@@ -228,17 +228,23 @@
   // ===== SCORING =====
 
   function computeResults() {
-    var resultsVec = [0, 0, 0, 0, 0];
+    // Weighted scoring — each question's contribution scaled by its weight field
+    var scores = [0, 0, 0, 0, 0]; // exit, voice, virtue, consequentialist, deontological
+    var run = [];
     for (var i = 0; i < data.questions.length; i++) {
-      var w = data.questions[i].weights[answers[i]];
-      for (var j = 0; j < 5; j++) resultsVec[j] += w[j];
+      var q = data.questions[i];
+      var ans = answers[i];
+      var qw = (q.weight !== undefined) ? q.weight : 1.0;
+      var w = q.weights[ans];
+      run.push({ qid: q.id, ans: ans });
+      for (var j = 0; j < 5; j++) scores[j] += w[j] * qw;
     }
 
-    var exitScore = resultsVec[0];
-    var voiceScore = resultsVec[1];
+    var exitScore = scores[0];
+    var voiceScore = scores[1];
     var evBias = exitScore > voiceScore ? 1 : voiceScore > exitScore ? 2 : 0;
 
-    var ethicsScores = [resultsVec[2], resultsVec[3], resultsVec[4]];
+    var ethicsScores = [scores[2], scores[3], scores[4]];
     var maxEthics = Math.max.apply(null, ethicsScores);
     var maxStates = [];
     for (var k = 0; k < 3; k++) {
@@ -259,7 +265,23 @@
       stateString = 'No preferred state (high adaptability)';
     }
 
-    var pending = { resultsVec: resultsVec, stateString: stateString, evBias: evBias, answers: answers.slice() };
+    // Continuous position for richer analytics
+    var evTotal = exitScore + voiceScore;
+    var evPos = evTotal > 0 ? (exitScore - voiceScore) / evTotal : 0;
+    var ethicsTotal = scores[2] + scores[3] + scores[4];
+    var ethicsPos = ethicsTotal > 0
+      ? { virtue: scores[2] / ethicsTotal, consequentialist: scores[3] / ethicsTotal, deontological: scores[4] / ethicsTotal }
+      : { virtue: 1/3, consequentialist: 1/3, deontological: 1/3 };
+
+    var pending = {
+      scores: scores,
+      stateString: stateString,
+      evBias: evBias,
+      run: run,
+      position: { ev: evPos, ethics: ethicsPos },
+      // legacy alias so downstream code using resultsVec still works
+      resultsVec: scores
+    };
     savePending(pending);
 
     // Check for a valid code in localStorage first
@@ -486,14 +508,22 @@
         '</div>';
     }
 
-    // Save to history
+    // Save to history (v2 record)
     saveResult({
-      version: 1,
+      version: 2,
       timestamp: new Date().toISOString(),
+      questions_version: data.schema_version || 1,
+      run: pending.run,
+      scores: {
+        exit: pending.scores[0],
+        voice: pending.scores[1],
+        virtue: pending.scores[2],
+        consequentialist: pending.scores[3],
+        deontological: pending.scores[4]
+      },
+      position: pending.position,
       archetype: stateString,
-      evBias: evBias,
-      scores: resultsVec.slice(),
-      answers: pending.answers.slice()
+      ev_bias: evBias
     });
   }
 

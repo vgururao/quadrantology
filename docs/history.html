@@ -106,36 +106,85 @@
     }
   }
 
+  // Normalize a history record to a common shape regardless of version
+  function normalize(entry) {
+    if (entry.version === 2) {
+      var s = entry.scores;
+      return {
+        archetype: entry.archetype,
+        evBias: entry.ev_bias,
+        scoresArr: [s.exit, s.voice, s.virtue, s.consequentialist, s.deontological],
+        position: entry.position || null,
+        questionCount: entry.run ? entry.run.length : null,
+        version: 2
+      };
+    }
+    // v1 legacy
+    return {
+      archetype: entry.archetype,
+      evBias: entry.evBias,
+      scoresArr: Array.isArray(entry.scores) ? entry.scores : [],
+      position: null,
+      questionCount: Array.isArray(entry.answers) ? entry.answers.length : null,
+      version: 1
+    };
+  }
+
   function renderEntry(entry, num, total) {
+    var n = normalize(entry);
     var card = document.createElement('div');
     card.className = 'history-entry';
 
     var biasLabel = '', biasClass = '';
-    if (entry.evBias === 1) { biasLabel = 'Exit'; biasClass = 'badge-exit'; }
-    else if (entry.evBias === 2) { biasLabel = 'Voice'; biasClass = 'badge-voice'; }
-
+    if (n.evBias === 1) { biasLabel = 'Exit'; biasClass = 'badge-exit'; }
+    else if (n.evBias === 2) { biasLabel = 'Voice'; biasClass = 'badge-voice'; }
     var badgeHtml = biasLabel ? '<span class="badge ' + biasClass + '">' + biasLabel + '</span>' : '';
 
-    var header = document.createElement('div');
-    header.className = 'history-entry-header';
-    header.innerHTML =
-      '<div class="history-entry-meta">' +
-        '<span class="history-entry-num">Run ' + (total - num + 1) + '</span>' +
-        '<span class="history-entry-date">' + formatDate(entry.timestamp) + '</span>' +
+    var posHtml = '';
+    if (n.position && n.position.ev !== undefined) {
+      var evPct = ((n.position.ev + 1) / 2 * 100).toFixed(0); // map -1..+1 to 0..100%
+      var e = n.position.ethics;
+      posHtml =
+        '<div class="history-position">' +
+          '<span class="history-pos-label">E&harr;V</span>' +
+          '<div class="history-pos-track">' +
+            '<div class="history-pos-fill" style="width:' + evPct + '%"></div>' +
+          '</div>' +
+          '<span class="history-pos-labels"><span class="voice-label">V</span><span class="exit-label">E</span></span>' +
+        '</div>' +
+        '<div class="history-ethics-bar">' +
+          '<div class="history-ethics-seg ethics-virtue" style="width:' + (e.virtue*100).toFixed(1) + '%" title="Virtue ' + (e.virtue*100).toFixed(0) + '%"></div>' +
+          '<div class="history-ethics-seg ethics-conseq" style="width:' + (e.consequentialist*100).toFixed(1) + '%" title="Consequentialist ' + (e.consequentialist*100).toFixed(0) + '%"></div>' +
+          '<div class="history-ethics-seg ethics-deont" style="width:' + (e.deontological*100).toFixed(1) + '%" title="Deontological ' + (e.deontological*100).toFixed(0) + '%"></div>' +
+        '</div>' +
+        '<div class="history-ethics-legend">' +
+          '<span class="ethics-virtue-dot">&#9632;</span> Virtue ' + (e.virtue*100).toFixed(0) + '%' +
+          ' &nbsp; <span class="ethics-conseq-dot">&#9632;</span> Conseq. ' + (e.consequentialist*100).toFixed(0) + '%' +
+          ' &nbsp; <span class="ethics-deont-dot">&#9632;</span> Deont. ' + (e.deontological*100).toFixed(0) + '%' +
+        '</div>';
+    }
+
+    var metaExtra = n.questionCount ? ' &middot; ' + n.questionCount + ' questions' : '';
+    metaExtra += n.version === 1 ? ' &middot; <span class="version-tag">v1</span>' : '';
+
+    card.innerHTML =
+      '<div class="history-entry-header">' +
+        '<div class="history-entry-meta">' +
+          '<span class="history-entry-num">Run ' + (total - num + 1) + '</span>' +
+          '<span class="history-entry-date">' + formatDate(entry.timestamp) + metaExtra + '</span>' +
+        '</div>' +
+        '<div class="history-entry-archetype">' +
+          '<span class="history-archetype-name">' + entry.archetype + '</span> ' + badgeHtml +
+        '</div>' +
       '</div>' +
-      '<div class="history-entry-archetype">' +
-        '<span class="history-archetype-name">' + entry.archetype + '</span> ' + badgeHtml +
-      '</div>';
+      posHtml;
 
-    card.appendChild(header);
-
-    if (entry.scores && entry.scores.length === 5) {
-      var maxVal = Math.max.apply(null, entry.scores);
-      if (maxVal === 0) maxVal = 1;
+    if (n.scoresArr.length === 5) {
+      var maxVal = Math.max.apply(null, n.scoresArr) || 1;
       var barsEl = document.createElement('div');
       barsEl.className = 'history-score-bars';
       for (var j = 0; j < 5; j++) {
-        var pct = (entry.scores[j] / maxVal * 100).toFixed(0);
+        var pct = (n.scoresArr[j] / maxVal * 100).toFixed(0);
         var row = document.createElement('div');
         row.className = 'history-score-row';
         row.innerHTML =
@@ -143,7 +192,7 @@
           '<div class="history-score-track">' +
             '<div class="history-score-fill ' + SCORE_CLASSES[j] + '" style="width:' + pct + '%"></div>' +
           '</div>' +
-          '<span class="history-score-val">' + entry.scores[j] + '</span>';
+          '<span class="history-score-val">' + n.scoresArr[j].toFixed(1) + '</span>';
         barsEl.appendChild(row);
       }
       card.appendChild(barsEl);
