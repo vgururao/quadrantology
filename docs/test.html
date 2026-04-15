@@ -65,6 +65,7 @@
       <p style="margin-top:1.5rem;"><a href="understand.html">Understanding your results &rarr;</a></p>
       <div class="result-actions">
         <button class="btn btn-primary" onclick="downloadHistory()">Download updated history</button>
+        <a href="history.html" class="btn btn-secondary">View history</a>
         <button class="btn btn-secondary" onclick="clearHistory()">Clear your history from this device</button>
         <a href="index.html" class="btn btn-secondary">Home</a>
       </div>
@@ -104,6 +105,7 @@
         '<p class="intro-subtext">You\'ve taken this test ' + count + ' ' + times + '. Ready to go again?</p>' +
         '<div class="intro-primary"><button class="btn btn-primary btn-large" onclick="beginTest()">Begin</button></div>' +
         '<div class="history-bar">' +
+          '<a href="history.html" class="btn btn-secondary btn-sm">View history</a>' +
           '<button class="btn btn-secondary btn-sm" onclick="downloadHistory()">Download your history</button>' +
           '<button class="btn btn-secondary btn-sm" onclick="document.getElementById(\'upload-input\').click()">Upload saved history</button>' +
           '<button class="btn btn-secondary btn-sm" onclick="clearHistory()">Clear your history from this device</button>' +
