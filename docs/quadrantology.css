@@ -250,6 +250,19 @@ p { margin-bottom: 1rem; }
 .paywall-buy-btn { width: 100%; text-align: center; }
 .paywall-fine { font-size: 0.82rem; color: var(--text-secondary); margin-top: 1rem; }
 
+.result-access-notice {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  background: #f0ece4;
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.result-access-notice p { margin-bottom: 0.5rem; }
+.result-access-notice p:last-child { margin-bottom: 0; }
+
 .history-bar {
   display: flex;
   align-items: center;

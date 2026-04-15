@@ -67,6 +67,7 @@
       <h3>Dimension Scores</h3>
       <div class="score-bars" id="score-bars"></div>
       <p style="margin-top:1.5rem;"><a href="understand.html">Understanding your results &rarr;</a></p>
+      <div id="result-access-msg"></div>
       <div class="result-actions">
         <button class="btn btn-primary" onclick="downloadHistory()">Download updated history</button>
         <a href="history.html" class="btn btn-secondary">View history</a>
@@ -83,8 +84,7 @@
 
 <script>
 (function() {
-  // TODO: update price display when finalizing pricing
-  var PRICE_DISPLAY = '$9';
+  var PRICE_DISPLAY = ''; // populated from /api/price on load
   var TOTAL_RUNS = 10;
   var MONTHS = 6;
 
@@ -92,11 +92,13 @@
   var current = 0;
   var answers = [];
 
-  // Load questions, then decide what to show
-  fetch('data/questions.json')
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      data = d;
+  // Load questions + price in parallel, then decide what to show
+  Promise.all([
+    fetch('data/questions.json').then(function(r) { return r.json(); }),
+    fetch('/api/price').then(function(r) { return r.json(); }).catch(function() { return {}; })
+  ]).then(function(results) {
+      data = results[0];
+      if (results[1].display) PRICE_DISPLAY = results[1].display;
       var params = new URLSearchParams(window.location.search);
       if (params.get('success') === '1' && params.get('session_id')) {
         handleStripeReturn(params.get('session_id'));
@@ -111,6 +113,7 @@
     });
 
   // ===== INTRO =====
+
 
   function showIntro() {
     var name = localStorage.getItem('quadrantology_name') || '';
@@ -264,14 +267,14 @@
     if (code) {
       validateCode(code).then(function(result) {
         if (result.valid) {
-          showResults(pending);
-          consumeCode(code); // fire-and-forget after results shown
+          showResults(pending, result.remaining - 1); // -1 because we're about to consume
+          consumeCode(code);
         } else {
           showPaywall(pending);
         }
       }).catch(function() {
         // Worker unavailable — show results anyway in dev
-        showResults(pending);
+        showResults(pending, null);
       });
     } else {
       showPaywall(pending);
@@ -325,7 +328,7 @@
         localStorage.setItem('quadrantology_code', code);
         var pending = loadPending();
         if (pending) {
-          showResults(pending);
+          showResults(pending, result.remaining - 1);
           consumeCode(code);
         } else {
           showIntro();
@@ -378,7 +381,7 @@
         .then(function(d) {
           if (d.code) {
             localStorage.setItem('quadrantology_code', d.code);
-            showResults(pending);
+            showResults(pending, TOTAL_RUNS - 1); // fresh purchase: 10 runs, 1 just consumed
             consumeCode(d.code);
           } else if (attempts < 4) {
             setTimeout(tryFetch, 1500);
@@ -399,7 +402,7 @@
 
   // ===== RESULTS =====
 
-  function showResults(pending) {
+  function showResults(pending, remaining) {
     clearPending();
     hideAll();
 
@@ -466,6 +469,21 @@
       (function(el, w) {
         setTimeout(function() { el.querySelector('.score-bar-value').style.width = w + '%'; }, 50);
       })(row, pct);
+    }
+
+    // Access message
+    var msgEl = document.getElementById('result-access-msg');
+    if (msgEl) {
+      var runsText = remaining === null ? '' :
+        remaining > 0
+          ? 'You can take this test <strong>' + remaining + ' more ' + (remaining === 1 ? 'time' : 'times') + '</strong> in the next ' + MONTHS + ' months to build a baseline. You may be shown different questions on future tests.'
+          : 'You have used all your runs. Purchase a new access code to continue tracking your results.';
+      msgEl.innerHTML =
+        '<div class="result-access-notice">' +
+          (runsText ? '<p>' + runsText + '</p>' : '') +
+          '<p>Your profile code is stored locally on this device and included in your downloadable history. ' +
+          'Store your downloaded history securely &mdash; you will need it to access your results from a new device.</p>' +
+        '</div>';
     }
 
     // Save to history
