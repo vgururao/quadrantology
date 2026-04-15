@@ -276,6 +276,7 @@
         '<span class="history-count">You\'ve taken this test ' + count + ' ' + times + '.</span>' +
         '<button class="btn btn-secondary btn-sm" onclick="downloadHistory()">Download results</button>' +
         '<button class="btn btn-secondary btn-sm" onclick="document.getElementById(\'upload-input\').click()">Upload from another device</button>' +
+        '<button class="btn btn-secondary btn-sm" onclick="clearHistory()">Clear history</button>' +
       '</div>';
   }
 
@@ -287,6 +288,13 @@
     a.download = 'quadrantology-results.json';
     a.click();
     URL.revokeObjectURL(a.href);
+  };
+
+  window.clearHistory = function() {
+    if (confirm('Clear all saved results from this device?')) {
+      localStorage.removeItem(STORAGE_KEY);
+      renderHistory();
+    }
   };
 
   document.getElementById('upload-input').addEventListener('change', function(e) {
