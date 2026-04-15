@@ -175,6 +175,19 @@ p { margin-bottom: 1rem; }
 }
 .btn-secondary:hover { background: var(--border); }
 
+.btn-sm { padding: 0.4rem 0.9rem; font-size: 0.85rem; font-weight: 500; }
+
+.history-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+.history-count { font-size: 0.9rem; color: var(--secondary-text); flex: 1 1 auto; }
+
 /* ===== Hero ===== */
 .hero {
   text-align: center;

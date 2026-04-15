@@ -63,6 +63,8 @@
         <a href="test.html" class="btn btn-primary">Take Again</a>
         <a href="index.html" class="btn btn-secondary">Home</a>
       </div>
+      <div id="result-history"></div>
+      <input type="file" id="upload-input" accept=".json" style="display:none">
     </div>
 
   </div>
@@ -222,6 +224,10 @@
       }
     }
 
+    // Save and render history
+    saveResult({ version: 1, timestamp: new Date().toISOString(), archetype: stateString, evBias: evBias, scores: resultsVec.slice(), answers: answers.slice() });
+    renderHistory();
+
     // Score bars
     var labels = ['Exit', 'Voice', 'Virtue Ethics', 'Consequentialist Ethics', 'Deontological Ethics'];
     var barClasses = ['exit-bar', 'voice-bar', 'ethics-bar', 'ethics-bar', 'ethics-bar'];
@@ -244,6 +250,68 @@
       })(row, pct);
     }
   }
+
+  // --- History: localStorage + export/import ---
+
+  var STORAGE_KEY = 'quadrantology_history';
+
+  function loadHistory() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+    catch(e) { return []; }
+  }
+
+  function saveResult(record) {
+    var h = loadHistory();
+    h.unshift(record);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(h));
+  }
+
+  function renderHistory() {
+    var h = loadHistory();
+    var div = document.getElementById('result-history');
+    var count = h.length;
+    var times = count === 1 ? 'time' : 'times';
+    div.innerHTML =
+      '<div class="history-bar">' +
+        '<span class="history-count">You\'ve taken this test ' + count + ' ' + times + '.</span>' +
+        '<button class="btn btn-secondary btn-sm" onclick="downloadHistory()">Download results</button>' +
+        '<button class="btn btn-secondary btn-sm" onclick="document.getElementById(\'upload-input\').click()">Upload from another device</button>' +
+      '</div>';
+  }
+
+  window.downloadHistory = function() {
+    var h = loadHistory();
+    var blob = new Blob([JSON.stringify(h, null, 2)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'quadrantology-results.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
+  document.getElementById('upload-input').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        var incoming = JSON.parse(ev.target.result);
+        if (!Array.isArray(incoming)) incoming = [incoming];
+        var existing = loadHistory();
+        var seen = {};
+        existing.forEach(function(r) { seen[r.timestamp] = true; });
+        var merged = existing.concat(incoming.filter(function(r) { return r.timestamp && !seen[r.timestamp]; }));
+        merged.sort(function(a, b) { return b.timestamp < a.timestamp ? -1 : 1; });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+        renderHistory();
+      } catch(err) {
+        alert('Could not read results file.');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  });
+
 })();
 </script>
 </body>
