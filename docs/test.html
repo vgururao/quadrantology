@@ -39,7 +39,11 @@
 <main class="content">
   <div class="test-container">
 
-    <div id="question-view">
+    <div id="intro-view" style="display:none;">
+      <!-- populated by showIntro() -->
+    </div>
+
+    <div id="question-view" style="display:none;">
       <div class="progress-bar-wrap">
         <div class="progress-bar-fill" id="progress-bar" style="width: 0%"></div>
       </div>
@@ -60,16 +64,16 @@
       <div class="score-bars" id="score-bars"></div>
       <p style="margin-top:1.5rem;"><a href="understand.html">Understanding your results &rarr;</a></p>
       <div class="result-actions">
-        <a href="test.html" class="btn btn-primary">Take Again</a>
+        <button class="btn btn-primary" onclick="downloadHistory()">Download updated history</button>
+        <button class="btn btn-secondary" onclick="clearHistory()">Clear your history from this device</button>
         <a href="index.html" class="btn btn-secondary">Home</a>
       </div>
-      <div id="result-history"></div>
-      <input type="file" id="upload-input" accept=".json" style="display:none">
     </div>
 
   </div>
 </main>
 
+<input type="file" id="upload-input" accept=".json" style="display:none">
 <footer class="site-footer">&copy; Quadrantology</footer>
 
 <script>
@@ -82,15 +86,71 @@
     .then(function(r) { return r.json(); })
     .then(function(d) {
       data = d;
-      showQuestion();
+      showIntro();
     });
+
+  // --- Intro ---
+
+  function showIntro() {
+    var name = localStorage.getItem('quadrantology_name') || '';
+    var h = loadHistory();
+    var div = document.getElementById('intro-view');
+
+    if (name) {
+      var count = h.length;
+      var times = count === 1 ? 'time' : 'times';
+      div.innerHTML =
+        '<h2>Welcome back, ' + name + '!</h2>' +
+        '<p class="intro-subtext">You\'ve taken this test ' + count + ' ' + times + '. Ready to go again?</p>' +
+        '<div class="intro-primary"><button class="btn btn-primary btn-large" onclick="beginTest()">Begin</button></div>' +
+        '<div class="history-bar">' +
+          '<button class="btn btn-secondary btn-sm" onclick="downloadHistory()">Download your history</button>' +
+          '<button class="btn btn-secondary btn-sm" onclick="document.getElementById(\'upload-input\').click()">Upload saved history</button>' +
+          '<button class="btn btn-secondary btn-sm" onclick="clearHistory()">Clear your history from this device</button>' +
+        '</div>';
+    } else {
+      div.innerHTML =
+        '<h2>Before we begin&hellip;</h2>' +
+        '<p class="intro-subtext">What\'s your name?</p>' +
+        '<div class="intro-name-form">' +
+          '<input type="text" id="name-input" class="name-input" placeholder="Your name" autocomplete="given-name">' +
+          '<button class="btn btn-primary" onclick="beginTest()">Begin</button>' +
+        '</div>';
+      setTimeout(function() {
+        var inp = document.getElementById('name-input');
+        if (inp) {
+          inp.focus();
+          inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') beginTest(); });
+        }
+      }, 0);
+    }
+
+    div.style.display = '';
+    document.getElementById('question-view').style.display = 'none';
+    document.getElementById('results-view').style.display = 'none';
+  }
+
+  window.beginTest = function() {
+    var nameInput = document.getElementById('name-input');
+    if (nameInput) {
+      var name = nameInput.value.trim();
+      if (!name) { nameInput.focus(); return; }
+      localStorage.setItem('quadrantology_name', name);
+    }
+    current = 0;
+    answers = [];
+    document.getElementById('intro-view').style.display = 'none';
+    showQuestion();
+  };
+
+  // --- Questions ---
 
   function showQuestion() {
     if (!data) return;
     if (document.activeElement) document.activeElement.blur();
     var q = data.questions[current];
     var total = data.questions.length;
-    var pct = ((current) / total * 100).toFixed(0);
+    var pct = (current / total * 100).toFixed(0);
     document.getElementById('progress-bar').style.width = pct + '%';
     document.getElementById('progress-text').textContent = 'Question ' + (current + 1) + ' of ' + total;
     document.getElementById('btn-a').textContent = q.a;
@@ -116,6 +176,8 @@
       showQuestion();
     }
   };
+
+  // --- Scoring ---
 
   function computeResults() {
     var resultsVec = [0, 0, 0, 0, 0];
@@ -179,7 +241,6 @@
     var nameEl = document.getElementById('archetype-name');
     nameEl.textContent = stateString;
 
-    // Add orientation badge
     if (evBias === 1) {
       nameEl.innerHTML += ' <span class="badge badge-exit">Exit</span>';
     } else if (evBias === 2) {
@@ -207,26 +268,22 @@
       'Exit ' + exitScore + ' &ndash; Voice ' + voiceScore +
       '</p>';
 
-    // Build archetype links
+    // Archetype links
     var linkDiv = document.getElementById('archetype-link');
     linkDiv.innerHTML = '';
-    var names = stateString.split(' / ');
-    for (var i = 0; i < names.length; i++) {
-      var page = data.archetypePages[names[i]];
+    var names2 = stateString.split(' / ');
+    for (var i = 0; i < names2.length; i++) {
+      var page = data.archetypePages[names2[i]];
       if (page) {
         var a = document.createElement('a');
         a.href = page;
-        a.textContent = 'Read about the ' + names[i];
+        a.textContent = 'Read about the ' + names2[i];
         linkDiv.appendChild(a);
-        if (i < names.length - 1) {
+        if (i < names2.length - 1) {
           linkDiv.appendChild(document.createTextNode(' | '));
         }
       }
     }
-
-    // Save and render history
-    saveResult({ version: 1, timestamp: new Date().toISOString(), archetype: stateString, evBias: evBias, scores: resultsVec.slice(), answers: answers.slice() });
-    renderHistory();
 
     // Score bars
     var labels = ['Exit', 'Voice', 'Virtue Ethics', 'Consequentialist Ethics', 'Deontological Ethics'];
@@ -244,11 +301,12 @@
         '<div class="score-bar-label"><span>' + labels[j] + '</span><span>' + resultsVec[j] + '</span></div>' +
         '<div class="score-bar-track"><div class="score-bar-value ' + barClasses[j] + '" style="width: 0%"></div></div>';
       container.appendChild(row);
-      // Animate in
       (function(el, w) {
         setTimeout(function() { el.querySelector('.score-bar-value').style.width = w + '%'; }, 50);
       })(row, pct);
     }
+
+    saveResult({ version: 1, timestamp: new Date().toISOString(), archetype: stateString, evBias: evBias, scores: resultsVec.slice(), answers: answers.slice() });
   }
 
   // --- History: localStorage + export/import ---
@@ -266,20 +324,6 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(h));
   }
 
-  function renderHistory() {
-    var h = loadHistory();
-    var div = document.getElementById('result-history');
-    var count = h.length;
-    var times = count === 1 ? 'time' : 'times';
-    div.innerHTML =
-      '<div class="history-bar">' +
-        '<span class="history-count">You\'ve taken this test ' + count + ' ' + times + '.</span>' +
-        '<button class="btn btn-secondary btn-sm" onclick="downloadHistory()">Download results</button>' +
-        '<button class="btn btn-secondary btn-sm" onclick="document.getElementById(\'upload-input\').click()">Upload from another device</button>' +
-        '<button class="btn btn-secondary btn-sm" onclick="clearHistory()">Clear history</button>' +
-      '</div>';
-  }
-
   window.downloadHistory = function() {
     var h = loadHistory();
     var blob = new Blob([JSON.stringify(h, null, 2)], { type: 'application/json' });
@@ -291,9 +335,10 @@
   };
 
   window.clearHistory = function() {
-    if (confirm('Clear all saved results from this device?')) {
+    if (confirm('Clear all saved results and your name from this device?')) {
       localStorage.removeItem(STORAGE_KEY);
-      renderHistory();
+      localStorage.removeItem('quadrantology_name');
+      showIntro();
     }
   };
 
@@ -311,7 +356,7 @@
         var merged = existing.concat(incoming.filter(function(r) { return r.timestamp && !seen[r.timestamp]; }));
         merged.sort(function(a, b) { return b.timestamp < a.timestamp ? -1 : 1; });
         localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
-        renderHistory();
+        showIntro();
       } catch(err) {
         alert('Could not read results file.');
       }
