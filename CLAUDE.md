@@ -31,14 +31,26 @@ The website is the primary active component. The personality test is implemented
   - `qtest/` — Legacy Matlab scoring scripts (Exosphere workshop)
   - `typeform/` — Legacy Typeform batch processing + pilot data
 
-## Development
+## Deployment
 
-No build tools, package manager, or test framework. Plain HTML/CSS/JS served via GitHub Pages from `docs/`.
+### Current (active): Cloudflare Pages + Workers
+- Cloudflare Pages serves `docs/` — deploy on push to `master`
+- Cloudflare Workers handle API routes (`/api/checkout`, `/api/stripe-webhook`)
+- Dev/staging site: `quadrantology.pages.dev` (no DNS change needed)
+- Production: `quadrantology.com` (DNS on Cloudflare, cutover when ready)
+- Worker + D1 config lives in `worker/` (not yet created)
 
-Preview locally:
+### Legacy: GitHub Pages
+- Tag `ghpages-v1` marks the last known-good GitHub Pages build
+- To restore: revert to that tag, re-enable GH Pages in repo settings
+- GH Pages served `docs/` directly from `master` — no build step
+- Will break when CF-specific features (Worker API calls) are added to `docs/`
+
+### Local preview
 ```
 python3 -m http.server -d docs
 ```
+Note: Worker-dependent features (Stripe checkout) won't work locally without `wrangler dev`.
 
 ## Architecture Notes
 
