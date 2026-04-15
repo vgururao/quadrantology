@@ -337,11 +337,28 @@
   };
 
   window.clearHistory = function() {
-    if (confirm('Clear all saved results and your name from this device?')) {
+    var overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML =
+      '<div class="modal-card">' +
+        '<p class="modal-question">Download your history first?</p>' +
+        '<div class="modal-actions">' +
+          '<button class="btn btn-primary" id="modal-yes">Yes, download</button>' +
+          '<button class="btn btn-secondary" id="modal-did">I already did</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+
+    function close() { document.body.removeChild(overlay); }
+
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) close(); });
+    document.getElementById('modal-yes').onclick = function() { downloadHistory(); close(); };
+    document.getElementById('modal-did').onclick = function() {
+      close();
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem('quadrantology_name');
       showIntro();
-    }
+    };
   };
 
   document.getElementById('upload-input').addEventListener('change', function(e) {
