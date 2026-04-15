@@ -50,7 +50,44 @@ The website is the primary active component. The personality test is implemented
 ```
 python3 -m http.server -d docs
 ```
-Note: Worker-dependent features (Stripe checkout) won't work locally without `wrangler dev`.
+Note: Worker-dependent features (Stripe checkout, code validation) won't work locally without `wrangler pages dev`.
+
+## Backend (Cloudflare Pages Functions)
+
+Serverless functions in `functions/api/` — deployed automatically by CF Pages alongside `docs/`.
+
+| Route | File | Purpose |
+|---|---|---|
+| `POST /api/validate-code` | `functions/api/validate-code.js` | Check if a code exists and has uses remaining |
+| `POST /api/consume-code` | `functions/api/consume-code.js` | Decrement a code's use counter (called after results shown) |
+| `POST /api/checkout` | `functions/api/checkout.js` | Create Stripe Checkout session |
+| `GET  /api/session-code` | `functions/api/session-code.js` | Exchange Stripe session_id for generated personal code |
+| `POST /api/stripe-webhook` | `functions/api/stripe-webhook.js` | Handle Stripe events, generate personal code on payment |
+| `POST /api/admin/generate-codes` | `functions/api/admin/generate-codes.js` | Batch-generate coupon/org codes (admin-protected) |
+
+### D1 Database
+
+Schema: `worker/schema.sql`. One table: `codes`.
+
+Apply schema:
+```bash
+wrangler d1 execute quadrantology --file=worker/schema.sql
+```
+
+### Environment variables (set in CF Pages dashboard → Settings → Environment variables)
+
+| Name | Type | Purpose |
+|---|---|---|
+| `STRIPE_SECRET_KEY` | Secret | Stripe API secret key |
+| `STRIPE_WEBHOOK_SECRET` | Secret | Stripe webhook signing secret |
+| `STRIPE_PRICE_ID` | Secret | Price ID for the individual access product |
+| `ADMIN_SECRET` | Secret | Bearer token for `/api/admin/generate-codes` |
+
+### Code format
+
+All codes follow the pattern `QNTLG-XXXX-XXXX-XXXX` (12 uppercase hex chars from a UUID).
+
+Types: `personal` (from Stripe purchase), `coupon` (batch-generated promo), `org` (bulk org purchase).
 
 ## Architecture Notes
 

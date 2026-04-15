@@ -54,6 +54,10 @@
       <button class="back-btn" id="back-btn" onclick="goBack()" style="display:none;">&#8592; Back</button>
     </div>
 
+    <div id="paywall-view" style="display:none;">
+      <!-- populated by showPaywall() -->
+    </div>
+
     <div id="results-view" class="results-section" style="display:none;">
       <h2>Your Results</h2>
       <div id="result-icon"></div>
@@ -79,45 +83,93 @@
 
 <script>
 (function() {
+  // TODO: update price display when finalizing pricing
+  var PRICE_DISPLAY = '$9';
+  var TOTAL_RUNS = 10;
+  var MONTHS = 6;
+
   var data = null;
   var current = 0;
   var answers = [];
 
+  // Load questions, then decide what to show
   fetch('data/questions.json')
     .then(function(r) { return r.json(); })
     .then(function(d) {
       data = d;
-      showIntro();
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('success') === '1' && params.get('session_id')) {
+        handleStripeReturn(params.get('session_id'));
+      } else if (params.get('canceled') === '1') {
+        history.replaceState({}, '', 'test.html');
+        var pending = loadPending();
+        if (pending) showPaywall(pending);
+        else showIntro();
+      } else {
+        showIntro();
+      }
     });
 
-  // --- Intro ---
+  // ===== INTRO =====
 
   function showIntro() {
     var name = localStorage.getItem('quadrantology_name') || '';
-    var h = loadHistory();
+    var code = localStorage.getItem('quadrantology_code') || '';
     var div = document.getElementById('intro-view');
 
+    hideAll();
+    div.style.display = '';
+
     if (name) {
+      // Returning user — show welcome, validate code in background
+      var h = loadHistory();
       var count = h.length;
       var times = count === 1 ? 'time' : 'times';
+
       div.innerHTML =
-        '<h2>Welcome back, ' + name + '!</h2>' +
-        '<p class="intro-subtext">You\'ve taken this test ' + count + ' ' + times + '. Ready to go again?</p>' +
-        '<div class="intro-primary"><button class="btn btn-primary btn-large" onclick="beginTest()">Begin</button></div>' +
+        '<h2>Welcome back, ' + esc(name) + '!</h2>' +
+        '<p class="intro-subtext">You\'ve taken this test ' + count + ' ' + times + '.</p>' +
+        '<div id="access-status" class="intro-access-status"></div>' +
+        '<div class="intro-primary"><button class="btn btn-primary btn-large" id="begin-btn" onclick="beginTest()">Begin</button></div>' +
         '<div class="history-bar">' +
           '<a href="history.html" class="btn btn-secondary btn-sm">View history</a>' +
           '<button class="btn btn-secondary btn-sm" onclick="downloadHistory()">Download your history</button>' +
           '<button class="btn btn-secondary btn-sm" onclick="document.getElementById(\'upload-input\').click()">Upload saved history</button>' +
           '<button class="btn btn-secondary btn-sm" onclick="clearHistory()">Clear your history from this device</button>' +
         '</div>';
+
+      if (code) {
+        validateCode(code).then(function(result) {
+          var el = document.getElementById('access-status');
+          if (!el) return;
+          if (result.valid) {
+            el.innerHTML = '<p class="access-ok">Access active &mdash; ' + result.remaining + ' run' + (result.remaining === 1 ? '' : 's') + ' remaining.</p>';
+          } else if (result.reason === 'exhausted') {
+            el.innerHTML = '<p class="access-warn">Your access code has been used up. You\'ll need to pay or enter a new code after this run.</p>';
+          } else {
+            el.innerHTML = '';
+          }
+        });
+      } else {
+        var statusEl = document.getElementById('access-status');
+        if (statusEl) statusEl.innerHTML = '<p class="access-warn">No access code saved. You\'ll need to pay or enter a code after completing the test.</p>';
+      }
+
     } else {
+      // First visit — name + notice
       div.innerHTML =
         '<h2>Before we begin&hellip;</h2>' +
         '<p class="intro-subtext">What\'s your name?</p>' +
         '<div class="intro-name-form">' +
           '<input type="text" id="name-input" class="name-input" placeholder="Your name" autocomplete="given-name">' +
           '<button class="btn btn-primary" onclick="beginTest()">Begin</button>' +
+        '</div>' +
+        '<div class="access-notice">' +
+          '<p>Once you complete the test, you\'ll need to pay <strong>' + PRICE_DISPLAY + '</strong> or enter a code from your organization to view your results. ' +
+          'You\'ll be able to take the test up to ' + TOTAL_RUNS + ' times over ' + MONTHS + ' months to track your trend. ' +
+          'Results are stored only on this device &mdash; you can export them at any time.</p>' +
         '</div>';
+
       setTimeout(function() {
         var inp = document.getElementById('name-input');
         if (inp) {
@@ -126,10 +178,6 @@
         }
       }, 0);
     }
-
-    div.style.display = '';
-    document.getElementById('question-view').style.display = 'none';
-    document.getElementById('results-view').style.display = 'none';
   }
 
   window.beginTest = function() {
@@ -141,25 +189,23 @@
     }
     current = 0;
     answers = [];
-    document.getElementById('intro-view').style.display = 'none';
+    hideAll();
     showQuestion();
   };
 
-  // --- Questions ---
+  // ===== QUESTIONS =====
 
   function showQuestion() {
     if (!data) return;
     if (document.activeElement) document.activeElement.blur();
     var q = data.questions[current];
     var total = data.questions.length;
-    var pct = (current / total * 100).toFixed(0);
-    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('progress-bar').style.width = (current / total * 100).toFixed(0) + '%';
     document.getElementById('progress-text').textContent = 'Question ' + (current + 1) + ' of ' + total;
     document.getElementById('btn-a').textContent = q.a;
     document.getElementById('btn-b').textContent = q.b;
     document.getElementById('back-btn').style.display = current > 0 ? 'inline-block' : 'none';
     document.getElementById('question-view').style.display = '';
-    document.getElementById('results-view').style.display = 'none';
   }
 
   window.answer = function(choice) {
@@ -173,29 +219,21 @@
   };
 
   window.goBack = function() {
-    if (current > 0) {
-      current--;
-      showQuestion();
-    }
+    if (current > 0) { current--; showQuestion(); }
   };
 
-  // --- Scoring ---
+  // ===== SCORING =====
 
   function computeResults() {
     var resultsVec = [0, 0, 0, 0, 0];
     for (var i = 0; i < data.questions.length; i++) {
       var w = data.questions[i].weights[answers[i]];
-      for (var j = 0; j < 5; j++) {
-        resultsVec[j] += w[j];
-      }
+      for (var j = 0; j < 5; j++) resultsVec[j] += w[j];
     }
 
     var exitScore = resultsVec[0];
     var voiceScore = resultsVec[1];
-    var evBias;
-    if (exitScore > voiceScore) evBias = 1;
-    else if (voiceScore > exitScore) evBias = 2;
-    else evBias = 0;
+    var evBias = exitScore > voiceScore ? 1 : voiceScore > exitScore ? 2 : 0;
 
     var ethicsScores = [resultsVec[2], resultsVec[3], resultsVec[4]];
     var maxEthics = Math.max.apply(null, ethicsScores);
@@ -204,95 +242,217 @@
       if (ethicsScores[k] === maxEthics) maxStates.push(k);
     }
 
-    var exitArchetypes = data.archetypes.exit;
-    var voiceArchetypes = data.archetypes.voice;
-
+    var exitA = data.archetypes.exit;
+    var voiceA = data.archetypes.voice;
     var stateString;
     if (maxStates.length === 1 && evBias > 0) {
-      stateString = (evBias === 1 ? exitArchetypes : voiceArchetypes)[maxStates[0]];
+      stateString = (evBias === 1 ? exitA : voiceA)[maxStates[0]];
     } else if (maxStates.length === 1 && evBias === 0) {
-      stateString = exitArchetypes[maxStates[0]] + ' / ' + voiceArchetypes[maxStates[0]];
+      stateString = exitA[maxStates[0]] + ' / ' + voiceA[maxStates[0]];
     } else if (maxStates.length === 2 && evBias > 0) {
-      var row = evBias === 1 ? exitArchetypes : voiceArchetypes;
+      var row = evBias === 1 ? exitA : voiceA;
       stateString = row[maxStates[0]] + ' / ' + row[maxStates[1]];
     } else {
       stateString = 'No preferred state (high adaptability)';
     }
 
-    showResults(resultsVec, stateString, evBias);
+    var pending = { resultsVec: resultsVec, stateString: stateString, evBias: evBias, answers: answers.slice() };
+    savePending(pending);
+
+    // Check for a valid code in localStorage first
+    var code = localStorage.getItem('quadrantology_code');
+    if (code) {
+      validateCode(code).then(function(result) {
+        if (result.valid) {
+          showResults(pending);
+          consumeCode(code); // fire-and-forget after results shown
+        } else {
+          showPaywall(pending);
+        }
+      }).catch(function() {
+        // Worker unavailable — show results anyway in dev
+        showResults(pending);
+      });
+    } else {
+      showPaywall(pending);
+    }
   }
 
-  function showResults(resultsVec, stateString, evBias) {
-    document.getElementById('question-view').style.display = 'none';
+  // ===== PAYWALL =====
+
+  function showPaywall(pending) {
+    hideAll();
+    var div = document.getElementById('paywall-view');
+    div.innerHTML =
+      '<div class="paywall-inner">' +
+        '<h2>Your results are ready.</h2>' +
+        '<p class="paywall-subtext">Enter an access code to view them, or purchase ' + TOTAL_RUNS + '-run access.</p>' +
+        '<div id="paywall-error" class="paywall-error" style="display:none;"></div>' +
+        '<div class="paywall-code-form">' +
+          '<label class="paywall-label">Access code</label>' +
+          '<p class="paywall-hint">From your organization, a previous purchase, or a coupon.</p>' +
+          '<div class="paywall-input-row">' +
+            '<input type="text" id="code-input" class="name-input" placeholder="QNTLG-XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters">' +
+            '<button class="btn btn-primary" onclick="applyCode()">Apply</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="paywall-divider"><span>or</span></div>' +
+        '<button class="btn btn-primary btn-large paywall-buy-btn" onclick="buyAccess()">' +
+          'Buy ' + TOTAL_RUNS + '-run access &mdash; ' + PRICE_DISPLAY +
+        '</button>' +
+        '<p class="paywall-fine">Access lets you retake the test up to ' + TOTAL_RUNS + ' times over ' + MONTHS + ' months. ' +
+        'Your code will be saved in your downloaded results file.</p>' +
+      '</div>';
+
+    div.style.display = '';
+
+    setTimeout(function() {
+      var inp = document.getElementById('code-input');
+      if (inp) inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') applyCode(); });
+    }, 0);
+  }
+
+  window.applyCode = function() {
+    var input = document.getElementById('code-input');
+    var code = (input ? input.value.trim() : '').toUpperCase();
+    if (!code) { if (input) input.focus(); return; }
+
+    var btn = document.querySelector('.paywall-input-row .btn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Checking\u2026'; }
+
+    validateCode(code).then(function(result) {
+      if (result.valid) {
+        localStorage.setItem('quadrantology_code', code);
+        var pending = loadPending();
+        if (pending) {
+          showResults(pending);
+          consumeCode(code);
+        } else {
+          showIntro();
+        }
+      } else {
+        var err = document.getElementById('paywall-error');
+        if (err) {
+          err.textContent = result.reason === 'exhausted'
+            ? 'That code has no runs remaining.'
+            : 'Code not recognized. Check the code and try again.';
+          err.style.display = '';
+        }
+        if (btn) { btn.disabled = false; btn.textContent = 'Apply'; }
+      }
+    }).catch(function() {
+      var err = document.getElementById('paywall-error');
+      if (err) { err.textContent = 'Could not reach the server. Please try again.'; err.style.display = ''; }
+      if (btn) { btn.disabled = false; btn.textContent = 'Apply'; }
+    });
+  };
+
+  window.buyAccess = function() {
+    fetch('/api/checkout', { method: 'POST' })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.url) window.location.href = d.url;
+        else alert('Could not start checkout. Please try again.');
+      })
+      .catch(function() {
+        alert('Could not reach the server. Please try again.');
+      });
+  };
+
+  // After returning from Stripe, exchange session_id for the generated personal code
+  function handleStripeReturn(sessionId) {
+    history.replaceState({}, '', 'test.html');
+    var pending = loadPending();
+    if (!pending) { showIntro(); return; }
+
+    hideAll();
+    var div = document.getElementById('intro-view');
+    div.innerHTML = '<p class="intro-subtext">Confirming your payment\u2026</p>';
+    div.style.display = '';
+
+    var attempts = 0;
+    function tryFetch() {
+      attempts++;
+      fetch('/api/session-code?session_id=' + encodeURIComponent(sessionId))
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d.code) {
+            localStorage.setItem('quadrantology_code', d.code);
+            showResults(pending);
+            consumeCode(d.code);
+          } else if (attempts < 4) {
+            setTimeout(tryFetch, 1500);
+          } else {
+            div.innerHTML =
+              '<p class="access-warn">Payment confirmed but code not yet ready. ' +
+              'Please wait a moment and <a href="test.html">reload</a>. ' +
+              'Your results are saved and will appear once confirmed.</p>';
+          }
+        })
+        .catch(function() {
+          if (attempts < 4) setTimeout(tryFetch, 1500);
+          else div.innerHTML = '<p class="access-warn">Could not confirm payment. Please <a href="test.html">reload</a> and try again.</p>';
+        });
+    }
+    tryFetch();
+  }
+
+  // ===== RESULTS =====
+
+  function showResults(pending) {
+    clearPending();
+    hideAll();
+
+    var resultsVec = pending.resultsVec;
+    var stateString = pending.stateString;
+    var evBias = pending.evBias;
+
     document.getElementById('results-view').style.display = '';
     document.getElementById('progress-bar').style.width = '100%';
 
-    // Result icon
+    // Icon
     var iconDiv = document.getElementById('result-icon');
     iconDiv.innerHTML = '';
-    var names = stateString.split(' / ');
-    for (var n = 0; n < names.length; n++) {
-      var slug = names[n].toLowerCase().replace(/\s+/g, '');
+    stateString.split(' / ').forEach(function(name) {
       var img = document.createElement('img');
-      img.src = 'images/' + slug + 'web.png';
-      img.alt = names[n];
+      img.src = 'images/' + name.toLowerCase().replace(/\s+/g, '') + 'web.png';
+      img.alt = name;
       img.className = 'result-archetype-icon';
       iconDiv.appendChild(img);
-    }
+    });
 
+    // Name + badge
     var nameEl = document.getElementById('archetype-name');
     nameEl.textContent = stateString;
+    if (evBias === 1) nameEl.innerHTML += ' <span class="badge badge-exit">Exit</span>';
+    else if (evBias === 2) nameEl.innerHTML += ' <span class="badge badge-voice">Voice</span>';
 
-    if (evBias === 1) {
-      nameEl.innerHTML += ' <span class="badge badge-exit">Exit</span>';
-    } else if (evBias === 2) {
-      nameEl.innerHTML += ' <span class="badge badge-voice">Voice</span>';
-    }
-
-    // Exit/Voice bias summary
-    var evSummary = document.getElementById('ev-bias-summary');
-    var exitScore = resultsVec[0];
-    var voiceScore = resultsVec[1];
-    var biasLabel, biasClass;
-    if (evBias === 1) {
-      biasLabel = 'Exit-oriented';
-      biasClass = 'badge-exit';
-    } else if (evBias === 2) {
-      biasLabel = 'Voice-oriented';
-      biasClass = 'badge-voice';
-    } else {
-      biasLabel = 'Balanced';
-      biasClass = '';
-    }
-    evSummary.innerHTML =
-      '<p class="ev-bias-text">' +
-      '<span class="badge ' + biasClass + '">' + biasLabel + '</span> ' +
-      'Exit ' + exitScore + ' &ndash; Voice ' + voiceScore +
-      '</p>';
+    // E/V summary
+    var biasLabel = evBias === 1 ? 'Exit-oriented' : evBias === 2 ? 'Voice-oriented' : 'Balanced';
+    var biasClass = evBias === 1 ? 'badge-exit' : evBias === 2 ? 'badge-voice' : '';
+    document.getElementById('ev-bias-summary').innerHTML =
+      '<p class="ev-bias-text"><span class="badge ' + biasClass + '">' + biasLabel + '</span> ' +
+      'Exit ' + resultsVec[0] + ' &ndash; Voice ' + resultsVec[1] + '</p>';
 
     // Archetype links
     var linkDiv = document.getElementById('archetype-link');
     linkDiv.innerHTML = '';
-    var names2 = stateString.split(' / ');
-    for (var i = 0; i < names2.length; i++) {
-      var page = data.archetypePages[names2[i]];
+    var names = stateString.split(' / ');
+    names.forEach(function(name, i) {
+      var page = data.archetypePages[name];
       if (page) {
         var a = document.createElement('a');
         a.href = page;
-        a.textContent = 'Read about the ' + names2[i];
+        a.textContent = 'Read about the ' + name;
         linkDiv.appendChild(a);
-        if (i < names2.length - 1) {
-          linkDiv.appendChild(document.createTextNode(' | '));
-        }
+        if (i < names.length - 1) linkDiv.appendChild(document.createTextNode(' | '));
       }
-    }
+    });
 
     // Score bars
     var labels = ['Exit', 'Voice', 'Virtue Ethics', 'Consequentialist Ethics', 'Deontological Ethics'];
     var barClasses = ['exit-bar', 'voice-bar', 'ethics-bar', 'ethics-bar', 'ethics-bar'];
-    var maxVal = Math.max.apply(null, resultsVec);
-    if (maxVal === 0) maxVal = 1;
-
+    var maxVal = Math.max.apply(null, resultsVec) || 1;
     var container = document.getElementById('score-bars');
     container.innerHTML = '';
     for (var j = 0; j < 5; j++) {
@@ -301,19 +461,47 @@
       row.className = 'score-bar-row';
       row.innerHTML =
         '<div class="score-bar-label"><span>' + labels[j] + '</span><span>' + resultsVec[j] + '</span></div>' +
-        '<div class="score-bar-track"><div class="score-bar-value ' + barClasses[j] + '" style="width: 0%"></div></div>';
+        '<div class="score-bar-track"><div class="score-bar-value ' + barClasses[j] + '" style="width:0%"></div></div>';
       container.appendChild(row);
       (function(el, w) {
         setTimeout(function() { el.querySelector('.score-bar-value').style.width = w + '%'; }, 50);
       })(row, pct);
     }
 
-    saveResult({ version: 1, timestamp: new Date().toISOString(), archetype: stateString, evBias: evBias, scores: resultsVec.slice(), answers: answers.slice() });
+    // Save to history
+    saveResult({
+      version: 1,
+      timestamp: new Date().toISOString(),
+      archetype: stateString,
+      evBias: evBias,
+      scores: resultsVec.slice(),
+      answers: pending.answers.slice()
+    });
   }
 
-  // --- History: localStorage + export/import ---
+  // ===== WORKER CALLS =====
+
+  function validateCode(code) {
+    return fetch('/api/validate-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: code })
+    }).then(function(r) { return r.json(); });
+  }
+
+  function consumeCode(code) {
+    // Fire-and-forget — called after results are shown
+    fetch('/api/consume-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: code })
+    }).catch(function() { /* silently ignore network errors */ });
+  }
+
+  // ===== HISTORY: localStorage + export/import =====
 
   var STORAGE_KEY = 'quadrantology_history';
+  var PENDING_KEY = 'quadrantology_pending';
 
   function loadHistory() {
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
@@ -326,9 +514,27 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(h));
   }
 
+  function savePending(pending) {
+    sessionStorage.setItem(PENDING_KEY, JSON.stringify(pending));
+  }
+
+  function loadPending() {
+    try { return JSON.parse(sessionStorage.getItem(PENDING_KEY)); }
+    catch(e) { return null; }
+  }
+
+  function clearPending() {
+    sessionStorage.removeItem(PENDING_KEY);
+  }
+
   window.downloadHistory = function() {
-    var h = loadHistory();
-    var blob = new Blob([JSON.stringify(h, null, 2)], { type: 'application/json' });
+    var payload = {
+      _note: 'This file includes your personal access code (quadrantology_code). Keep it safe — uploading it on another device restores your full history and access.',
+      name: localStorage.getItem('quadrantology_name') || '',
+      code: localStorage.getItem('quadrantology_code') || '',
+      history: loadHistory()
+    };
+    var blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
     var a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'quadrantology-results.json';
@@ -350,13 +556,13 @@
     document.body.appendChild(overlay);
 
     function close() { document.body.removeChild(overlay); }
-
     overlay.addEventListener('click', function(e) { if (e.target === overlay) close(); });
     document.getElementById('modal-yes').onclick = function() { downloadHistory(); close(); };
     document.getElementById('modal-did').onclick = function() {
       close();
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem('quadrantology_name');
+      localStorage.removeItem('quadrantology_code');
       showIntro();
     };
   };
@@ -367,8 +573,11 @@
     var reader = new FileReader();
     reader.onload = function(ev) {
       try {
-        var incoming = JSON.parse(ev.target.result);
-        if (!Array.isArray(incoming)) incoming = [incoming];
+        var payload = JSON.parse(ev.target.result);
+        // Support both old format (array) and new format (object with history)
+        var incoming = Array.isArray(payload) ? payload : (payload.history || []);
+        if (payload.name) localStorage.setItem('quadrantology_name', payload.name);
+        if (payload.code) localStorage.setItem('quadrantology_code', payload.code);
         var existing = loadHistory();
         var seen = {};
         existing.forEach(function(r) { seen[r.timestamp] = true; });
@@ -383,6 +592,18 @@
     reader.readAsText(file);
     e.target.value = '';
   });
+
+  // ===== UTILITIES =====
+
+  function hideAll() {
+    ['intro-view', 'question-view', 'paywall-view', 'results-view'].forEach(function(id) {
+      document.getElementById(id).style.display = 'none';
+    });
+  }
+
+  function esc(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
 
 })();
 </script>
