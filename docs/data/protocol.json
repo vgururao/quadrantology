@@ -1,0 +1,19 @@
+{
+  "_comment": "Site-wide configuration. Edit here; all pages read this at runtime.",
+
+  "protocol": {
+    "min_runs":        3,
+    "window_days":     90,
+    "ics_interval_days": 30,
+
+    "_comment": "min_runs completions within window_days unlocks trendline analytics and LLM chat. ics_interval_days is the spacing between suggested retake dates in the .ics download."
+  },
+
+  "analytics": {
+    "tiers": [
+      { "runs": 3, "label": "Trendline",  "description": "Archetype trend chart + baseline comment unlocked." },
+      { "runs": 5, "label": "Deeper",     "description": "Richer commentary, ethics drift chart." },
+      { "runs": 10,"label": "Longitudinal","description": "Full longitudinal analysis." }
+    ]
+  }
+}

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quadrantology: Your History</title>
+  <title>Quadrantology: Your Logbook</title>
   <meta name="theme-color" content="#ffffff">
   <link rel="stylesheet" href="quadrantology.css">
 </head>
@@ -40,7 +40,7 @@
   <div class="history-page">
     <div class="history-page-header">
       <div>
-        <h1 id="history-title">Your History</h1>
+        <h1 id="history-title">Your Logbook</h1>
         <p id="history-subtitle" class="history-page-subtitle"></p>
       </div>
       <div class="history-page-actions" id="history-page-actions"></div>
@@ -75,7 +75,7 @@
     var h = loadHistory();
     var count = h.length;
 
-    document.getElementById('history-title').textContent = name ? name + '\u2019s History' : 'Your History';
+    document.getElementById('history-title').textContent = name ? name + '\u2019s Logbook' : 'Your Logbook';
     document.getElementById('history-subtitle').textContent =
       count === 0 ? '' :
       count === 1 ? '1 result' : count + ' results';
@@ -83,8 +83,8 @@
     var actionsEl = document.getElementById('history-page-actions');
     if (count > 0) {
       actionsEl.innerHTML =
-        '<button class="btn btn-secondary btn-sm" onclick="downloadHistory()">Download</button> ' +
-        '<button class="btn btn-secondary btn-sm" onclick="clearHistory()">Clear</button>';
+        '<button class="btn btn-secondary btn-sm" onclick="downloadHistory()">Download logbook</button> ' +
+        '<button class="btn btn-secondary btn-sm" onclick="clearHistory()">Clear logbook</button>';
     } else {
       actionsEl.innerHTML = '';
     }
@@ -93,7 +93,7 @@
     if (count === 0) {
       listEl.innerHTML =
         '<div class="history-empty">' +
-          '<p>No results saved on this device yet.</p>' +
+          '<p>No logbook entries on this device yet.</p>' +
           '<a href="test.html" class="btn btn-primary" style="margin-top:1rem;">Take the test</a>' +
         '</div>';
       return;
@@ -198,6 +198,13 @@
       card.appendChild(barsEl);
     }
 
+    if (entry.note) {
+      var noteEl = document.createElement('div');
+      noteEl.className = 'history-note';
+      noteEl.textContent = entry.note;
+      card.appendChild(noteEl);
+    }
+
     return card;
   }
 
@@ -206,7 +213,7 @@
     var blob = new Blob([JSON.stringify(h, null, 2)], { type: 'application/json' });
     var a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'quadrantology-results.json';
+    a.download = 'quadrantology-logbook.json';
     a.click();
     URL.revokeObjectURL(a.href);
   };
