@@ -17,10 +17,16 @@
     ]
   },
 
-  "relational": {
-    "max_others":          4,
+  "sharing": {
+    "min_runs_to_share":   3,
+
+    "_comment": "User must have at least min_runs_to_share completed runs before they can generate a share URL. Shared URLs are point-in-time snapshots (name, most recent 3 archetypes + summary scores + datestamps). To update, ask the person for a new URL."
+  },
+
+  "personal_circle": {
+    "max_slots":             8,
     "requires_subscription": true,
 
-    "_comment": "Users can add up to max_others shared results from other people to their logbook for relational analysis. Feature is locked on the single assessment sequence; subscription only."
+    "_comment": "Personal Circle holds up to max_slots intimate contacts whose personality arcs you track alongside your own. Adding a shared result to your circle requires a subscription. Generating and receiving share URLs is free. Each slot has update (paste new URL) and drop actions."
   }
 }

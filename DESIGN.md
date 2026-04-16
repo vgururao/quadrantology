@@ -14,7 +14,13 @@ Reference products: continuous glucose monitors, sleep trackers, fitness tracker
 
 A complementary reference is the Dexa scan model: a service you can use as a one-off (single body composition scan) or subscribe to annually for regular scans. The one-off gives you a snapshot; the subscription gives you a longitudinal picture that compounds in value over time. This maps directly to the product portfolio: a single assessment sequence (3 tests, 90 days) versus an annual subscription for ongoing tracking.
 
-## 3. The main "result" is the personality arc, not a point state
+## 3. Personal Circle, not social network
+
+The relational feature is called the Personal Circle. It is not an address book, a social network, or a contact list. It is a small set of intimate people — partners, close friends, mentors, key colleagues — whose personality arcs you track alongside your own, because those relationships actively shape who you are. The model is closer to a therapist's genogram or a coach's relationship map than to LinkedIn connections.
+
+Sharing is intentionally friction-ful and bilateral: you generate a share URL from your own logbook, send it to someone directly, and they add it to their circle (and vice versa if they want). There is no follow, no discovery, no feed. The circle is private to each user and stored only in their logbook.
+
+## 4. The main "result" is the personality arc, not a point state
 
 Like a character arc in a story, what matters is the shape of the trajectory — where you started, where you moved, what inflection points appeared, whether you're converging or oscillating. A single archetype label is a thumbnail; the arc is the full picture. Features and copy should consistently reinforce this: the trendline is not a bonus feature, it is the core deliverable.
 
