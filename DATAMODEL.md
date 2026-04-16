@@ -150,16 +150,54 @@ The fragment is never sent to the server. Decoded and rendered entirely client-s
 
 ---
 
+## Coach Mode: Imported Client Logbooks
+
+Available only on the Coach Mode subscription tier. A coach imports a client's full logbook — not a summary arc, but the complete `quadrantology-logbook.json` the client downloads and shares directly (out of band: email, secure message, etc.). The imported logbook gives the coach access to the client's full run history including dimension scores, position data, and journal notes.
+
+Stored in a separate localStorage key from the coach's own logbook, as a named collection:
+
+### localStorage key: `quadrantology_coach_clients`
+
+Array of imported client logbooks, each wrapped with import metadata:
+
+```json
+{
+  "version":   "client-v1",
+  "imported":  "<ISO 8601 — when imported>",
+  "label":     "<name the coach assigns locally>",
+  "logbook": {
+    "name":    "<client's display name from their logbook>",
+    "history": [ <full own run records> ],
+    "circle":  [ <client's personal circle, if present> ]
+  }
+}
+```
+
+**Field notes:**
+- `label`: coach-assigned local name, independent of the client's `name` field — allows the coach to organise clients without the client's name being the identifier
+- `logbook.circle`: included if present in the shared file; coach can see who is in the client's circle (names + arcs) but has no way to contact them
+- The client's `code` field is stripped on import — the coach has no access to the client's access credentials
+- No cap currently specified on number of clients; to be defined in `protocol.json` when the feature is built
+
+### Encryption
+
+The logbook file must be encrypted before sharing to prevent interception (email, file hosts, etc.). Encryption scheme TBD when the feature is built. Leading candidate: **asymmetric key pair** — coach generates a key pair in-browser, shares the public key (or a derived "import code") with the client, client's browser encrypts the logbook file using it before download, coach's browser decrypts on import using the private key (never leaves coach's device). Eliminates need for a shared secret or a server-mediated handshake.
+
+---
+
 ## Computed Views (no new storage)
 
 Some pages compute and display results from existing logbook + circle data without persisting anything new. These do not require data model changes — they are read-only views. Adding one of these features means updating UI only.
 
-| Page | Inputs | Description |
-|---|---|---|
-| `analytics.html` | `quadrantology_history` | Trendline chart + commentary across own runs. Unlocked at `min_runs`. |
-| `analysis.html` | Selected subset of circle + self | Relationship analysis across 2+ people. Selection is ephemeral (not saved). Analysis type chosen at runtime. |
+| Page | Inputs | Subscription | Description |
+|---|---|---|---|
+| `analytics.html` | `quadrantology_history` | Annual | Trendline chart + commentary across own runs. Unlocked at `min_runs`. |
+| `analysis.html` (standard) | Selected subset of circle + self | Annual | Relationship analysis across 2+ people using summary arcs. Selection ephemeral. |
+| `analysis.html` (deep) | 2+ full logbooks from coach clients | Coach Mode | Deep analysis with full run histories. Same page, richer inputs and analysis types. |
 
-**Relationship analysis selection pool:** yourself (full run history) + any Personal Circle members (summary arcs). Yourself is optional — you can run an analysis on two circle members without including yourself (e.g., to mediate between two people who've asked for your perspective). Results are displayed only, not saved to the logbook.
+**Standard relationship analysis selection pool:** yourself (full run history) + any Personal Circle members (summary arcs). Yourself is optional — you can run an analysis on two circle members without including yourself (mediator use case).
+
+**Deep analysis selection pool (Coach Mode):** any combination of imported client logbooks. The coach's own logbook can also be included. Full dimension scores and arc history available for all participants, enabling richer analysis than the summary-only standard mode. Results displayed only, not saved.
 
 ---
 
