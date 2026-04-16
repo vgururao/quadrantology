@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relationship Analysis | Quadrantology</title>
+  <link rel="stylesheet" href="quadrantology.css">
+  <style>
+    .analysis-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 1.5rem;
+      margin: 2rem 0;
+      align-items: start;
+    }
+
+    /* ── Sidebar ── */
+    .analysis-sidebar {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      position: sticky;
+      top: 1rem;
+    }
+    .sidebar-section { margin-bottom: 1.25rem; }
+    .sidebar-section:last-child { margin-bottom: 0; }
+    .sidebar-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--secondary-text);
+      margin-bottom: 0.6rem;
+    }
+
+    /* Person list */
+    .person-list { display: flex; flex-direction: column; gap: 0.35rem; }
+    .person-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.12s;
+    }
+    .person-row:hover { background: var(--bg); }
+    .person-row.checked { background: #f0f8fa; }
+    .person-row input[type="checkbox"] { cursor: pointer; accent-color: var(--exit-color); }
+    .person-name { font-size: 0.88rem; flex: 1; }
+    .person-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .person-badge.exit  { background: var(--exit-color);  color: #fff; }
+    .person-badge.voice { background: var(--voice-color); color: #fff; }
+    .person-badge.self  { background: var(--accent); color: #fff; }
+    .person-empty {
+      font-size: 0.83rem;
+      color: var(--secondary-text);
+      font-style: italic;
+      padding: 0.3rem 0.5rem;
+    }
+
+    /* Analysis type */
+    .analysis-types { display: flex; flex-direction: column; gap: 0.3rem; }
+    .type-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 0.4rem 0.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.12s;
+    }
+    .type-row:hover { background: var(--bg); }
+    .type-row.selected { background: #f0f8fa; }
+    .type-row input[type="radio"] { cursor: pointer; accent-color: var(--exit-color); margin-top: 2px; }
+    .type-info { flex: 1; }
+    .type-name { font-size: 0.88rem; font-weight: 600; }
+    .type-desc { font-size: 0.73rem; color: var(--secondary-text); line-height: 1.4; margin-top: 1px; }
+
+    /* Analyze button */
+    #analyze-btn {
+      width: 100%;
+      padding: 0.55rem 0;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    #analyze-btn:disabled { opacity: 0.4; cursor: default; }
+    #analyze-btn:not(:disabled):hover { opacity: 0.88; }
+    .selection-hint {
+      font-size: 0.76rem;
+      color: var(--secondary-text);
+      text-align: center;
+      margin-top: 0.5rem;
+      min-height: 1.2em;
+    }
+
+    /* ── Main panel ── */
+    .analysis-main {
+      min-height: 360px;
+    }
+
+    .analysis-placeholder {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3rem 2rem;
+      text-align: center;
+      color: var(--secondary-text);
+    }
+    .analysis-placeholder .placeholder-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .analysis-placeholder p { font-size: 0.9rem; line-height: 1.6; max-width: 320px; margin: 0 auto; }
+
+    /* Results card */
+    .result-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .result-card:last-child { margin-bottom: 0; }
+    .result-card-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--secondary-text);
+      margin-bottom: 0.6rem;
+    }
+    .result-headline {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+    .result-body {
+      font-size: 0.88rem;
+      color: var(--secondary-text);
+      line-height: 1.65;
+    }
+
+    /* Composition bar (E/V breakdown for a group) */
+    .comp-bars { display: flex; flex-direction: column; gap: 0.7rem; margin: 1rem 0; }
+    .comp-row { display: flex; align-items: center; gap: 0.75rem; }
+    .comp-name { width: 90px; font-size: 0.82rem; flex-shrink: 0; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .comp-track {
+      flex: 1;
+      height: 14px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+    }
+    .comp-exit-fill  { background: var(--exit-color);  height: 100%; transition: width 0.4s; }
+    .comp-voice-fill { background: var(--voice-color); height: 100%; transition: width 0.4s; }
+    .comp-label { font-size: 0.73rem; color: var(--secondary-text); width: 40px; text-align: right; flex-shrink: 0; }
+
+    /* Ethics triangle (simplex bars) */
+    .ethics-bars { display: flex; flex-direction: column; gap: 0.5rem; margin: 0.75rem 0; }
+    .ethic-row { display: flex; align-items: center; gap: 0.75rem; }
+    .ethic-label { width: 110px; font-size: 0.8rem; flex-shrink: 0; }
+    .ethic-track {
+      flex: 1;
+      height: 10px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .ethic-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width 0.4s; }
+    .ethic-pct { font-size: 0.73rem; color: var(--secondary-text); width: 32px; text-align: right; flex-shrink: 0; }
+
+    /* Fault line table */
+    .fault-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      margin: 0.75rem 0;
+    }
+    .fault-table th {
+      text-align: left;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: var(--secondary-text);
+      padding: 0 0.5rem 0.4rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .fault-table td { padding: 0.45rem 0.5rem 0.45rem 0; vertical-align: middle; }
+    .fault-table tr:not(:last-child) td { border-bottom: 1px solid #f0ece5; }
+    .fault-pair { font-weight: 600; }
+    .fault-dim { color: var(--secondary-text); }
+    .fault-delta {
+      font-weight: 700;
+      color: var(--accent);
+      text-align: right;
+    }
+    .fault-bar-cell { width: 100px; }
+    .fault-bar-track { height: 8px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .fault-bar-fill  { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.4s; }
+
+    /* Blind spots */
+    .blind-spots { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0.75rem 0; }
+    .blind-spot-chip {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+    }
+    .blind-spot-name { font-size: 0.82rem; font-weight: 700; margin-bottom: 2px; }
+    .blind-spot-val  { font-size: 0.73rem; color: var(--secondary-text); }
+    .blind-spot-chip.weak-spot { border-color: var(--accent); background: #fdf6f0; }
+    .blind-spot-chip.weak-spot .blind-spot-name { color: var(--accent); }
+
+    /* Section heading within result */
+    .result-section-head {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: var(--secondary-text);
+      margin: 1.25rem 0 0.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Demo notice */
+    .demo-bar {
+      background: #fff8e6;
+      border: 1px solid #e8d49a;
+      border-radius: 6px;
+      padding: 0.6rem 1rem;
+      font-size: 0.83rem;
+      color: #7a6000;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .demo-bar button {
+      background: none;
+      border: 1px solid #c8a800;
+      color: #7a6000;
+      border-radius: 4px;
+      padding: 3px 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .demo-bar button:hover { background: #fff3c0; }
+
+    .page-intro { margin: 1.5rem 0 0; }
+    .page-intro h1 { font-size: 1.8rem; margin-bottom: 0.4rem; }
+    .page-intro p  { color: var(--secondary-text); max-width: 580px; line-height: 1.6; }
+
+    @media (max-width: 780px) {
+      .analysis-layout { grid-template-columns: 1fr; }
+      .analysis-sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">Quadrantology</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+    <ul class="nav-links">
+      <li><a href="test.html">The Test</a></li>
+      <li><a href="theory.html">The Theory</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="game.html">How to Play</a></li>
+      <li class="nav-dropdown">
+        <a href="#archetypes">Archetypes &#9662;</a>
+        <div class="nav-dropdown-content">
+          <div class="dropdown-exit">Exit</div>
+          <a href="hacker.html">Hacker</a>
+          <a href="contrarian.html">Contrarian</a>
+          <a href="legalist.html">Legalist</a>
+          <div class="dropdown-voice">Voice</div>
+          <a href="investigator.html">Investigator</a>
+          <a href="holywarrior.html">Holy Warrior</a>
+          <a href="operator.html">Operator</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main class="content">
+
+  <div class="page-intro">
+    <h1>Relationship Analysis</h1>
+    <p>Select two or more people from your Personal Circle (or include yourself) and choose an analysis type. Results are computed from arc data you already have — no new data is collected or stored.</p>
+  </div>
+
+  <div class="demo-bar" id="demo-bar">
+    <span>No data yet. Load 3 demo contacts to explore the analysis types — drop them on the circle page to add real people.</span>
+    <button onclick="loadDemoData()">Load demo data</button>
+  </div>
+
+  <div class="analysis-layout">
+    <div class="analysis-sidebar">
+
+      <div class="sidebar-section">
+        <div class="sidebar-label">Select People (pick 2+)</div>
+        <div class="person-list" id="person-list">
+          <div class="person-empty">No circle data. <a href="circle.html">Add contacts</a> or load demo data.</div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-label">Analysis Type</div>
+        <div class="analysis-types" id="analysis-types">
+          <label class="type-row selected">
+            <input type="radio" name="analysis-type" value="working-dynamic" checked>
+            <div class="type-info">
+              <div class="type-name">Working Dynamic</div>
+              <div class="type-desc">Exit vs. Voice balance and likely tension points</div>
+            </div>
+          </label>
+          <label class="type-row">
+            <input type="radio" name="analysis-type" value="values-map">
+            <div class="type-info">
+              <div class="type-name">Values Map</div>
+              <div class="type-desc">Shared vs. divergent ethical orientations</div>
+            </div>
+          </label>
+          <label class="type-row">
+            <input type="radio" name="analysis-type" value="fault-lines">
+            <div class="type-info">
+              <div class="type-name">Fault Lines</div>
+              <div class="type-desc">The most divergent pairs across all dimensions</div>
+            </div>
+          </label>
+          <label class="type-row">
+            <input type="radio" name="analysis-type" value="blind-spots">
+            <div class="type-info">
+              <div class="type-name">Collective Blind Spots</div>
+              <div class="type-desc">Dimensions underrepresented across the group</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <button id="analyze-btn" disabled onclick="runAnalysis()">Analyze</button>
+      <div class="selection-hint" id="selection-hint">Select 2 or more people</div>
+
+    </div>
+
+    <div class="analysis-main" id="analysis-main">
+      <div class="analysis-placeholder">
+        <div class="placeholder-icon">&#9684;</div>
+        <p>Select people from your circle and choose an analysis type to see results here.</p>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size:0.83rem; color:var(--secondary-text); border-top:1px solid var(--border); padding-top:1rem; margin-bottom:2rem;">
+    &larr; <a href="circle.html">Back to Personal Circle</a>
+    &nbsp;&middot;&nbsp; Analysis uses only locally stored arc data. Nothing is sent to the server.
+  </p>
+
+</main>
+
+<script>
+// ── Constants ──────────────────────────────────────────────────────────────
+
+const EXIT_ARCHETYPES  = ['Hacker','Contrarian','Legalist'];
+const VOICE_ARCHETYPES = ['Investigator','Holy Warrior','Operator'];
+const ABBR = {
+  'Hacker':'H','Contrarian':'Cn','Legalist':'Lg',
+  'Investigator':'In','Holy Warrior':'HW','Operator':'Op'
+};
+const ETHICS_LABELS = ['Virtue','Consequentialist','Deontological'];
+
+function groupOf(archetype) {
+  return EXIT_ARCHETYPES.includes(archetype) ? 'exit' : 'voice';
+}
+
+// ── Data loading ──────────────────────────────────────────────────────────
+
+// Normalise a circle entry's most-recent result to a flat profile object
+function circleEntryToProfile(entry) {
+  const r = entry.results[0]; // newest result
+  return {
+    name:      entry.name,
+    source:    'circle',
+    demo:      !!entry._demo,
+    archetype: r.archetype,
+    ev:        r.ev,
+    ethics:    Array.isArray(r.ethics) ? r.ethics : [1/3, 1/3, 1/3]
+  };
+}
+
+// Summarise own most-recent v2 run to a profile
+function ownRunToProfile(run) {
+  const ev = typeof run.position?.ev === 'number' ? run.position.ev : 0;
+  const e  = run.position?.ethics;
+  const ethics = e
+    ? [e.virtue ?? 1/3, e.consequentialist ?? 1/3, e.deontological ?? 1/3]
+    : [1/3, 1/3, 1/3];
+  return {
+    name:      'You',
+    source:    'self',
+    archetype: run.archetype,
+    ev,
+    ethics
+  };
+}
+
+function loadPeople() {
+  const people = [];
+
+  // Own data
+  try {
+    const hist = JSON.parse(localStorage.getItem('quadrantology_history') || '[]');
+    const v2 = hist.filter(r => r.version === 2);
+    if (v2.length > 0) people.push(ownRunToProfile(v2[0]));
+  } catch(e) {}
+
+  // Circle data
+  try {
+    const circle = JSON.parse(localStorage.getItem('quadrantology_circle') || '[]');
+    for (const entry of circle) {
+      if (entry.results && entry.results.length > 0) {
+        people.push(circleEntryToProfile(entry));
+      }
+    }
+  } catch(e) {}
+
+  return people;
+}
+
+// ── Render sidebar ─────────────────────────────────────────────────────────
+
+let allPeople = [];
+
+function renderPersonList() {
+  allPeople = loadPeople();
+  const list = document.getElementById('person-list');
+
+  if (allPeople.length === 0) {
+    list.innerHTML = '<div class="person-empty">No circle data. <a href="circle.html">Add contacts</a> or load demo data.</div>';
+    return;
+  }
+
+  list.innerHTML = allPeople.map((p, i) => {
+    const grp = groupOf(p.archetype);
+    const badgeCls = p.source === 'self' ? 'self' : grp;
+    const demoTag = p.demo ? ' <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;color:#7a6000;background:#fff3c0;border:1px solid #e8d49a;border-radius:3px;padding:1px 4px;vertical-align:middle;">demo</span>' : '';
+    return `
+      <label class="person-row" id="row-${i}">
+        <input type="checkbox" value="${i}" onchange="onSelectionChange()">
+        <span class="person-name">${esc(p.name)}${demoTag}</span>
+        <span class="person-badge ${badgeCls}">${ABBR[p.archetype] || p.archetype}</span>
+      </label>`;
+  }).join('');
+}
+
+function getSelected() {
+  return [...document.querySelectorAll('#person-list input[type="checkbox"]:checked')]
+    .map(cb => allPeople[parseInt(cb.value)]);
+}
+
+function onSelectionChange() {
+  // Update row highlight
+  document.querySelectorAll('#person-list input[type="checkbox"]').forEach(cb => {
+    cb.closest('.person-row').classList.toggle('checked', cb.checked);
+  });
+  const n = getSelected().length;
+  const btn = document.getElementById('analyze-btn');
+  const hint = document.getElementById('selection-hint');
+  btn.disabled = n < 2;
+  hint.textContent = n < 2
+    ? `Select ${2 - n} more person${n === 1 ? '' : 's'}`
+    : `${n} people selected`;
+}
+
+// ── Analysis type highlight ────────────────────────────────────────────────
+
+document.getElementById('analysis-types').addEventListener('change', () => {
+  document.querySelectorAll('.type-row').forEach(row => {
+    row.classList.toggle('selected', row.querySelector('input').checked);
+  });
+});
+
+// ── Core analysis functions ────────────────────────────────────────────────
+
+function runAnalysis() {
+  const people  = getSelected();
+  const type    = document.querySelector('input[name="analysis-type"]:checked').value;
+  const main    = document.getElementById('analysis-main');
+
+  switch (type) {
+    case 'working-dynamic': main.innerHTML = analysisWorkingDynamic(people); break;
+    case 'values-map':      main.innerHTML = analysisValuesMap(people);      break;
+    case 'fault-lines':     main.innerHTML = analysisFaultLines(people);     break;
+    case 'blind-spots':     main.innerHTML = analysisBlindSpots(people);     break;
+  }
+}
+
+// ── Working Dynamic ──────────────────────────────────────────────────────
+
+function analysisWorkingDynamic(people) {
+  const exitPeople  = people.filter(p => groupOf(p.archetype) === 'exit');
+  const voicePeople = people.filter(p => groupOf(p.archetype) === 'voice');
+  const exitFrac    = exitPeople.length / people.length;
+  const voiceFrac   = 1 - exitFrac;
+  const avgEv       = people.reduce((s, p) => s + p.ev, 0) / people.length;
+
+  let headline, body;
+
+  if (Math.abs(exitFrac - 0.5) < 0.15) {
+    headline = 'Balanced Exit/Voice mix';
+    body = `This group has roughly equal Exit and Voice representation — ${exitPeople.length} Exit and ${voicePeople.length} Voice. ` +
+      `That balance supports productive creative tension, but requires active facilitation: ` +
+      `Exit members will tend to push for change and disruption while Voice members will want to preserve function and legitimacy. ` +
+      `The risk is stalemate on consequential decisions; the opportunity is that neither extreme dominates unchecked.`;
+  } else if (exitFrac > 0.65) {
+    headline = 'Exit-heavy group';
+    body = `${exitPeople.length} of ${people.length} people lean Exit (${Math.round(exitFrac * 100)}%). ` +
+      `Expect high appetite for change, experimentation, and rule-breaking. ` +
+      `The ${voicePeople.length > 0 ? voicePeople.map(p => p.name).join(' and ') + (voicePeople.length === 1 ? ' is' : ' are') : 'no one is'} ` +
+      `carrying the Voice load — ${voicePeople.length === 0 ? 'which means there is no natural brake on disruption' : 'watch for that person being steamrolled'}. ` +
+      `This group executes well in crisis or startup mode but may exhaust itself without a sustaining rhythm.`;
+  } else {
+    headline = 'Voice-heavy group';
+    body = `${voicePeople.length} of ${people.length} people lean Voice (${Math.round(voiceFrac * 100)}%). ` +
+      `Expect high emphasis on process, legitimacy, and incremental improvement. ` +
+      `The ${exitPeople.length > 0 ? exitPeople.map(p => p.name).join(' and ') + (exitPeople.length === 1 ? ' is' : ' are') : 'no one is'} ` +
+      `providing Exit energy — ${exitPeople.length === 0 ? 'meaning the group may lack the capacity for decisive disruption when needed' : 'that person may feel isolated or ignored'}. ` +
+      `This group sustains well but may resist necessary change for too long.`;
+  }
+
+  const barsHtml = people.map(p => {
+    const evPct = Math.round((p.ev + 1) / 2 * 100); // -1..+1 → 0..100
+    const grp = groupOf(p.archetype);
+    return `
+      <div class="comp-row">
+        <span class="comp-name" title="${esc(p.name)}">${esc(p.name)}</span>
+        <div class="comp-track">
+          <div class="comp-voice-fill" style="width:${100 - evPct}%"></div>
+          <div class="comp-exit-fill"  style="width:${evPct}%"></div>
+        </div>
+        <span class="comp-label" style="color:var(--${grp}-color)">${ABBR[p.archetype]}</span>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="result-card">
+      <div class="result-card-title">Working Dynamic</div>
+      <div class="result-headline">${headline}</div>
+      <div class="result-body">${body}</div>
+      <div class="result-section-head">Exit/Voice position by person</div>
+      <div style="display:flex;justify-content:space-between;font-size:0.68rem;color:var(--secondary-text);margin-bottom:4px;">
+        <span style="color:var(--voice-color)">&#9664; Voice</span>
+        <span style="color:var(--exit-color)">Exit &#9654;</span>
+      </div>
+      <div class="comp-bars">${barsHtml}</div>
+      ${groupDynamic(exitPeople, voicePeople)}
+    </div>`;
+}
+
+function groupDynamic(exitPeople, voicePeople) {
+  if (exitPeople.length === 0 || voicePeople.length === 0) return '';
+  // Most common archetypes
+  const exitNames  = exitPeople.map(p => p.archetype);
+  const voiceNames = voicePeople.map(p => p.archetype);
+  const uniqueExit  = [...new Set(exitNames)];
+  const uniqueVoice = [...new Set(voiceNames)];
+
+  const comboPairs = [];
+  for (const e of uniqueExit) for (const v of uniqueVoice) comboPairs.push(`${e}/${v}`);
+  const comboNote = comboPairs.length === 1 ? pairNote(uniqueExit[0], uniqueVoice[0]) : '';
+
+  if (!comboNote) return '';
+  return `<div class="result-section-head">Archetype interaction note</div>
+    <div class="result-body">${comboNote}</div>`;
+}
+
+function pairNote(exitArch, voiceArch) {
+  const notes = {
+    'Hacker/Investigator':    'Hackers want to break things fast; Investigators want to understand them fully first. Productive if time is allowed — toxic if rushed.',
+    'Hacker/Holy Warrior':    'Both are energised by moral urgency, but Hackers act first and ask forgiveness; Holy Warriors need the cause to be legitimate before moving. Expect frequent "but is this right?" friction.',
+    'Hacker/Operator':        'High-friction pairing. Hackers disrupt; Operators maintain. The Operator will feel like their work keeps getting undermined. Requires clear handoff protocols.',
+    'Contrarian/Investigator':'Both are skeptics, but of different targets. Contrarians attack consensus; Investigators probe for hidden truth. They can be powerful allies or compete for the role of "the one who sees through it all."',
+    'Contrarian/Holy Warrior':'Volatile. Contrarians question the cause; Holy Warriors protect it. Expect public disagreements about whether the mission is legitimate.',
+    'Contrarian/Operator':    'The Operator will find the Contrarian exhausting. Every system the Operator builds, the Contrarian will question. Best when the Contrarian is formally tasked with adversarial review.',
+    'Legalist/Investigator':  'Strong natural alliance. Both work within rules — Legalists enforce them, Investigators use them as evidence. They will reinforce each other\'s impulse toward documentation and process.',
+    'Legalist/Holy Warrior':  'Principled but potentially rigid. Both will demand that things be done the right way. Risk of paralysis when the rules conflict with the mission.',
+    'Legalist/Operator':      'High compatibility. Legalists provide the framework; Operators run inside it. This pairing builds institutions that actually function and endure.',
+  };
+  return notes[`${exitArch}/${voiceArch}`] || '';
+}
+
+// ── Values Map ─────────────────────────────────────────────────────────────
+
+function analysisValuesMap(people) {
+  const avg = [0, 0, 0];
+  for (const p of people) for (let i = 0; i < 3; i++) avg[i] += p.ethics[i] / people.length;
+
+  const dominant = avg.indexOf(Math.max(...avg));
+  const weakest  = avg.indexOf(Math.min(...avg));
+  const spread   = Math.max(...avg) - Math.min(...avg);
+
+  let headline, body;
+  const domLabel = ETHICS_LABELS[dominant];
+  const weakLabel = ETHICS_LABELS[weakest];
+
+  if (spread < 0.12) {
+    headline = 'Balanced values profile';
+    body = `This group shows no dominant ethical orientation — virtue, consequentialist, and deontological impulses are spread within ${Math.round(spread * 100)} percentage points of each other. ` +
+      `That balance is unusual and may indicate a group that reasons carefully about ethics rather than defaulting to a single framework. ` +
+      `Disagreements in this group are less likely to be about ends vs. means and more likely to be about which frame is appropriate for a given situation.`;
+  } else {
+    headline = `${domLabel}-leaning group`;
+    body = `The group leans ${domLabel.toLowerCase()} (${Math.round(avg[dominant] * 100)}% average weight). ` +
+      { Virtue: 'Virtue-oriented groups anchor decisions in character, trust, and role-appropriateness — "what would a good person do here?" Arguments from consequences or abstract rules tend to land less well.',
+        Consequentialist: 'Consequentialist groups anchor in outcomes — "what actually works?" They will discount rules that seem to produce worse results and resist appeals to tradition or character that don\'t translate into measurable impact.',
+        Deontological: 'Deontological groups anchor in principles and duties — "what are we obligated to do regardless of outcome?" They take rules seriously, resist pragmatic exceptions, and may feel that outcome-focused arguments miss something important.'
+      }[domLabel] +
+      ` The group\'s weakest orientation is ${weakLabel.toLowerCase()} (${Math.round(avg[weakest] * 100)}%). ` +
+      `Arguments framed in ${weakLabel.toLowerCase()} terms may fall flat even if they are correct.`;
+  }
+
+  // Individual variance
+  const variances = people.map(p => {
+    const dist = Math.sqrt(p.ethics.reduce((s, v, i) => s + (v - avg[i]) ** 2, 0));
+    return { name: p.name, dist, ethics: p.ethics };
+  }).sort((a, b) => b.dist - a.dist);
+
+  const outlier = variances[0];
+  const outlierNote = outlier.dist > 0.18
+    ? `<div class="result-section-head">Outlier note</div>
+       <div class="result-body"><strong>${esc(outlier.name)}</strong> diverges most from the group average (distance ${outlier.dist.toFixed(2)}). ` +
+       `Their ethical framing may feel alien to others in this group — worth making explicit in high-stakes conversations.</div>`
+    : '';
+
+  const ethicBarsHtml = people.map(p => {
+    return `
+      <div style="margin-bottom:0.75rem;">
+        <div style="font-size:0.82rem;font-weight:600;margin-bottom:0.3rem;">${esc(p.name)}</div>
+        <div class="ethics-bars">
+          ${ETHICS_LABELS.map((lbl, i) => `
+            <div class="ethic-row">
+              <span class="ethic-label">${lbl}</span>
+              <div class="ethic-track"><div class="ethic-fill" style="width:${Math.round(p.ethics[i] * 100)}%"></div></div>
+              <span class="ethic-pct">${Math.round(p.ethics[i] * 100)}%</span>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="result-card">
+      <div class="result-card-title">Values Map</div>
+      <div class="result-headline">${headline}</div>
+      <div class="result-body">${body}</div>
+      <div class="result-section-head">Group average</div>
+      <div class="ethics-bars">
+        ${ETHICS_LABELS.map((lbl, i) => `
+          <div class="ethic-row">
+            <span class="ethic-label">${lbl}</span>
+            <div class="ethic-track"><div class="ethic-fill" style="width:${Math.round(avg[i] * 100)}%"></div></div>
+            <span class="ethic-pct">${Math.round(avg[i] * 100)}%</span>
+          </div>`).join('')}
+      </div>
+      ${outlierNote}
+    </div>
+    <div class="result-card">
+      <div class="result-card-title">Individual profiles</div>
+      ${ethicBarsHtml}
+    </div>`;
+}
+
+// ── Fault Lines ─────────────────────────────────────────────────────────────
+
+function analysisFaultLines(people) {
+  // Dimensions: ev (scalar), ethics[0,1,2]
+  // For each pair, compute max dimension delta
+  const pairs = [];
+  for (let i = 0; i < people.length; i++) {
+    for (let j = i + 1; j < people.length; j++) {
+      const a = people[i], b = people[j];
+      const dims = [
+        { name: 'Exit/Voice',       delta: Math.abs(a.ev - b.ev) / 2 },  // ev range is -1..+1, normalise to 0..1
+        { name: 'Virtue',           delta: Math.abs(a.ethics[0] - b.ethics[0]) },
+        { name: 'Consequentialist', delta: Math.abs(a.ethics[1] - b.ethics[1]) },
+        { name: 'Deontological',    delta: Math.abs(a.ethics[2] - b.ethics[2]) },
+      ];
+      const worstDim = dims.reduce((mx, d) => d.delta > mx.delta ? d : mx, dims[0]);
+      pairs.push({ a, b, dims, worstDim, totalDelta: dims.reduce((s, d) => s + d.delta, 0) });
+    }
+  }
+  pairs.sort((x, y) => y.worstDim.delta - x.worstDim.delta);
+
+  const top = pairs.slice(0, Math.min(pairs.length, 5));
+  const worst = top[0];
+
+  let body = `The most divergent pair in this group is <strong>${esc(worst.a.name)}</strong> and <strong>${esc(worst.b.name)}</strong>, ` +
+    `primarily on the <em>${worst.worstDim.name}</em> dimension (gap: ${Math.round(worst.worstDim.delta * 100)} points). `;
+
+  if (worst.worstDim.name === 'Exit/Voice') {
+    body += `One leans toward disruption and change (Exit) while the other tends toward sustaining and legitimising existing structures (Voice). ` +
+      `This is a structural tension — neither is wrong — but it will surface in almost every consequential decision they face together.`;
+  } else {
+    body += `They weight the <em>${worst.worstDim.name.toLowerCase()}</em> ethical dimension very differently. ` +
+      `Arguments that feel obviously correct to one may feel irrelevant or wrong-headed to the other, not because of bad faith but because of incompatible moral grammars.`;
+  }
+
+  const rowsHtml = top.map(p => `
+    <tr>
+      <td class="fault-pair">${esc(p.a.name)} &amp; ${esc(p.b.name)}</td>
+      <td class="fault-dim">${p.worstDim.name}</td>
+      <td class="fault-bar-cell">
+        <div class="fault-bar-track">
+          <div class="fault-bar-fill" style="width:${Math.round(p.worstDim.delta * 100)}%"></div>
+        </div>
+      </td>
+      <td class="fault-delta">${Math.round(p.worstDim.delta * 100)}</td>
+    </tr>`).join('');
+
+  return `
+    <div class="result-card">
+      <div class="result-card-title">Fault Lines</div>
+      <div class="result-headline">Greatest divergence: ${esc(worst.a.name)} &amp; ${esc(worst.b.name)}</div>
+      <div class="result-body">${body}</div>
+      <div class="result-section-head">All pairs ranked by largest single-dimension gap</div>
+      <table class="fault-table">
+        <thead>
+          <tr>
+            <th>Pair</th>
+            <th>Dimension</th>
+            <th>Gap</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>${rowsHtml}</tbody>
+      </table>
+      <div class="result-body" style="margin-top:0.75rem;font-size:0.8rem;">
+        Gap scores are 0–100; 100 = maximum possible difference on that dimension.
+        High scores don't mean the pair can't work — knowing the fault line is the first step to bridging it.
+      </div>
+    </div>`;
+}
+
+// ── Blind Spots ─────────────────────────────────────────────────────────────
+
+function analysisBlindSpots(people) {
+  const exitFrac  = people.filter(p => groupOf(p.archetype) === 'exit').length  / people.length;
+  const voiceFrac = 1 - exitFrac;
+
+  const avgEthics = [0, 0, 0];
+  for (const p of people) for (let i = 0; i < 3; i++) avgEthics[i] += p.ethics[i] / people.length;
+
+  // Score: deviation below equal distribution (1/N for EV split, 1/3 for ethics)
+  const evGap    = Math.min(exitFrac, voiceFrac);       // closer to 0 = more lopsided
+  const ethGaps  = avgEthics.map(v => Math.max(0, 1/3 - v));  // below-average ethics dimensions
+
+  const chips = [];
+  if (exitFrac < 0.25) chips.push({ name: 'Exit perspective', val: `${Math.round(exitFrac * 100)}% of group`, weak: true });
+  if (voiceFrac < 0.25) chips.push({ name: 'Voice perspective', val: `${Math.round(voiceFrac * 100)}% of group`, weak: true });
+
+  ETHICS_LABELS.forEach((lbl, i) => {
+    chips.push({
+      name: lbl,
+      val: `avg ${Math.round(avgEthics[i] * 100)}%`,
+      weak: avgEthics[i] < 0.22
+    });
+  });
+
+  const weakChips = chips.filter(c => c.weak);
+  const strongChips = chips.filter(c => !c.weak);
+
+  let headline, body;
+  if (weakChips.length === 0) {
+    headline = 'No major blind spots detected';
+    body = 'This group covers Exit and Voice perspectives and all three ethical orientations at reasonable levels. That doesn\'t mean there are no blind spots — it means they aren\'t legible from arc data alone. Consider which viewpoints are missing from the room entirely, regardless of what the model shows.';
+  } else {
+    headline = `${weakChips.length} potential blind spot${weakChips.length > 1 ? 's' : ''} detected`;
+    const weakNames = weakChips.map(c => c.name.toLowerCase()).join(', ');
+    body = `This group is underweight on: <strong>${weakNames}</strong>. ` +
+      `Decisions that hinge on these frames may receive less critical scrutiny than they deserve. ` +
+      `Consider explicitly inviting those perspectives — even steel-manning them — before closing on important choices.`;
+  }
+
+  const allChipsHtml = chips.map(c => `
+    <div class="blind-spot-chip ${c.weak ? 'weak-spot' : ''}">
+      <div class="blind-spot-name">${esc(c.name)}</div>
+      <div class="blind-spot-val">${esc(c.val)}</div>
+    </div>`).join('');
+
+  return `
+    <div class="result-card">
+      <div class="result-card-title">Collective Blind Spots</div>
+      <div class="result-headline">${headline}</div>
+      <div class="result-body">${body}</div>
+      <div class="result-section-head">Coverage by dimension</div>
+      <div class="blind-spots">${allChipsHtml}</div>
+      <div class="result-body" style="margin-top:0.75rem;font-size:0.8rem;">
+        Highlighted chips are below the 25% threshold for Exit/Voice or 22% for ethics orientations.
+        Scores are computed from the most recent arc snapshot for each person.
+      </div>
+    </div>`;
+}
+
+// ── Demo data ─────────────────────────────────────────────────────────────
+
+const DEMO_CIRCLE = [
+  {
+    version: 'circle-v1', _demo: true,
+    added: new Date(Date.now() - 14 * 86400000).toISOString(),
+    name: 'Zev Okafor',
+    results: [
+      { ts: new Date(Date.now() - 14 * 86400000).toISOString(), archetype: 'Hacker', ev: 0.72, ethics: [0.20, 0.55, 0.25] },
+      { ts: new Date(Date.now() - 44 * 86400000).toISOString(), archetype: 'Contrarian', ev: 0.55, ethics: [0.18, 0.60, 0.22] },
+      { ts: new Date(Date.now() - 74 * 86400000).toISOString(), archetype: 'Hacker', ev: 0.65, ethics: [0.22, 0.52, 0.26] }
+    ]
+  },
+  {
+    version: 'circle-v1', _demo: true,
+    added: new Date(Date.now() - 30 * 86400000).toISOString(),
+    name: 'Praxis Endolin',
+    results: [
+      { ts: new Date(Date.now() - 30 * 86400000).toISOString(), archetype: 'Operator', ev: -0.58, ethics: [0.45, 0.25, 0.30] },
+      { ts: new Date(Date.now() - 60 * 86400000).toISOString(), archetype: 'Operator', ev: -0.62, ethics: [0.48, 0.22, 0.30] }
+    ]
+  },
+  {
+    version: 'circle-v1', _demo: true,
+    added: new Date(Date.now() - 8 * 86400000).toISOString(),
+    name: 'Sable Vorth',
+    results: [
+      { ts: new Date(Date.now() - 8 * 86400000).toISOString(), archetype: 'Investigator', ev: -0.30, ethics: [0.30, 0.35, 0.35] }
+    ]
+  }
+];
+
+const DEMO_OWN = [{
+  version: 2,
+  timestamp: new Date(Date.now() - 5 * 86400000).toISOString(),
+  archetype: 'Holy Warrior',
+  position: { ev: -0.45, ethics: { virtue: 0.55, consequentialist: 0.25, deontological: 0.20 } }
+}];
+
+function loadDemoData() {
+  localStorage.setItem('quadrantology_circle',  JSON.stringify(DEMO_CIRCLE));
+  localStorage.setItem('quadrantology_history', JSON.stringify(DEMO_OWN));
+  renderPersonList();
+  document.getElementById('demo-bar').innerHTML =
+    '<span>Showing 3 demo contacts. Drop them on the <a href="circle.html">circle page</a> to add real people.</span>' +
+    '<button onclick="clearDemoData()">Clear demo data</button>';
+  document.getElementById('demo-bar').style.display = '';
+}
+
+function clearDemoData() {
+  localStorage.removeItem('quadrantology_circle');
+  localStorage.removeItem('quadrantology_history');
+  renderPersonList();
+  document.getElementById('demo-bar').innerHTML =
+    '<span>No data yet. Load 3 demo contacts to explore the analysis types — drop them on the circle page to add real people.</span>' +
+    '<button onclick="loadDemoData()">Load demo data</button>';
+  document.getElementById('analysis-main').innerHTML =
+    '<div class="analysis-placeholder"><div class="placeholder-icon">&#9684;</div>' +
+    '<p>Select people from your circle and choose an analysis type to see results here.</p></div>';
+  onSelectionChange();
+}
+
+// ── Utility ────────────────────────────────────────────────────────────────
+
+function esc(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+
+renderPersonList();
+
+// Hide demo bar if real data present
+if (allPeople.length > 0) {
+  document.getElementById('demo-bar').style.display = 'none';
+}
+</script>
+</body>
+</html>

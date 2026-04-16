@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Questions | Quadrantology</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #f4f1eb;
+      --card:        #ffffff;
+      --text:        #2c2c2c;
+      --text2:       #6b6459;
+      --accent:      #c0713a;
+      --border:      #e0dbd3;
+      --live:        #2e7d51;
+      --live-bg:     #edf7f1;
+      --calib:       #a06b00;
+      --calib-bg:    #fff8e6;
+      --arch:        #6b6459;
+      --arch-bg:     #f0ede8;
+      --danger:      #a83232;
+      --sidebar-w:   280px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Top bar ── */
+    .topbar {
+      background: var(--text);
+      color: #fff;
+      padding: 0 20px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      font-size: 13px;
+    }
+    .topbar-title { font-weight: 600; letter-spacing: 0.5px; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .topbar-fp { color: #aaa; font-family: monospace; font-size: 11px; }
+    .topbar-signout {
+      background: none; border: 1px solid #666; color: #ccc;
+      padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;
+    }
+    .topbar-signout:hover { border-color: #999; color: #fff; }
+
+    /* ── Auth panel ── */
+    #auth-panel {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    .auth-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 32px;
+      width: 100%;
+      max-width: 440px;
+    }
+    .auth-card h2 { font-size: 18px; margin-bottom: 6px; }
+    .auth-card p { color: var(--text2); margin-bottom: 24px; font-size: 13px; }
+    .auth-section { margin-bottom: 24px; }
+    .auth-section + .auth-section { border-top: 1px solid var(--border); padding-top: 20px; }
+    .auth-section h3 { font-size: 13px; font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text2); }
+
+    .fp-display {
+      font-family: monospace;
+      font-size: 13px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+      color: var(--text);
+      word-break: break-all;
+    }
+    .pubkey-wrap { position: relative; }
+    .pubkey-display {
+      font-family: monospace;
+      font-size: 11px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 8px 10px;
+      width: 100%;
+      resize: none;
+      color: var(--text2);
+      height: 72px;
+      margin-bottom: 6px;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 2px 8px;
+      font-size: 11px;
+      cursor: pointer;
+      color: var(--text2);
+    }
+    .copy-btn:hover { background: var(--bg); }
+
+    .btn {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      text-align: center;
+    }
+    .btn-primary { background: var(--text); color: #fff; }
+    .btn-primary:hover { background: #444; }
+    .btn-secondary { background: var(--bg); border: 1px solid var(--border); color: var(--text); }
+    .btn-secondary:hover { background: var(--border); }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-full { width: 100%; }
+
+    .auth-status {
+      margin-top: 12px;
+      font-size: 12px;
+      min-height: 18px;
+    }
+    .auth-status.error { color: var(--danger); }
+    .auth-status.ok { color: var(--live); }
+
+    .key-warning {
+      font-size: 12px;
+      color: var(--danger);
+      background: #fdf2f2;
+      border: 1px solid #f5c6c6;
+      border-radius: 4px;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+    }
+
+    /* ── Main app layout ── */
+    #main-app {
+      flex: 1;
+      display: none;
+      overflow: hidden;
+    }
+    .app-layout {
+      display: flex;
+      height: 100%;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--card);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .sidebar-header {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .sidebar-header h3 { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text2); }
+    .sidebar-header button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .sidebar-header button:hover { opacity: 0.85; }
+
+    .sidebar-filters {
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 4px;
+    }
+    .filter-btn {
+      flex: 1;
+      padding: 4px 6px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: none;
+      font-size: 11px;
+      cursor: pointer;
+      color: var(--text2);
+    }
+    .filter-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
+
+    .q-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+    .q-item {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .q-item:hover { background: var(--bg); }
+    .q-item.selected { background: #f0e8e0; }
+    .q-item-id { font-family: monospace; font-size: 11px; font-weight: 600; color: var(--text2); width: 36px; flex-shrink: 0; }
+    .q-item-text { flex: 1; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      flex-shrink: 0;
+    }
+    .badge-live { background: var(--live-bg); color: var(--live); }
+    .badge-calibrating { background: var(--calib-bg); color: var(--calib); }
+    .badge-archived { background: var(--arch-bg); color: var(--arch); }
+
+    .sidebar-footer {
+      padding: 10px 14px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .sidebar-footer button {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--text2);
+      text-align: left;
+    }
+    .sidebar-footer button:hover { background: var(--bg); color: var(--text); }
+
+    /* ── Editor panel ── */
+    .editor-panel {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 28px;
+    }
+    .editor-empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text2);
+      font-size: 14px;
+    }
+
+    .editor-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 16px;
+    }
+    .editor-title h2 { font-size: 20px; }
+    .editor-title p { font-size: 12px; color: var(--text2); margin-top: 2px; }
+    .editor-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+    .form-section { margin-bottom: 20px; }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text2);
+      margin-bottom: 6px;
+    }
+    .form-input, .form-textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 8px 10px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--card);
+    }
+    .form-input:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .form-textarea { resize: vertical; min-height: 72px; }
+    .form-input-sm { width: 80px; }
+    .form-input[readonly] { background: var(--bg); color: var(--text2); }
+
+    .status-toggle {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      width: fit-content;
+    }
+    .status-btn {
+      padding: 6px 14px;
+      border: none;
+      border-right: 1px solid var(--border);
+      background: none;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--text2);
+    }
+    .status-btn:last-child { border-right: none; }
+    .status-btn:hover { background: var(--bg); }
+    .status-btn.active-live { background: var(--live-bg); color: var(--live); font-weight: 600; }
+    .status-btn.active-calibrating { background: var(--calib-bg); color: var(--calib); font-weight: 600; }
+    .status-btn.active-archived { background: var(--arch-bg); color: var(--arch); font-weight: 600; }
+
+    /* Weight grid */
+    .weight-grid {
+      display: grid;
+      grid-template-columns: 48px repeat(5, 1fr);
+      gap: 4px;
+      align-items: center;
+    }
+    .weight-header {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text2);
+      text-align: center;
+      padding: 2px 0;
+    }
+    .weight-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text2);
+    }
+    .weight-input {
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 5px 4px;
+      font-size: 13px;
+      text-align: center;
+      width: 100%;
+      background: var(--card);
+      color: var(--text);
+    }
+    .weight-input:focus { outline: none; border-color: var(--accent); }
+
+    .state-note-wrap { margin-top: 8px; }
+
+    /* Research panel */
+    .research-panel {
+      background: var(--calib-bg);
+      border: 1px solid #e8d49a;
+      border-radius: 6px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .research-panel h4 {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--calib);
+      margin-bottom: 12px;
+    }
+    .response-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+    .response-label { width: 12px; font-weight: 700; color: var(--text2); }
+    .response-bar-track {
+      flex: 1;
+      height: 8px;
+      background: #e8d49a;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .response-bar-fill {
+      height: 100%;
+      background: var(--calib);
+      border-radius: 4px;
+      transition: width 0.3s;
+    }
+    .response-count { font-size: 12px; color: var(--text2); width: 60px; text-align: right; }
+    .response-pct { font-size: 12px; font-weight: 600; color: var(--calib); width: 36px; text-align: right; }
+    .research-footer {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .research-threshold { font-weight: 600; color: var(--calib); }
+
+    /* State log */
+    .state-log-section { margin-top: 20px; }
+    .log-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text2);
+      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .log-toggle:hover { color: var(--text); }
+    .log-entries { margin-top: 10px; }
+    .log-entry {
+      display: flex;
+      gap: 10px;
+      font-size: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2);
+    }
+    .log-entry:last-child { border-bottom: none; }
+    .log-ts { font-family: monospace; flex-shrink: 0; color: var(--text); }
+    .log-change { flex: 1; }
+    .log-by { font-family: monospace; font-size: 10px; color: var(--arch); }
+
+    /* Save notification */
+    .save-flash {
+      position: fixed;
+      bottom: 20px;
+      right: 24px;
+      background: var(--live);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.2s;
+      pointer-events: none;
+    }
+    .save-flash.show { opacity: 1; transform: translateY(0); }
+
+    /* Import progress */
+    .import-progress {
+      position: fixed;
+      bottom: 20px;
+      right: 24px;
+      background: var(--text);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 4px;
+      font-size: 12px;
+      min-width: 200px;
+      display: none;
+    }
+    .import-progress.show { display: block; }
+    .import-bar { height: 4px; background: #444; border-radius: 2px; margin-top: 6px; }
+    .import-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.1s; }
+
+    hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">Quadrantology Admin — Questions</div>
+  <div class="topbar-right" id="topbar-right" style="display:none">
+    <span class="topbar-fp" id="topbar-fp"></span>
+    <button class="topbar-signout" onclick="signOut()">Sign out</button>
+  </div>
+</div>
+
+<!-- Auth panel -->
+<div id="auth-panel">
+  <div class="auth-card">
+    <h2>Admin Authentication</h2>
+    <p>Private key authentication required. Your key never leaves this browser.</p>
+
+    <div class="auth-section" id="signin-section">
+      <h3>Sign in</h3>
+      <div id="key-status-area"></div>
+      <button class="btn btn-primary btn-full" id="signin-btn" onclick="signIn()">Authenticate</button>
+      <div class="auth-status" id="auth-status"></div>
+    </div>
+
+    <div class="auth-section">
+      <h3>Key Management</h3>
+      <div id="keygen-area">
+        <p style="font-size:12px;color:var(--text2);margin-bottom:10px;">
+          Generate a key pair in this browser. The private key is stored locally (non-extractable).
+          Add your public key to the <code>ADMIN_PUBLIC_KEYS</code> environment variable in CF Pages.
+        </p>
+        <button class="btn btn-secondary" onclick="generateKey()">Generate New Key Pair</button>
+      </div>
+      <div id="pubkey-display-area" style="display:none; margin-top:14px;">
+        <div class="form-label">Your public key (add to ADMIN_PUBLIC_KEYS in CF env)</div>
+        <div class="key-warning">
+          Copy this key and add it to the CF Pages dashboard before closing this page.
+          If you lose access to this browser, you will need to generate a new key pair.
+        </div>
+        <div class="pubkey-wrap">
+          <textarea class="pubkey-display" id="pubkey-text" readonly></textarea>
+          <button class="copy-btn" onclick="copyPublicKey()">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main app -->
+<div id="main-app">
+  <div class="app-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h3>Questions</h3>
+        <button onclick="newQuestion()">+ New</button>
+      </div>
+      <div class="sidebar-filters">
+        <button class="filter-btn active" data-filter="all" onclick="setFilter(this,'all')">All</button>
+        <button class="filter-btn" data-filter="live" onclick="setFilter(this,'live')">Live</button>
+        <button class="filter-btn" data-filter="calibrating" onclick="setFilter(this,'calibrating')">Calib</button>
+        <button class="filter-btn" data-filter="archived" onclick="setFilter(this,'archived')">Arch</button>
+      </div>
+      <div class="q-list" id="q-list"></div>
+      <div class="sidebar-footer">
+        <button onclick="importFromJson()">↑ Import from questions.json</button>
+      </div>
+    </aside>
+
+    <!-- Editor -->
+    <div class="editor-panel">
+      <div class="editor-empty" id="editor-empty">Select a question to edit, or click + New</div>
+      <div id="editor-content" style="display:none">
+
+        <div class="editor-header">
+          <div class="editor-title">
+            <h2 id="editor-heading">New Question</h2>
+            <p id="editor-meta"></p>
+          </div>
+          <div class="editor-actions">
+            <button class="btn btn-secondary" onclick="discardChanges()">Discard</button>
+            <button class="btn btn-primary" onclick="saveQuestion()">Save</button>
+          </div>
+        </div>
+
+        <!-- Research data panel (calibrating only) -->
+        <div id="research-panel" style="display:none">
+          <div class="research-panel">
+            <h4>Calibration Data</h4>
+            <div class="response-row">
+              <span class="response-label">A</span>
+              <div class="response-bar-track"><div class="response-bar-fill" id="bar-a" style="width:0%"></div></div>
+              <span class="response-pct" id="pct-a">–</span>
+              <span class="response-count" id="count-a">0 responses</span>
+            </div>
+            <div class="response-row">
+              <span class="response-label">B</span>
+              <div class="response-bar-track"><div class="response-bar-fill" id="bar-b" style="width:0%"></div></div>
+              <span class="response-pct" id="pct-b">–</span>
+              <span class="response-count" id="count-b">0 responses</span>
+            </div>
+            <div class="research-footer">
+              <span id="research-total">Total: 0 responses</span>
+              <span class="research-threshold" id="research-threshold"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="form-section">
+          <label class="form-label">Status</label>
+          <div class="status-toggle">
+            <button class="status-btn" data-status="live" onclick="setStatus('live')">Live</button>
+            <button class="status-btn" data-status="calibrating" onclick="setStatus('calibrating')">Calibrating</button>
+            <button class="status-btn" data-status="archived" onclick="setStatus('archived')">Archived</button>
+          </div>
+        </div>
+
+        <!-- ID -->
+        <div class="form-section">
+          <label class="form-label">Question ID</label>
+          <input type="text" class="form-input" id="q-id" readonly style="width:100px">
+        </div>
+
+        <!-- Answer A -->
+        <div class="form-section">
+          <label class="form-label">Answer A</label>
+          <textarea class="form-textarea" id="q-answer-a" rows="2" oninput="markDirty()"></textarea>
+        </div>
+
+        <!-- Answer B -->
+        <div class="form-section">
+          <label class="form-label">Answer B</label>
+          <textarea class="form-textarea" id="q-answer-b" rows="2" oninput="markDirty()"></textarea>
+        </div>
+
+        <!-- Dimension weights -->
+        <div class="form-section">
+          <label class="form-label">Dimension Weights</label>
+          <div class="weight-grid">
+            <div class="weight-header"></div>
+            <div class="weight-header">Exit</div>
+            <div class="weight-header">Voice</div>
+            <div class="weight-header">Virtue</div>
+            <div class="weight-header">Conseq.</div>
+            <div class="weight-header">Deont.</div>
+            <div class="weight-label">A</div>
+            <input type="number" class="weight-input" id="wa0" min="0" max="5" step="0.1" oninput="markDirty()">
+            <input type="number" class="weight-input" id="wa1" min="0" max="5" step="0.1" oninput="markDirty()">
+            <input type="number" class="weight-input" id="wa2" min="0" max="5" step="0.1" oninput="markDirty()">
+            <input type="number" class="weight-input" id="wa3" min="0" max="5" step="0.1" oninput="markDirty()">
+            <input type="number" class="weight-input" id="wa4" min="0" max="5" step="0.1" oninput="markDirty()">
+            <div class="weight-label">B</div>
+            <input type="number" class="weight-input" id="wb0" min="0" max="5" step="0.1" oninput="markDirty()">
+            <input type="number" class="weight-input" id="wb1" min="0" max="5" step="0.1" oninput="markDirty()">
+            <input type="number" class="weight-input" id="wb2" min="0" max="5" step="0.1" oninput="markDirty()">
+            <input type="number" class="weight-input" id="wb3" min="0" max="5" step="0.1" oninput="markDirty()">
+            <input type="number" class="weight-input" id="wb4" min="0" max="5" step="0.1" oninput="markDirty()">
+          </div>
+        </div>
+
+        <!-- Response weight -->
+        <div class="form-section">
+          <label class="form-label">Response Weight <span style="font-weight:400;text-transform:none;font-size:11px;">(contribution to scoring, default 1.0)</span></label>
+          <input type="number" class="form-input form-input-sm" id="q-response-weight" min="0" max="5" step="0.1" value="1.0" oninput="markDirty()">
+        </div>
+
+        <!-- Notes -->
+        <div class="form-section">
+          <label class="form-label">Notes</label>
+          <textarea class="form-textarea" id="q-notes" rows="2" placeholder="Internal notes (not shown to users)" oninput="markDirty()"></textarea>
+        </div>
+
+        <!-- State change note (only shown when status changes) -->
+        <div class="form-section state-note-wrap" id="state-note-section" style="display:none">
+          <label class="form-label">Note for state change log</label>
+          <input type="text" class="form-input" id="q-state-note" placeholder="e.g. Moving to calibration for v2 weight validation">
+        </div>
+
+        <hr>
+
+        <!-- State log -->
+        <div class="state-log-section">
+          <button class="log-toggle" onclick="toggleLog()">
+            <span id="log-arrow">▶</span> State History
+          </button>
+          <div class="log-entries" id="log-entries" style="display:none"></div>
+        </div>
+
+      </div><!-- editor-content -->
+    </div><!-- editor-panel -->
+
+  </div><!-- app-layout -->
+</div><!-- main-app -->
+
+<div class="save-flash" id="save-flash">Saved</div>
+<div class="import-progress" id="import-progress">
+  <div id="import-progress-text">Importing…</div>
+  <div class="import-bar"><div class="import-bar-fill" id="import-bar-fill" style="width:0%"></div></div>
+</div>
+
+<script>
+'use strict';
+
+// ── Constants ──────────────────────────────────────────────────────────────
+const IDB_NAME  = 'quadrantology-admin';
+const IDB_STORE = 'keys';
+const IDB_KEY   = 'keyPair';
+const DIMS      = ['exit','voice','virtue','consequentialist','deontological'];
+
+// ── State ──────────────────────────────────────────────────────────────────
+let token      = sessionStorage.getItem('admin_token') || null;
+let fingerprint = sessionStorage.getItem('admin_fp') || null;
+let questions  = [];     // [{id, answer_a, answer_b, weights_a, weights_b, response_weight, status, ...}]
+let current    = null;   // currently selected question (copy)
+let dirty      = false;
+let currentStatus = null; // tracks status in the form
+let originalStatus = null;
+let logExpanded = false;
+let filterMode = 'all';
+let minSamples = 100; // updated from protocol.json
+
+// ── IndexedDB helpers ──────────────────────────────────────────────────────
+function openDB() {
+  return new Promise((res, rej) => {
+    const req = indexedDB.open(IDB_NAME, 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore(IDB_STORE);
+    req.onsuccess = e => res(e.target.result);
+    req.onerror = e => rej(e.target.error);
+  });
+}
+async function idbGet(key) {
+  const db = await openDB();
+  return new Promise((res, rej) => {
+    const req = db.transaction(IDB_STORE, 'readonly').objectStore(IDB_STORE).get(key);
+    req.onsuccess = e => res(e.target.result);
+    req.onerror = e => rej(e.target.error);
+  });
+}
+async function idbPut(key, val) {
+  const db = await openDB();
+  return new Promise((res, rej) => {
+    const req = db.transaction(IDB_STORE, 'readwrite').objectStore(IDB_STORE).put(val, key);
+    req.onsuccess = () => res();
+    req.onerror = e => rej(e.target.error);
+  });
+}
+async function idbDelete(key) {
+  const db = await openDB();
+  return new Promise((res, rej) => {
+    const req = db.transaction(IDB_STORE, 'readwrite').objectStore(IDB_STORE).delete(key);
+    req.onsuccess = () => res();
+    req.onerror = e => rej(e.target.error);
+  });
+}
+
+// ── Crypto helpers ─────────────────────────────────────────────────────────
+function bufferToBase64url(buf) {
+  const bytes = new Uint8Array(buf);
+  let binary = '';
+  for (const b of bytes) binary += String.fromCharCode(b);
+  return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+}
+
+async function computeFingerprint(spkiBuf) {
+  const hash = await crypto.subtle.digest('SHA-256', spkiBuf);
+  return Array.from(new Uint8Array(hash).slice(0,8))
+    .map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ── Page init ──────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', async () => {
+  // Load protocol for min_samples
+  try {
+    const p = await fetch('/data/protocol.json').then(r => r.json());
+    minSamples = p.calibration?.min_samples || 100;
+  } catch {}
+
+  const kp = await idbGet(IDB_KEY);
+  if (kp) {
+    const fp = await computeFingerprint(await crypto.subtle.exportKey('spki', kp.publicKey));
+    document.getElementById('key-status-area').innerHTML =
+      `<div class="fp-display">Key fingerprint: <strong>${fp}</strong></div>`;
+    document.getElementById('pubkey-display-area').style.display = 'none';
+  } else {
+    document.getElementById('key-status-area').innerHTML =
+      `<p style="font-size:12px;color:var(--text2);margin-bottom:10px;">No key pair found. Generate one below.</p>`;
+    document.getElementById('signin-btn').disabled = true;
+    document.getElementById('signin-btn').style.opacity = '0.5';
+  }
+
+  // Auto-attempt if token still valid
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[0]));
+      if (payload.exp > Math.floor(Date.now()/1000)) {
+        showApp();
+        return;
+      }
+    } catch {}
+    token = null;
+    sessionStorage.removeItem('admin_token');
+    sessionStorage.removeItem('admin_fp');
+  }
+});
+
+// ── Key generation ─────────────────────────────────────────────────────────
+window.generateKey = async function() {
+  const kp = await crypto.subtle.generateKey(
+    { name: 'ECDSA', namedCurve: 'P-256' },
+    false,  // private key is non-extractable
+    ['sign', 'verify']
+  );
+  await idbPut(IDB_KEY, kp);
+
+  const spki = await crypto.subtle.exportKey('spki', kp.publicKey);
+  const pubB64 = bufferToBase64url(spki);
+  const fp = await computeFingerprint(spki);
+
+  document.getElementById('key-status-area').innerHTML =
+    `<div class="fp-display">Key fingerprint: <strong>${fp}</strong></div>`;
+  document.getElementById('pubkey-text').value = pubB64;
+  document.getElementById('pubkey-display-area').style.display = 'block';
+  document.getElementById('signin-btn').disabled = false;
+  document.getElementById('signin-btn').style.opacity = '';
+};
+
+window.copyPublicKey = function() {
+  const txt = document.getElementById('pubkey-text').value;
+  navigator.clipboard.writeText(txt).catch(() => {
+    document.getElementById('pubkey-text').select();
+    document.execCommand('copy');
+  });
+  const btn = document.querySelector('.copy-btn');
+  btn.textContent = 'Copied!';
+  setTimeout(() => btn.textContent = 'Copy', 1500);
+};
+
+// ── Authentication ─────────────────────────────────────────────────────────
+window.signIn = async function() {
+  const status = document.getElementById('auth-status');
+  const btn    = document.getElementById('signin-btn');
+  btn.disabled = true;
+  btn.textContent = 'Authenticating…';
+  status.className = 'auth-status';
+  status.textContent = '';
+
+  try {
+    const kp = await idbGet(IDB_KEY);
+    if (!kp) throw new Error('No key pair found. Generate one first.');
+
+    // Get challenge (with auto-retry on expiry)
+    const { challenge } = await fetch('/api/admin/challenge').then(r => r.json());
+
+    // Export public key
+    const spki = await crypto.subtle.exportKey('spki', kp.publicKey);
+    const pubB64 = bufferToBase64url(spki);
+
+    // Sign challenge
+    const sig = await crypto.subtle.sign(
+      { name: 'ECDSA', hash: 'SHA-256' },
+      kp.privateKey,
+      new TextEncoder().encode(challenge)
+    );
+    const sigB64 = bufferToBase64url(sig);
+
+    // Submit
+    const res = await fetch('/api/admin/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ challenge, signature: sigB64, public_key: pubB64 })
+    }).then(r => r.json());
+
+    if (res.error) throw new Error(res.error);
+
+    token = res.token;
+    fingerprint = res.fingerprint;
+    sessionStorage.setItem('admin_token', token);
+    sessionStorage.setItem('admin_fp', fingerprint);
+
+    showApp();
+  } catch (err) {
+    status.className = 'auth-status error';
+    status.textContent = err.message;
+    btn.disabled = false;
+    btn.textContent = 'Authenticate';
+  }
+};
+
+window.signOut = function() {
+  token = null; fingerprint = null;
+  sessionStorage.removeItem('admin_token');
+  sessionStorage.removeItem('admin_fp');
+  document.getElementById('main-app').style.display = 'none';
+  document.getElementById('auth-panel').style.display = '';
+  document.getElementById('topbar-right').style.display = 'none';
+};
+
+// ── Show main app ──────────────────────────────────────────────────────────
+async function showApp() {
+  document.getElementById('auth-panel').style.display = 'none';
+  document.getElementById('main-app').style.display = '';
+  if (fingerprint) {
+    document.getElementById('topbar-fp').textContent = 'fp: ' + fingerprint;
+    document.getElementById('topbar-right').style.display = '';
+  }
+  await loadQuestions();
+}
+
+// ── API helpers ────────────────────────────────────────────────────────────
+function authHeaders() {
+  return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token };
+}
+
+async function apiGet(path) {
+  const r = await fetch(path, { headers: authHeaders() });
+  const data = await r.json();
+  if (r.status === 401) { signOut(); throw new Error('Session expired. Please sign in again.'); }
+  return data;
+}
+
+async function apiPost(path, body) {
+  const r = await fetch(path, { method: 'POST', headers: authHeaders(), body: JSON.stringify(body) });
+  const data = await r.json();
+  if (r.status === 401) { signOut(); throw new Error('Session expired. Please sign in again.'); }
+  return data;
+}
+
+// ── Questions list ─────────────────────────────────────────────────────────
+async function loadQuestions() {
+  const data = await apiGet('/api/admin/questions');
+  questions = data.questions || [];
+  renderList();
+}
+
+function renderList() {
+  const list = document.getElementById('q-list');
+  const filtered = filterMode === 'all' ? questions : questions.filter(q => q.status === filterMode);
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div style="padding:16px;font-size:12px;color:var(--text2);">No questions. Use Import to seed from questions.json.</div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(q => `
+    <div class="q-item${current && current.id === q.id ? ' selected' : ''}"
+         onclick="selectQuestion('${q.id}')">
+      <span class="q-item-id">${q.id}</span>
+      <span class="q-item-text">${escHtml(q.answer_a)}</span>
+      <span class="badge badge-${q.status}">${q.status === 'calibrating' ? 'cal' : q.status}</span>
+    </div>
+  `).join('');
+}
+
+window.setFilter = function(btn, filter) {
+  filterMode = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderList();
+};
+
+// ── Question editor ────────────────────────────────────────────────────────
+window.selectQuestion = async function(id) {
+  if (dirty && !confirm('Discard unsaved changes?')) return;
+
+  const data = await apiGet('/api/admin/questions?id=' + encodeURIComponent(id));
+  current = data.question;
+  const log = data.state_log || [];
+
+  fillForm(current);
+  renderLog(log);
+
+  if (current.status === 'calibrating') {
+    loadResearchData(id);
+    document.getElementById('research-panel').style.display = '';
+  } else {
+    document.getElementById('research-panel').style.display = 'none';
+  }
+
+  dirty = false;
+  renderList();
+};
+
+function fillForm(q) {
+  document.getElementById('editor-empty').style.display = 'none';
+  document.getElementById('editor-content').style.display = '';
+
+  document.getElementById('editor-heading').textContent = q.id;
+  document.getElementById('editor-meta').textContent =
+    'Created: ' + (q.added_at ? q.added_at.slice(0,10) : 'unknown') +
+    (q.created_by ? '  ·  by: ' + q.created_by : '');
+
+  document.getElementById('q-id').value = q.id;
+  document.getElementById('q-answer-a').value = q.answer_a || '';
+  document.getElementById('q-answer-b').value = q.answer_b || '';
+  document.getElementById('q-response-weight').value = q.response_weight ?? 1.0;
+  document.getElementById('q-notes').value = q.notes || '';
+
+  const wa = q.weights_a || [0,0,0,0,0];
+  const wb = q.weights_b || [0,0,0,0,0];
+  for (let i = 0; i < 5; i++) {
+    document.getElementById('wa' + i).value = wa[i] ?? 0;
+    document.getElementById('wb' + i).value = wb[i] ?? 0;
+  }
+
+  originalStatus = q.status;
+  currentStatus = q.status;
+  updateStatusButtons();
+  document.getElementById('state-note-section').style.display = 'none';
+  document.getElementById('q-state-note').value = '';
+}
+
+function updateStatusButtons() {
+  document.querySelectorAll('.status-btn').forEach(btn => {
+    btn.className = 'status-btn';
+    if (btn.dataset.status === currentStatus) {
+      btn.classList.add('active-' + currentStatus);
+    }
+  });
+}
+
+window.setStatus = function(s) {
+  currentStatus = s;
+  updateStatusButtons();
+  const changed = s !== originalStatus;
+  document.getElementById('state-note-section').style.display = changed ? '' : 'none';
+  if (s === 'calibrating' && current) {
+    loadResearchData(current.id);
+    document.getElementById('research-panel').style.display = '';
+  } else {
+    document.getElementById('research-panel').style.display = 'none';
+  }
+  markDirty();
+};
+
+window.markDirty = function() { dirty = true; };
+
+window.discardChanges = function() {
+  if (current) {
+    fillForm(current);
+    dirty = false;
+  }
+};
+
+window.saveQuestion = async function() {
+  if (!current && !document.getElementById('q-id').value) return;
+
+  const id = document.getElementById('q-id').value.trim();
+  const wa = [0,1,2,3,4].map(i => parseFloat(document.getElementById('wa'+i).value) || 0);
+  const wb = [0,1,2,3,4].map(i => parseFloat(document.getElementById('wb'+i).value) || 0);
+
+  const body = {
+    id,
+    answer_a:       document.getElementById('q-answer-a').value.trim(),
+    answer_b:       document.getElementById('q-answer-b').value.trim(),
+    weights_a:      wa,
+    weights_b:      wb,
+    response_weight: parseFloat(document.getElementById('q-response-weight').value) || 1.0,
+    status:         currentStatus,
+    notes:          document.getElementById('q-notes').value.trim() || null,
+    state_note:     document.getElementById('q-state-note').value.trim() || null
+  };
+
+  try {
+    const res = await apiPost('/api/admin/questions', body);
+    if (res.error) throw new Error(res.error);
+
+    // Update local cache
+    const idx = questions.findIndex(q => q.id === id);
+    if (idx >= 0) questions[idx] = res.question;
+    else questions.push(res.question);
+    questions.sort((a, b) => a.id.localeCompare(b.id));
+
+    current = res.question;
+    originalStatus = res.question.status;
+    dirty = false;
+    document.getElementById('state-note-section').style.display = 'none';
+
+    renderList();
+    flashSave();
+
+    // Reload log
+    const data = await apiGet('/api/admin/questions?id=' + encodeURIComponent(id));
+    renderLog(data.state_log || []);
+  } catch (err) {
+    alert('Save failed: ' + err.message);
+  }
+};
+
+// ── New question ───────────────────────────────────────────────────────────
+window.newQuestion = function() {
+  if (dirty && !confirm('Discard unsaved changes?')) return;
+
+  // Auto-generate next ID
+  const nums = questions.map(q => parseInt(q.id.replace('Q','')) || 0);
+  const nextNum = nums.length ? Math.max(...nums) + 1 : 1;
+  const nextId  = 'Q' + String(nextNum).padStart(3, '0');
+
+  current = {
+    id: nextId, answer_a: '', answer_b: '',
+    weights_a: [0,0,0,0,0], weights_b: [0,0,0,0,0],
+    response_weight: 1.0, status: 'live',
+    added_at: new Date().toISOString(), notes: ''
+  };
+
+  fillForm(current);
+  renderLog([]);
+  document.getElementById('q-id').removeAttribute('readonly');
+  document.getElementById('research-panel').style.display = 'none';
+  dirty = false;
+  renderList();
+};
+
+// ── Research data ──────────────────────────────────────────────────────────
+async function loadResearchData(qid) {
+  try {
+    const data = await apiGet('/api/admin/research-data?question_id=' + encodeURIComponent(qid));
+    const { counts, total, pct_a, pct_b } = data;
+    const pA = pct_a ?? 0, pB = pct_b ?? 0;
+
+    document.getElementById('bar-a').style.width = pA + '%';
+    document.getElementById('bar-b').style.width = pB + '%';
+    document.getElementById('pct-a').textContent = pct_a !== null ? pA + '%' : '–';
+    document.getElementById('pct-b').textContent = pct_b !== null ? pB + '%' : '–';
+    document.getElementById('count-a').textContent = counts.a + (counts.a === 1 ? ' resp.' : ' resp.');
+    document.getElementById('count-b').textContent = counts.b + (counts.b === 1 ? ' resp.' : ' resp.');
+    document.getElementById('research-total').textContent = 'Total: ' + total + ' responses';
+    document.getElementById('research-threshold').textContent =
+      total >= minSamples
+        ? '✓ Min samples reached (' + minSamples + ')'
+        : total + ' / ' + minSamples + ' min samples';
+  } catch {}
+}
+
+// ── State log ──────────────────────────────────────────────────────────────
+function renderLog(log) {
+  const el = document.getElementById('log-entries');
+  if (!log.length) {
+    el.innerHTML = '<div style="font-size:12px;color:var(--text2);padding:8px 0;">No history.</div>';
+    return;
+  }
+  el.innerHTML = log.map(entry => {
+    const from = entry.from_status ? entry.from_status + ' → ' : 'Created → ';
+    const ts   = (entry.changed_at || '').slice(0, 16).replace('T', ' ');
+    return `<div class="log-entry">
+      <span class="log-ts">${ts}</span>
+      <span class="log-change">${from}${entry.to_status}${entry.note ? ' — ' + escHtml(entry.note) : ''}</span>
+      ${entry.changed_by ? `<span class="log-by">${entry.changed_by}</span>` : ''}
+    </div>`;
+  }).join('');
+}
+
+window.toggleLog = function() {
+  logExpanded = !logExpanded;
+  document.getElementById('log-entries').style.display = logExpanded ? '' : 'none';
+  document.getElementById('log-arrow').textContent = logExpanded ? '▼' : '▶';
+};
+
+// ── Import from questions.json ─────────────────────────────────────────────
+window.importFromJson = async function() {
+  if (!confirm('Import all questions from /data/questions.json into D1?\nExisting questions with the same ID will be updated.')) return;
+
+  const prog = document.getElementById('import-progress');
+  const progText = document.getElementById('import-progress-text');
+  const progBar  = document.getElementById('import-bar-fill');
+  prog.classList.add('show');
+
+  try {
+    const json = await fetch('/data/questions.json').then(r => r.json());
+    const qs   = json.questions || [];
+    let done   = 0;
+
+    for (const q of qs) {
+      // Map old status names to new
+      const status = q.status === 'retired' ? 'archived' : 'live';
+      await apiPost('/api/admin/questions', {
+        id:             q.id,
+        answer_a:       q.a,
+        answer_b:       q.b,
+        weights_a:      q.weights.a,
+        weights_b:      q.weights.b,
+        response_weight: q.weight ?? 1.0,
+        status,
+        notes:          q.note || null,
+        state_note:     'Imported from questions.json v1'
+      });
+      done++;
+      const pct = Math.round(done / qs.length * 100);
+      progText.textContent = `Importing… ${done}/${qs.length}`;
+      progBar.style.width = pct + '%';
+    }
+
+    await loadQuestions();
+    progText.textContent = `Done — ${done} questions imported.`;
+    setTimeout(() => prog.classList.remove('show'), 2000);
+  } catch (err) {
+    progText.textContent = 'Import failed: ' + err.message;
+    setTimeout(() => prog.classList.remove('show'), 3000);
+  }
+};
+
+// ── Utilities ─────────────────────────────────────────────────────────────
+function escHtml(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function flashSave() {
+  const el = document.getElementById('save-flash');
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 1500);
+}
+</script>
+</body>
+</html>

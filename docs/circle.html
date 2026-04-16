@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Circle | Quadrantology</title>
+  <link rel="stylesheet" href="quadrantology.css">
+  <style>
+    .circle-header {
+      margin: 2rem 0 1.5rem;
+    }
+    .circle-header h1 { font-size: 1.8rem; margin-bottom: 0.4rem; }
+    .circle-header p  { color: var(--secondary-text); max-width: 560px; line-height: 1.6; }
+
+    /* 4-column grid, 2 rows = 8 slots */
+    .circle-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    /* ── Slot cards ── */
+    .slot-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Empty slot */
+    .slot-empty {
+      border: 2px dashed var(--border);
+      background: transparent;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      gap: 0.4rem;
+      color: var(--secondary-text);
+    }
+    .slot-empty:hover {
+      border-color: var(--accent);
+      background: #fdf6f0;
+      color: var(--accent);
+    }
+    .slot-empty .plus {
+      font-size: 1.8rem;
+      line-height: 1;
+      font-weight: 300;
+    }
+    .slot-empty .add-label { font-size: 0.8rem; text-align: center; }
+
+    /* Filled slot */
+    .slot-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .slot-archetype {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .slot-archetype.exit  { background: var(--exit-color);  color: #fff; }
+    .slot-archetype.voice { background: var(--voice-color); color: #fff; }
+
+    /* Mini arc — chips showing archetype progression */
+    .mini-arc {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin: 0.5rem 0;
+      flex-wrap: wrap;
+    }
+    .arc-chip {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 6px;
+      border-radius: 3px;
+      letter-spacing: 0.3px;
+    }
+    .arc-chip.exit  { background: #d4ecf0; color: var(--exit-color); }
+    .arc-chip.voice { background: #f0d4d4; color: var(--voice-color); }
+    .arc-arrow { color: var(--secondary-text); font-size: 0.65rem; }
+
+    /* EV bar */
+    .ev-bar-wrap {
+      margin: 0.4rem 0 0.6rem;
+    }
+    .ev-bar-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.65rem;
+      color: var(--secondary-text);
+      margin-bottom: 2px;
+    }
+    .ev-bar-track {
+      height: 5px;
+      background: var(--border);
+      border-radius: 3px;
+      position: relative;
+    }
+    .ev-bar-marker {
+      position: absolute;
+      top: -2px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      transform: translateX(-50%);
+      border: 2px solid #fff;
+    }
+    .ev-bar-marker.exit  { background: var(--exit-color); }
+    .ev-bar-marker.voice { background: var(--voice-color); }
+
+    .slot-meta {
+      font-size: 0.72rem;
+      color: var(--secondary-text);
+      margin-top: auto;
+      padding-top: 0.5rem;
+    }
+    .slot-actions {
+      display: flex;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+    }
+    .slot-actions button {
+      flex: 1;
+      padding: 4px 0;
+      font-size: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: none;
+      cursor: pointer;
+      color: var(--secondary-text);
+    }
+    .slot-actions button:hover { background: var(--bg); color: var(--text); }
+    .slot-actions .btn-drop:hover { border-color: #c0392b; color: #c0392b; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 460px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .modal-box h3 { font-size: 1.1rem; margin-bottom: 0.3rem; }
+    .modal-box p  { color: var(--secondary-text); font-size: 0.88rem; margin-bottom: 1rem; line-height: 1.5; }
+    .modal-box textarea {
+      width: 100%;
+      height: 80px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.5rem 0.75rem;
+      font-family: monospace;
+      font-size: 0.8rem;
+      resize: none;
+      margin-bottom: 0.5rem;
+    }
+    .modal-box textarea:focus { outline: none; border-color: var(--accent); }
+    .modal-error {
+      color: #c0392b;
+      font-size: 0.82rem;
+      min-height: 1.2em;
+      margin-bottom: 0.5rem;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+    }
+    .modal-actions button { padding: 0.45rem 1rem; font-size: 0.88rem; }
+
+    /* Demo slot styling */
+    .slot-demo { opacity: 0.82; }
+    .slot-demo-tag {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #7a6000;
+      background: #fff3c0;
+      border: 1px solid #e8d49a;
+      border-radius: 3px;
+      padding: 1px 5px;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+
+    /* Demo notice */
+    .demo-bar {
+      background: #fff8e6;
+      border: 1px solid #e8d49a;
+      border-radius: 6px;
+      padding: 0.6rem 1rem;
+      font-size: 0.83rem;
+      color: #7a6000;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .demo-bar button {
+      background: none;
+      border: 1px solid #c8a800;
+      color: #7a6000;
+      border-radius: 4px;
+      padding: 3px 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .demo-bar button:hover { background: #fff3c0; }
+
+    /* Footer note */
+    .circle-note {
+      font-size: 0.83rem;
+      color: var(--secondary-text);
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 700px) {
+      .circle-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 400px) {
+      .circle-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">Quadrantology</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+    <ul class="nav-links">
+      <li><a href="test.html">The Test</a></li>
+      <li><a href="theory.html">The Theory</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="game.html">How to Play</a></li>
+      <li class="nav-dropdown">
+        <a href="#archetypes">Archetypes &#9662;</a>
+        <div class="nav-dropdown-content">
+          <div class="dropdown-exit">Exit</div>
+          <a href="hacker.html">Hacker</a>
+          <a href="contrarian.html">Contrarian</a>
+          <a href="legalist.html">Legalist</a>
+          <div class="dropdown-voice">Voice</div>
+          <a href="investigator.html">Investigator</a>
+          <a href="holywarrior.html">Holy Warrior</a>
+          <a href="operator.html">Operator</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main class="content">
+
+  <div class="circle-header">
+    <h1>Personal Circle</h1>
+    <p>Track the personality arcs of the people you work and live with most closely. Up to 8 slots. Each slot is a point-in-time snapshot — ask for a new share URL to update.</p>
+  </div>
+
+  <div class="demo-bar" id="demo-bar">
+    <span>No circle data yet. Load 3 demo contacts to explore the interface — then drop them to add real people.</span>
+    <button onclick="loadDemoData()">Load demo data</button>
+  </div>
+
+  <div class="circle-grid" id="circle-grid"></div>
+
+  <p class="circle-note">
+    Your circle is stored only on this device. <a href="history.html">Export your logbook</a> to back it up.
+    Adding contacts requires a subscription — receiving and viewing share URLs is free.
+    &nbsp;&middot;&nbsp; <a href="analysis.html">Relationship analysis &rarr;</a>
+  </p>
+
+</main>
+
+<!-- Add / Update modal -->
+<div class="modal-overlay" id="modal" onclick="closeModalOnOverlay(event)">
+  <div class="modal-box">
+    <h3 id="modal-title">Add to Circle</h3>
+    <p>Paste a share URL from someone's results page. Share URLs look like:<br>
+    <code>quadrantology.com/r.html#v1:…</code></p>
+    <textarea id="share-input" placeholder="Paste share URL here…" oninput="clearModalError()"></textarea>
+    <div class="modal-error" id="modal-error"></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="confirmAdd()">Add</button>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">&copy; Quadrantology</footer>
+
+<script>
+'use strict';
+
+const STORAGE_KEY  = 'quadrantology_circle';
+const MAX_SLOTS    = 8;
+
+const EXIT_SET = new Set(['Hacker','Contrarian','Legalist']);
+const ABBR = {
+  'Hacker':'H', 'Contrarian':'Cn', 'Legalist':'Lg',
+  'Investigator':'In', 'Holy Warrior':'HW', 'Operator':'Op'
+};
+
+function evClass(ev) { return (ev === null || ev === undefined) ? 'exit' : (ev >= 0 ? 'exit' : 'voice'); }
+function arcClass(archetype) { return EXIT_SET.has(archetype) ? 'exit' : 'voice'; }
+function ageLabel(iso) {
+  if (!iso) return '';
+  var d = Math.floor((Date.now() - new Date(iso)) / 86400000);
+  if (d === 0) return 'Added today';
+  if (d === 1) return 'Added yesterday';
+  return 'Added ' + d + ' days ago';
+}
+
+// ── Storage ────────────────────────────────────────────────────────────────
+function loadCircle() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch { return []; }
+}
+function saveCircle(arr) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+}
+
+// ── Render ─────────────────────────────────────────────────────────────────
+function render() {
+  var circle = loadCircle();
+  var grid = document.getElementById('circle-grid');
+
+  // Hide demo bar if we have data
+  document.getElementById('demo-bar').style.display = circle.length > 0 ? 'none' : '';
+
+  var html = '';
+  for (var i = 0; i < MAX_SLOTS; i++) {
+    if (i < circle.length) {
+      html += renderFilled(circle[i], i);
+    } else {
+      html += renderEmpty(i);
+    }
+  }
+  grid.innerHTML = html;
+}
+
+function renderEmpty(idx) {
+  return '<div class="slot-card slot-empty" onclick="openAdd(' + idx + ')" title="Add contact">' +
+    '<span class="plus">+</span>' +
+    '<span class="add-label">Add to circle</span>' +
+  '</div>';
+}
+
+function renderFilled(entry, idx) {
+  var latest = entry.results && entry.results[0];
+  var archetype = latest ? latest.archetype : '—';
+  var ev = latest ? latest.ev : null;
+  var cls = arcClass(archetype);
+
+  // Mini arc chips (oldest → newest = results reversed)
+  var arcHtml = '';
+  if (entry.results && entry.results.length > 0) {
+    var ordered = entry.results.slice().reverse(); // oldest first
+    for (var j = 0; j < ordered.length; j++) {
+      if (j > 0) arcHtml += '<span class="arc-arrow">›</span>';
+      var r = ordered[j];
+      var ac = arcClass(r.archetype);
+      arcHtml += '<span class="arc-chip ' + ac + '">' + esc(ABBR[r.archetype] || r.archetype) + '</span>';
+    }
+  }
+
+  // EV position marker (0–100% along bar; ev is -1 to +1, center = 0)
+  var markerPct = ev !== null ? Math.round((ev + 1) / 2 * 100) : 50;
+  var markerCls = ev !== null ? evClass(ev) : 'exit';
+
+  var dummyTag = entry._demo
+    ? '<span class="slot-demo-tag">demo</span>'
+    : '';
+
+  return '<div class="slot-card' + (entry._demo ? ' slot-demo' : '') + '">' +
+    '<div class="slot-name">' +
+      '<span>' + esc(entry.name) + dummyTag + '</span>' +
+      '<span class="slot-archetype ' + cls + '">' + esc(archetype) + '</span>' +
+    '</div>' +
+    '<div class="mini-arc">' + arcHtml + '</div>' +
+    '<div class="ev-bar-wrap">' +
+      '<div class="ev-bar-labels"><span>Voice</span><span>Exit</span></div>' +
+      '<div class="ev-bar-track">' +
+        '<div class="ev-bar-marker ' + markerCls + '" style="left:' + markerPct + '%"></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="slot-meta">' + ageLabel(entry.added) + '</div>' +
+    '<div class="slot-actions">' +
+      '<button onclick="openUpdate(' + idx + ')">Update</button>' +
+      '<button class="btn-drop" onclick="dropSlot(' + idx + ')">Drop</button>' +
+    '</div>' +
+  '</div>';
+}
+
+// ── Modal ──────────────────────────────────────────────────────────────────
+var activeSlot = null;
+
+function openAdd(idx) {
+  activeSlot = idx;
+  document.getElementById('modal-title').textContent = 'Add to Circle';
+  document.getElementById('share-input').value = '';
+  document.getElementById('modal-error').textContent = '';
+  document.getElementById('modal').classList.add('open');
+  setTimeout(function() { document.getElementById('share-input').focus(); }, 50);
+}
+
+function openUpdate(idx) {
+  activeSlot = idx;
+  document.getElementById('modal-title').textContent = 'Update Contact';
+  document.getElementById('share-input').value = '';
+  document.getElementById('modal-error').textContent = '';
+  document.getElementById('modal').classList.add('open');
+  setTimeout(function() { document.getElementById('share-input').focus(); }, 50);
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  activeSlot = null;
+}
+
+function closeModalOnOverlay(e) {
+  if (e.target === document.getElementById('modal')) closeModal();
+}
+
+function clearModalError() {
+  document.getElementById('modal-error').textContent = '';
+}
+
+async function confirmAdd() {
+  var input = document.getElementById('share-input').value.trim();
+  if (!input) { showModalError('Paste a share URL first.'); return; }
+
+  var errEl = document.getElementById('modal-error');
+  errEl.textContent = 'Parsing…';
+
+  try {
+    var payload = await parseShareUrl(input);
+    var circle = loadCircle();
+
+    var entry = {
+      version: 'circle-v1',
+      added:   new Date().toISOString(),
+      name:    payload.name || 'Unknown',
+      results: payload.results || []
+    };
+
+    if (activeSlot !== null && activeSlot < circle.length) {
+      // Update existing slot — preserve name unless payload provides one
+      entry.name = payload.name || circle[activeSlot].name;
+      circle[activeSlot] = entry;
+    } else {
+      // Add to next available slot
+      if (circle.length >= MAX_SLOTS) { showModalError('Circle is full (8 slots maximum).'); return; }
+      circle.push(entry);
+    }
+
+    saveCircle(circle);
+    closeModal();
+    render();
+  } catch (err) {
+    showModalError(err.message || 'Could not parse this URL.');
+  }
+}
+
+function showModalError(msg) {
+  document.getElementById('modal-error').textContent = msg;
+}
+
+// ── Share URL parsing ──────────────────────────────────────────────────────
+// Format: [any-prefix]#v1:<base64url-encoded-json>
+// Encoding may be plain JSON or deflate-raw compressed JSON (as r.html will produce).
+async function parseShareUrl(input) {
+  var fragment = input;
+  var hashIdx = input.indexOf('#');
+  if (hashIdx >= 0) fragment = input.slice(hashIdx + 1);
+
+  if (!fragment.startsWith('v1:')) throw new Error('Not a Quadrantology share URL (expected #v1:…)');
+  var encoded = fragment.slice(3);
+
+  // base64url → bytes
+  var b64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+  var padded = b64.padEnd(b64.length + (4 - b64.length % 4) % 4, '=');
+  var bytes;
+  try {
+    bytes = Uint8Array.from(atob(padded), function(c) { return c.charCodeAt(0); });
+  } catch {
+    throw new Error('Could not decode share URL — it may be corrupted.');
+  }
+
+  // Try deflate decompression first (for URLs generated by r.html), then plain JSON
+  var json;
+  try {
+    var ds = new DecompressionStream('deflate-raw');
+    var writer = ds.writable.getWriter();
+    var reader = ds.readable.getReader();
+    writer.write(bytes);
+    writer.close();
+    var chunks = [];
+    while (true) {
+      var result = await reader.read();
+      if (result.done) break;
+      chunks.push(result.value);
+    }
+    var total = chunks.reduce(function(n, c) { return n + c.length; }, 0);
+    var merged = new Uint8Array(total);
+    var offset = 0;
+    chunks.forEach(function(c) { merged.set(c, offset); offset += c.length; });
+    json = JSON.parse(new TextDecoder().decode(merged));
+  } catch {
+    // Fall back to plain JSON (uncompressed, useful for testing)
+    try { json = JSON.parse(new TextDecoder().decode(bytes)); }
+    catch { throw new Error('Share URL data is not valid JSON.'); }
+  }
+
+  if (!json || typeof json.name !== 'string' || !Array.isArray(json.results)) {
+    throw new Error('Share URL has unexpected format.');
+  }
+  return json;
+}
+
+// ── Drop ──────────────────────────────────────────────────────────────────
+function dropSlot(idx) {
+  var circle = loadCircle();
+  if (idx >= circle.length) return;
+  var name = circle[idx].name;
+  if (!confirm('Remove ' + name + ' from your circle?')) return;
+  circle.splice(idx, 1);
+  saveCircle(circle);
+  render();
+}
+
+// ── Demo data ─────────────────────────────────────────────────────────────
+function loadDemoData() {
+  var now = new Date();
+  function daysAgo(d) { return new Date(now - d * 86400000).toISOString(); }
+
+  var demo = [
+    {
+      version: 'circle-v1', added: daysAgo(3), name: 'Zev Okafor', _demo: true,
+      results: [
+        { ts: daysAgo(3),  archetype: 'Hacker',      ev:  0.62, ethics: [0.15, 0.60, 0.25] },
+        { ts: daysAgo(35), archetype: 'Contrarian',  ev:  0.38, ethics: [0.20, 0.55, 0.25] },
+        { ts: daysAgo(68), archetype: 'Hacker',      ev:  0.55, ethics: [0.15, 0.65, 0.20] }
+      ]
+    },
+    {
+      version: 'circle-v1', added: daysAgo(12), name: 'Praxis Endolin', _demo: true,
+      results: [
+        { ts: daysAgo(12), archetype: 'Operator',    ev: -0.40, ethics: [0.25, 0.35, 0.40] },
+        { ts: daysAgo(44), archetype: 'Operator',    ev: -0.45, ethics: [0.20, 0.30, 0.50] }
+      ]
+    },
+    {
+      version: 'circle-v1', added: daysAgo(7), name: 'Sable Vorth', _demo: true,
+      results: [
+        { ts: daysAgo(7),  archetype: 'Investigator',ev: -0.28, ethics: [0.45, 0.30, 0.25] },
+        { ts: daysAgo(40), archetype: 'Holy Warrior', ev: -0.52, ethics: [0.55, 0.25, 0.20] },
+        { ts: daysAgo(72), archetype: 'Investigator',ev: -0.35, ethics: [0.40, 0.30, 0.30] }
+      ]
+    }
+  ];
+
+  saveCircle(demo);
+  render();
+  document.getElementById('demo-bar').innerHTML =
+    '<span>Showing 3 demo contacts (marked <strong>demo</strong>). Drop them to add real people.</span>' +
+    '<button onclick="clearDemoData()">Clear demo data</button>';
+  document.getElementById('demo-bar').style.display = '';
+}
+
+function clearDemoData() {
+  saveCircle([]);
+  render();
+}
+
+// ── Utils ──────────────────────────────────────────────────────────────────
+function esc(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+render();
+</script>
+
+</body>
+</html>

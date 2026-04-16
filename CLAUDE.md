@@ -23,13 +23,17 @@ docs/              — Live website (Cloudflare Pages, custom domain quadrantolo
   shop.html        — Card deck shop + print-at-home downloads
   game.html        — How to Play (stub)
   history.html     — Logbook viewer (rename to analytics.html when analytics built)
+  circle.html      — Personal Circle: up to 8 arc snapshots from contacts
+  analysis.html    — Relationship Analysis: computed views over circle + own data
   hacker.html, contrarian.html, legalist.html,
   investigator.html, holywarrior.html, operator.html
   quadrantology.css — Full shared stylesheet with custom properties
   data/
-    questions.json  — Question bank (schema v1): permanent IDs, weights, status
-    protocol.json   — Runtime feature parameters (min_runs, circle size, etc.)
+    questions.json  — Question bank (seed/backup only; canonical source is now D1)
+    protocol.json   — Runtime feature parameters (min_runs, circle size, calibration, etc.)
   images/          — Site images and card print sheets
+  admin/
+    questions.html  — Admin UI: question CRUD, status toggles, research data view (ECDSA key auth)
 
 functions/         — Cloudflare Pages Functions (deployed alongside docs/)
   api/
@@ -39,11 +43,21 @@ functions/         — Cloudflare Pages Functions (deployed alongside docs/)
     session-code.js     — GET:  exchange Stripe session_id for personal code
     stripe-webhook.js   — POST: handle checkout.session.completed, generate code
     price.js            — GET:  fetch live price display from Stripe
+    questions.js        — GET:  serve live+calibrating questions from D1 (falls back to 503)
     admin/
-      generate-codes.js — POST: batch-generate coupon/org codes (admin-protected)
+      _middleware.js    — HMAC token verification for all /api/admin/* routes
+      challenge.js      — GET:  issue nonce for ECDSA challenge-response auth
+      auth.js           — POST: verify signature, return HMAC session token
+      questions.js      — GET/POST: question CRUD + state log
+      research-data.js  — GET:  per-question response counts + archetype breakdown
+      generate-codes.js — POST: batch-generate coupon/org codes
+    research/
+      record-response.js  — POST: store opted-in test run anonymously (per-run pathway)
+      submit-logbook.js   — POST: store full logbook history anonymously (bulk pathway)
 
 worker/
   schema.sql       — D1 schema (apply once: wrangler d1 execute quadrantology --file=worker/schema.sql --remote)
+  seed-questions.sql — INSERT OR IGNORE for all 28 questions; run once after schema.sql
 
 assets/            — Source/master files (not served)
   deck/            — Card deck masters (character art, logos, PSD masters)
@@ -103,11 +117,21 @@ Worker-dependent features (Stripe, code validation) require `wrangler pages dev`
 | `POST /api/checkout` | Create Stripe Checkout session |
 | `GET  /api/session-code?session_id=` | Exchange Stripe session_id for personal code |
 | `POST /api/stripe-webhook` | Handle payment events, generate personal code |
+| `GET  /api/questions` | Serve live+calibrating questions from D1 |
+| `GET  /api/admin/challenge` | Issue ECDSA auth nonce |
+| `POST /api/admin/auth` | Verify ECDSA signature, return HMAC session token |
+| `GET  /api/admin/questions` | List all questions (with optional `?id=Q001` for single+state log) |
+| `POST /api/admin/questions` | Create or update question |
+| `GET  /api/admin/research-data` | Response counts + archetype breakdown (`?question_id=` or `?all=1`) |
 | `POST /api/admin/generate-codes` | Batch-generate coupon/org codes |
+| `POST /api/research/record-response` | Store anonymised per-run response (opted-in users) |
+| `POST /api/research/submit-logbook` | Store anonymised full logbook history (bulk opt-in) |
 
 ### D1 schema (`worker/schema.sql`)
 
-One table: `codes`
+Tables: `codes`, `questions`, `question_state_log`, `research_subjects`, `research_sessions`, `research_responses`, `admin_challenges`
+
+**`codes`** (unchanged)
 
 | Column | Type | Notes |
 |---|---|---|
@@ -128,18 +152,41 @@ One table: `codes`
 | `STRIPE_WEBHOOK_SECRET` | Secret | Stripe webhook signing secret (`whsec_...`) |
 | `STRIPE_PRICE_ID` | Secret | Price ID for the access product (`price_...`) |
 | `ADMIN_SECRET` | Secret | Bearer token for `/api/admin/generate-codes` |
+| `ADMIN_PUBLIC_KEYS` | Plain | Comma-separated base64url SPKI ECDSA P-256 public keys for admin UI (`/admin/questions`). Generate via the admin page key setup flow. |
+| `ADMIN_TOKEN_SECRET` | Secret | HMAC-SHA256 signing secret for admin session tokens. Must be at least 32 bytes of random entropy. Generate with `openssl rand -base64 32`. |
+
+### D1 schema migrations
+
+Schema changes are applied manually. After updating `worker/schema.sql`, run:
+```bash
+wrangler d1 execute quadrantology --file=worker/schema.sql --remote
+```
+This is safe to re-run (all statements use `CREATE TABLE IF NOT EXISTS`).
+
+To seed questions into D1 from the static file (first-time setup):
+```bash
+wrangler d1 execute quadrantology --file=worker/seed-questions.sql --remote
+```
+After seeding, the admin UI at `/admin/questions` can import/manage questions from D1. The "Import from questions.json" button in the admin UI also handles seeding.
 
 ## Data Model
 
 See `DATAMODEL.md` for the full canonical spec. Summary below for quick reference.
 
-### questions.json (schema v1)
+### Questions (D1-backed, schema v2)
 
-Each question has a permanent `id` (Q001–Q028+), `status` (`active`/`retired`), `weight` (float, default 1.0), `added` (schema version), and dimension weight vectors for answers `a` and `b`.
+Questions are now managed in D1 via `/admin/questions` and served via `GET /api/questions`. The static `docs/data/questions.json` is a seed/backup file only.
+
+Each question has: `id` (Q001–Q028+), `status` (`live`/`calibrating`/`archived`), `response_weight` (float, default 1.0), `questions_version` (int), `answer_a`/`answer_b`, `weights_a`/`weights_b` (dimension weight arrays), `notes`, and `state_log` (full status change history).
+
+Status meanings:
+- `live` — in the test pool for respondents
+- `calibrating` — live AND anonymous responses are recorded in D1 for research
+- `archived` — not in pool; preserved for history replay (questions are never deleted)
+
+Calibration threshold (`protocol.json > calibration.min_samples`, default 100): after this many responses, `response_weight` can be manually set via admin UI.
 
 Dimensions (index order): `[exit, voice, virtue, consequentialist, deontological]`
-
-Questions are never deleted — only retired. Retired questions stay in the file so old history records can be replayed.
 
 **Known issues to resolve:** Q011 answer A and Q023 answer B have all-zero weight vectors. May be intentional asymmetric questions — review with author.
 
@@ -149,11 +196,13 @@ Two versions coexist in localStorage and exported JSON:
 
 **v1** (legacy): `{ version:1, timestamp, archetype, evBias, scores:[array], answers:[array] }`
 
-**v2** (current): `{ version:2, timestamp, questions_version, run:[{qid,ans}], scores:{exit,voice,virtue,consequentialist,deontological}, position:{ev, ethics:{virtue,consequentialist,deontological}}, archetype, ev_bias, note:'' }`
+**v2** (current): `{ version:2, timestamp, questions_version, run:[{qid,ans}], scores:{exit,voice,virtue,consequentialist,deontological}, position:{ev, ethics:{virtue,consequentialist,deontological}}, archetype, ev_bias, calibrating:[qids], run_token:string|null, note:'' }`
 
 - `position.ev`: continuous E↔V position, -1 (pure Voice) to +1 (pure Exit)
 - `position.ethics`: simplex proportions summing to 1.0
 - `run`: exact question IDs + answers, enabling future replay and reanalysis
+- `calibrating`: array of question IDs that were in `calibrating` status at run time (used by `submit-logbook` to correctly tag `is_calibrating` on response rows)
+- `run_token`: 32-char hex token generated at run time if user opted into research; stored in `research_sessions.run_token` for cross-dataset linkage. `null` if user declined. Never the same as the internal `session_id`.
 - `note`: freeform journal entry, private to the user, never included in share payloads
 
 ### Personal Circle records

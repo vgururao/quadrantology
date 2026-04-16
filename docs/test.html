@@ -95,10 +95,43 @@
   var data = null;
   var current = 0;
   var answers = [];
+  var testQuestions = null;    // active question pool for this run (filtered by consent choice)
+  var researchOptIn = false;   // set at beginTest() from consent checkbox
+  var researchSessionId = null; // internal DB key — random UUID, never stored in logbook
+  var runToken = null;          // cross-dataset linkage token — stored in logbook run record only if opted in
+
+  // Returns HTML for the research consent block, or '' if no calibrating questions.
+  function calibConsentHTML() {
+    if (!data || !data.questions) return '';
+    var n = data.questions.filter(function(q) { return q.status === 'calibrating'; }).length;
+    if (n === 0) return '';
+    var noun = n === 1 ? 'question' : 'questions';
+    var pronoun = n === 1 ? 'It' : 'They';
+    return '<div class="research-consent-block">' +
+      '<p><strong>' + n + ' ' + noun + ' in this run ' + (n === 1 ? 'is' : 'are') + ' being calibrated.</strong> ' +
+      pronoun + ' will not be used to compute your result.</p>' +
+      '<label class="consent-label"><input type="checkbox" id="research-consent"> ' +
+      'Yes — log my responses anonymously for research</label>' +
+      '<p class="consent-note">If you prefer not to participate, calibration questions will be skipped.</p>' +
+      '</div>';
+  }
+
+  // Fetch questions from D1-backed API; fall back to static file if unavailable or empty
+  function fetchQuestions() {
+    return fetch('/api/questions')
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.questions && d.questions.length > 0) return d;
+        return fetch('data/questions.json').then(function(r) { return r.json(); });
+      })
+      .catch(function() {
+        return fetch('data/questions.json').then(function(r) { return r.json(); });
+      });
+  }
 
   // Load questions + price in parallel, then decide what to show
   Promise.all([
-    fetch('data/questions.json').then(function(r) { return r.json(); }),
+    fetchQuestions(),
     fetch('/api/price').then(function(r) { return r.json(); }).catch(function() { return {}; })
   ]).then(function(results) {
       data = results[0];
@@ -137,6 +170,7 @@
         '<h2>Welcome back, ' + esc(name) + '!</h2>' +
         '<p class="intro-subtext">You\'ve taken this test ' + count + ' ' + times + '.</p>' +
         '<div id="access-status" class="intro-access-status"></div>' +
+        calibConsentHTML() +
         '<div class="intro-primary"><button class="btn btn-primary btn-large" id="begin-btn" onclick="beginTest()">Begin</button></div>' +
         '<div class="history-bar">' +
           '<a href="history.html" class="btn btn-secondary btn-sm">View logbook</a>' +
@@ -171,6 +205,7 @@
           '<input type="text" id="name-input" class="name-input" placeholder="Your name" autocomplete="given-name">' +
           '<button class="btn btn-primary" onclick="beginTest()">Begin</button>' +
         '</div>' +
+        calibConsentHTML() +
         '<div class="access-notice">' +
           '<p>Once you complete the test, you\'ll need to pay <strong>' + PRICE_DISPLAY + '</strong> or enter a code from your organization to view your results. ' +
           'You\'ll be able to take the test up to ' + TOTAL_RUNS + ' times over ' + MONTHS + ' months to track your trend. ' +
@@ -194,6 +229,18 @@
       if (!name) { nameInput.focus(); return; }
       localStorage.setItem('quadrantology_name', name);
     }
+
+    // Capture research consent and build the active question pool for this run
+    var consentEl = document.getElementById('research-consent');
+    researchOptIn = consentEl ? consentEl.checked : false;
+    testQuestions = researchOptIn
+      ? data.questions
+      : data.questions.filter(function(q) { return q.status !== 'calibrating'; });
+    // session_id is the internal DB key — never stored in the user's logbook
+    // run_token is stored in the logbook run record so submit-logbook can link back to this session
+    researchSessionId = crypto.randomUUID();
+    runToken = researchOptIn ? crypto.randomUUID().replace(/-/g, '') : null;
+
     current = 0;
     answers = [];
     hideAll();
@@ -203,10 +250,10 @@
   // ===== QUESTIONS =====
 
   function showQuestion() {
-    if (!data) return;
+    if (!testQuestions) return;
     if (document.activeElement) document.activeElement.blur();
-    var q = data.questions[current];
-    var total = data.questions.length;
+    var q = testQuestions[current];
+    var total = testQuestions.length;
     document.getElementById('progress-bar').style.width = (current / total * 100).toFixed(0) + '%';
     document.getElementById('progress-text').textContent = 'Question ' + (current + 1) + ' of ' + total;
     document.getElementById('btn-a').textContent = q.a;
@@ -218,7 +265,7 @@
   window.answer = function(choice) {
     answers[current] = choice;
     current++;
-    if (current < data.questions.length) {
+    if (current < testQuestions.length) {
       showQuestion();
     } else {
       computeResults();
@@ -232,15 +279,18 @@
   // ===== SCORING =====
 
   function computeResults() {
-    // Weighted scoring — each question's contribution scaled by its weight field
+    // Weighted scoring — calibrating questions are excluded from score computation
+    // regardless of opt-in choice (opt-out users never see them; opt-in users answer
+    // them for research but their weights don't affect the result).
     var scores = [0, 0, 0, 0, 0]; // exit, voice, virtue, consequentialist, deontological
     var run = [];
-    for (var i = 0; i < data.questions.length; i++) {
-      var q = data.questions[i];
+    for (var i = 0; i < testQuestions.length; i++) {
+      var q = testQuestions[i];
       var ans = answers[i];
+      run.push({ qid: q.id, ans: ans });
+      if (q.status === 'calibrating') continue; // recorded for research, not scored
       var qw = (q.weight !== undefined) ? q.weight : 1.0;
       var w = q.weights[ans];
-      run.push({ qid: q.id, ans: ans });
       for (var j = 0; j < 5; j++) scores[j] += w[j] * qw;
     }
 
@@ -277,14 +327,45 @@
       ? { virtue: scores[2] / ethicsTotal, consequentialist: scores[3] / ethicsTotal, deontological: scores[4] / ethicsTotal }
       : { virtue: 1/3, consequentialist: 1/3, deontological: 1/3 };
 
+    // Research recording — only fires if user opted in at the intro screen.
+    // Sends full run (all answered questions) so cross-question correlations are possible.
+    // Which questions were in calibrating status during this run — stored in the logbook record
+    // so that submit-logbook can correctly set is_calibrating on each response row.
+    var calibratingIds = testQuestions
+      .filter(function(q) { return q.status === 'calibrating'; })
+      .map(function(q) { return q.id; });
+
+    if (researchOptIn && researchSessionId) {
+      fetch('/api/research/record-response', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: researchSessionId,
+          run_token:  runToken,
+          responses: testQuestions.map(function(q, i) {
+            return { question_id: q.id, answer: answers[i], is_calibrating: q.status === 'calibrating' ? 1 : 0 };
+          }),
+          outcome: {
+            archetype:      stateString,
+            ev_pos:         evPos,
+            ethics_virtue:  ethicsPos.virtue,
+            ethics_conseq:  ethicsPos.consequentialist,
+            ethics_deont:   ethicsPos.deontological
+          },
+          questions_version: data.schema_version || 1
+        })
+      }).catch(function() {}); // fire-and-forget
+    }
+
     var pending = {
-      scores: scores,
+      scores:      scores,
       stateString: stateString,
-      evBias: evBias,
-      run: run,
-      position: { ev: evPos, ethics: ethicsPos },
-      // legacy alias so downstream code using resultsVec still works
-      resultsVec: scores
+      evBias:      evBias,
+      run:         run,
+      position:    { ev: evPos, ethics: ethicsPos },
+      calibrating: calibratingIds,              // qids in calibrating status at run time
+      run_token:   runToken,                    // null if not opted in
+      resultsVec:  scores                       // legacy alias
     };
     savePending(pending);
 
@@ -525,9 +606,11 @@
         consequentialist: pending.scores[3],
         deontological: pending.scores[4]
       },
-      position: pending.position,
-      archetype: stateString,
-      ev_bias: evBias,
+      position:   pending.position,
+      archetype:  stateString,
+      ev_bias:    evBias,
+      calibrating: pending.calibrating,  // qids in calibrating status at run time; [] if none/opted-out
+      run_token:  pending.run_token,     // cross-dataset linkage token; null if not opted in
       note: ''
     });
   }

@@ -28,5 +28,11 @@
     "requires_subscription": true,
 
     "_comment": "Personal Circle holds up to max_slots intimate contacts whose personality arcs you track alongside your own. Adding a shared result to your circle requires a subscription. Generating and receiving share URLs is free. Each slot has update (paste new URL) and drop actions."
+  },
+
+  "calibration": {
+    "min_samples": 100,
+
+    "_comment": "Questions in 'calibrating' status are included in the test pool and responses are anonymously recorded. After min_samples responses, a response_weight can be assigned via the admin interface. Questions stay in calibrating status until manually promoted to live by an admin."
   }
 }
