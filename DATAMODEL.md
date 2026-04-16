@@ -75,6 +75,8 @@ Appended to `quadrantology_history` each time the user completes a test. Newest 
     "ev":     0.0,
     "ethics": { "virtue": 0.0, "consequentialist": 0.0, "deontological": 0.0 }
   },
+  "calibrating": ["Q005", "Q012"],
+  "run_token":   "<32-char hex string, or null>",
   "note": ""
 }
 ```
@@ -83,8 +85,10 @@ Appended to `quadrantology_history` each time the user completes a test. Newest 
 - `position.ev`: continuous E↔V position, -1 (pure Voice) to +1 (pure Exit)
 - `position.ethics`: simplex proportions, sum to 1.0
 - `run`: full Q/A log, enables future replay and reanalysis as the scoring model evolves
+- `calibrating`: question IDs that were in `calibrating` status at run time. Used by `submit-logbook` to correctly tag `is_calibrating` on response rows even for runs submitted later. Empty array `[]` if no calibrating questions were present or user declined opt-in.
+- `run_token`: 32-char hex token generated at run time if user opted into research. Stored in `research_sessions.run_token` for cross-dataset linkage. `null` if user declined. Never the same as the internal `session_id` (which never leaves the server).
 - `note`: freeform journal entry written at result time. Private — never included in share payloads.
-- Questions are never deleted from `questions.json`, only retired, so old run records remain replayable.
+- Questions are never deleted from D1, only archived, so old run records remain replayable.
 
 ---
 
@@ -198,6 +202,44 @@ Some pages compute and display results from existing logbook + circle data witho
 **Standard relationship analysis selection pool:** yourself (full run history) + any Personal Circle members (summary arcs). Yourself is optional — you can run an analysis on two circle members without including yourself (mediator use case).
 
 **Deep analysis selection pool (Coach Mode):** any combination of imported client logbooks. The coach's own logbook can also be included. Full dimension scores and arc history available for all participants, enabling richer analysis than the summary-only standard mode. Results displayed only, not saved.
+
+---
+
+## Research Data (D1 — server side)
+
+Anonymised research data is stored server-side in Cloudflare D1. This data is never linked to user accounts, access codes, names, or journal notes. Full schema in `worker/schema.sql`.
+
+### Table hierarchy
+
+```
+research_subjects           — one row per logbook submission (bulk pathway)
+  └── research_sessions     — one row per test run (per-run or bulk)
+        └── research_responses — one row per question answered
+```
+
+**`research_sessions`** key columns:
+- `session_id` — internal UUID primary key; never exposed outside the server
+- `subject_id` — FK to `research_subjects`; null for per-run submissions until linked by logbook submit
+- `run_token` — 32-char hex; the only cross-dataset linkage token; stored in user's v2 run record
+- `archetype`, `ev_pos`, `ethics_virtue/conseq/deont`, `questions_version`, `collected_at`
+
+**`research_responses`** key columns:
+- `session_id`, `question_id`, `answer` (`a`/`b`), `is_calibrating` (0/1)
+
+**Cross-dataset linkage:** When a user who opted in per-run later submits their full logbook, `submit-logbook` matches `run_token` values to avoid duplicating responses. The `session_id` UUID is never stored in the user's logbook — only `run_token`.
+
+### Questions (D1)
+
+Managed via `/admin/questions` UI. Schema in `worker/schema.sql`. Seed file: `worker/seed-questions.sql`.
+
+Each question: `id`, `status` (`live`/`calibrating`/`archived`), `response_weight`, `questions_version`, `answer_a/b`, `weights_a/b` (5-element arrays: exit, voice, virtue, consequentialist, deontological), `notes`.
+
+Status meanings:
+- `live` — in pool, responses not recorded
+- `calibrating` — in pool AND responses recorded anonymously (triggers opt-in consent on intro)
+- `archived` — not in pool; preserved for replay
+
+Full audit trail in `question_state_log` (one row per status change, with reason note).
 
 ---
 

@@ -256,6 +256,32 @@ Never sent to the server. Decoded and rendered entirely in `r.html`. Journal not
 
 Top-level fields: `_note`, `name`, `code`, `history` (own runs), `circle` (Personal Circle snapshots). The code is flagged in the note so users know to keep the file secure. Circle data is included so the full relational context is portable across devices.
 
+## Wrap-Up Procedure
+
+When the user says **"wrap up"**, perform all of the following before committing:
+
+### 1. Update project-level artifacts (in order)
+
+| File | What to update |
+|---|---|
+| `DATAMODEL.md` | Any new/changed data structures, fields, localStorage keys, or D1 tables |
+| `DESIGN.md` | Only if a new design principle was established or an existing one was revised |
+| `CLAUDE.md` | Repo structure (new files), API routes table, env vars, this artifact inventory if it changed |
+| `STATUS.md` | "What's Working" (move completed items in), roadmap tiers (reorder/restate as needed), Known Issues |
+| `TODO.md` | Add any new manual action items (CF dashboard, DNS, Stripe, content review); move completed items to Done |
+| `devlog/YYYY-MM-DD-sessionN.md` | New entry covering: what was built, key decisions, files changed |
+
+### 2. Commit all changed files
+Stage all modified tracked files plus any new files created during the session. Do not stage `.wrangler/` or other local tooling artifacts. Commit message: one-line summary of session scope.
+
+### 3. Push to origin/master
+Cloudflare Pages auto-deploys on push. Do **not** push to `gh-pages` — that branch is the frozen stable build.
+
+### Notes
+- `DESIGN.md` changes are rare; don't update it unless a principle actually changed.
+- The devlog is the narrative record; STATUS.md is the current-state snapshot. Don't duplicate — STATUS.md states facts, devlog explains decisions.
+- If data structures changed, update DATAMODEL.md *first* so the other docs can reference it accurately.
+
 ## Architecture Notes
 
 - All pages share `quadrantology.css` and the same nav structure (CSS-only hamburger menu, checkbox trick)

@@ -29,6 +29,9 @@ _Last updated: 2026-04-16 (Session 3)_
 
 ## Go-Live Checklist
 
+- [ ] Apply D1 schema migrations (`worker/schema.sql` then `worker/seed-questions.sql`) — see `TODO.md`
+- [ ] Set `ADMIN_PUBLIC_KEYS` + `ADMIN_TOKEN_SECRET` CF env vars to activate admin UI — see `TODO.md`
+- [ ] Promote at least one question to `calibrating` via admin UI to activate research data collection
 - [ ] DNS cutover: point `quadrantology.com` to Cloudflare, disable GitHub Pages
 - [ ] Create Stripe live-mode product + price
 - [ ] Update CF env vars: `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET` (live values)
@@ -36,23 +39,42 @@ _Last updated: 2026-04-16 (Session 3)_
 - [ ] Test with a real card on production domain
 - [ ] Verify D1 binding works in production (currently verified on staging only)
 
-## Next Up (Tier 1)
+## Next Up (Tier 1 — pre-onboarding)
 
-1. **URL fragment sharing** — "Share my arc" generates a ~220-char URL fragment with name + most recent 3 archetypes + summary scores. `r.html` renders received arcs client-side. Requires `min_runs_to_share` completed runs. Name set at share time, not persisted.
-2. **Analytics page** — rename/rebuild `history.html` → `analytics.html`. Trendline chart + commentary, unlocked at `min_runs` (3). Richer at 5 and 10 runs.
-3. **Mobile-friendly UX** — responsive pass on test, paywall, logbook pages.
-4. **.ics retake schedule** — client-side calendar file generation, ~30-day spacing, anchored to first test date.
-5. **Research submission payload preview** — before any research data leaves the browser (per-run opt-in POST or logbook submission), show the user the exact JSON being sent in a scrollable modal. Not a summary — the raw stripped object, so they can verify name/notes/code are absent. "Here is exactly what will be sent. Proceed?"
-6. **Apply D1 schema migrations** — `wrangler d1 execute quadrantology --file=worker/schema.sql --remote` then `--file=worker/seed-questions.sql --remote`; set `ADMIN_PUBLIC_KEYS` and `ADMIN_TOKEN_SECRET` env vars in CF Pages dashboard to activate admin UI.
+1. **URL fragment sharing + `r.html`** — "Share my arc" generates a ~220-char URL fragment with name + most recent 3 archetypes + summary scores. `r.html` renders received arcs client-side and has an "Add to Circle" button. Prerequisite for circle.html to be usable by real people. Requires `min_runs_to_share` completed runs. Name set at share time, not persisted.
+2. **Mobile-friendly UX** — responsive pass on test, paywall, logbook, circle pages.
+3. **.ics retake schedule** — client-side calendar file generation, ~30-day spacing, anchored to first test date.
+4. **Research submission payload preview** — before any research data leaves the browser (per-run opt-in POST or logbook submission), show the user the exact JSON being sent in a scrollable modal. Raw stripped object, not a summary — so they can verify name/notes/code are absent.
+5. **Entry points to circle + analysis** — link from results page and logbook to `circle.html`; link from circle to `analysis.html`. Currently these pages are only reachable by direct URL.
 
-## Next Up (Tier 1.5)
+## Next Up (Tier 1.5 — content + research expansion)
 
-- **Product portfolio UI** — paywall presents three tiers: single assessment, annual subscription, Coach Mode. Requires Stripe subscription Price IDs + D1 subscription state.
-- **Offline-verifiable bundle** — publish a signed, versioned zip of `docs/` (the complete static site) alongside each release, with a SHA256 in a signed manifest. Users who want to audit the code they're running can download the bundle, verify the hash, and run locally with `python3 -m http.server`. Neither research logging pathway fires in this mode unless the user explicitly initiates a submission. Worker-dependent features (Stripe, code validation) won't work offline, but the test itself, scoring, and local logbook do. Stepping stone toward the ZK-verifiable client in Someday/Maybe.
+- **Copy and explanatory material** — improve landing page, about/theory, and results-page copy to reinforce the tracker framing. Add FAQ or explainer for first-time users.
+- **Question bank expansion** — add questions beyond the initial 28 to the D1 bank (new Q/A pairs, all starting in `calibrating` status to gather data before promoting to `live`).
+- **Question sampling logic** — when the bank grows beyond the run size, each run draws a balanced subset by archetype/dimension coverage rather than serving all questions. Scoring must remain comparable across runs with different subsets. Design in DATAMODEL.md before coding.
+- **Subscription state design** — `circle.html` and `analysis.html` are supposed to be subscription-gated; `protocol.json` has `requires_subscription: true` but nothing enforces it. Design where subscription state lives (D1 + localStorage?) and add to DATAMODEL.md before building the enforcement.
+- **Product portfolio UI** — paywall presents three tiers: single assessment sequence, annual subscription, Coach Mode. Requires subscription state design above + Stripe subscription Price IDs.
+- **Offline-verifiable bundle** — signed zip of `docs/` with SHA256 manifest. Users can verify and run locally with `python3 -m http.server`. Stepping stone toward ZK client.
+
+## Later (Tier 2 — enrichment)
+
+- **Analytics page** — `history.html` serves as a stub for now (log of results, no chart). The full analytics page (trendline chart + commentary, unlocked at `min_runs`, richer at 5 and 10 runs) is deferred until the question bank, sampling logic, and subscription gating are solid. This is a critical launch feature but self-contained — building it well requires a stable data foundation first.
+- **Bulk org admin UI** — admin page for generating code batches, viewing usage, exporting lists. Builds on existing `/api/admin/generate-codes`.
+
+## Later (Tier 3 — Coach Mode)
+
+- **Coach Mode subscription** — import full client logbooks via encrypted file transfer (asymmetric key pair, client encrypts, coach decrypts in-browser; private key never leaves coach's device). Stored in `quadrantology_coach_clients`. Client cap TBD in `protocol.json`.
+- **Deep relationship analysis** — `analysis.html` richer mode when coach client logbooks present. Full dimension scores + arc history for all participants, not just summary arcs.
+
+## Later (Tier 4 — advanced)
+
+- **LLM results interpretation** — in-page chat (results + theory context → Claude API via Worker proxy) and/or MCP server exposing results for Claude Desktop.
+- **x402 / crypto payments** — CF Workers x402 facilitator + "Pay with ETH" on paywall. Base/USDC.
+- **Google Drive sync** — OAuth, save/sync logbook JSON to personal Drive.
 
 ## Someday / Maybe
 
-- **Verifiable local client for privacy-sovereign test-taking.** The fundamental limitation of any web app is that the server serves the code, so secret telemetry is undetectable without auditing the network. A stronger model: distribute the test as a content-addressed, signed static bundle (IPFS CID or signed tarball with published SHA256) that users can verify before running. The test runs entirely from the local bundle; research submission and logbook export are explicit user actions with no ambient server access. Research data would use a ZK-friendly scheme: the client generates a cryptographic commitment to its answers, computes the archetype locally, and selectively opens only the parts of the commitment it chooses to share — proving correct computation without revealing anything withheld. This requires a ZK-executable version of the scoring function (plausible with RISC Zero or zkWASM once tooling matures) and a commitment scheme for the Q/A vector. The offline-verifiable bundle (Tier 1.5) is the near-term stepping stone toward this.
+- **Verifiable local client for privacy-sovereign test-taking.** Distribute the test as a content-addressed, signed static bundle (IPFS CID or signed tarball with published SHA256) that users can verify before running. The test runs entirely from the local bundle; research submission and logbook export are explicit user actions with no ambient server access. Research data would use a ZK-friendly scheme: the client generates a cryptographic commitment to its answers, computes the archetype locally, and selectively opens only the parts of the commitment it chooses to share — proving correct computation without revealing anything withheld. Requires a ZK-executable scoring function (RISC Zero / zkWASM) and a commitment scheme for the Q/A vector. The offline-verifiable bundle (Tier 1.5) is the near-term stepping stone.
 
 ## Known Issues / Pending Review
 
@@ -65,8 +87,10 @@ _Last updated: 2026-04-16 (Session 3)_
 |---|---|
 | `DATAMODEL.md` | Canonical data model — update before touching code |
 | `DESIGN.md` | Founding design principles |
-| `docs/data/protocol.json` | Runtime feature parameters (min_runs, circle size, etc.) |
-| `CLAUDE.md` | Full technical reference for Claude Code sessions |
+| `CLAUDE.md` | Full technical reference + wrap-up procedure for Claude Code sessions |
+| `TODO.md` | Manual action items (CF dashboard, DNS, Stripe, content review) |
+| `docs/data/protocol.json` | Runtime feature parameters (min_runs, circle size, calibration, etc.) |
+| `devlog/` | Session-by-session narrative log |
 
 ## Stack
 
