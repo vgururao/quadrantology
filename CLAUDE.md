@@ -128,6 +128,8 @@ One table: `codes`
 
 ## Data Model
 
+See `DATAMODEL.md` for the full canonical spec. Summary below for quick reference.
+
 ### questions.json (schema v1)
 
 Each question has a permanent `id` (Q001–Q028+), `status` (`active`/`retired`), `weight` (float, default 1.0), `added` (schema version), and dimension weight vectors for answers `a` and `b`.

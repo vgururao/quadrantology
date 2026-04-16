@@ -24,6 +24,10 @@ Sharing is intentionally friction-ful and bilateral: you generate a share URL fr
 
 Like a character arc in a story, what matters is the shape of the trajectory — where you started, where you moved, what inflection points appeared, whether you're converging or oscillating. A single archetype label is a thumbnail; the arc is the full picture. Features and copy should consistently reinforce this: the trendline is not a bonus feature, it is the core deliverable.
 
+## 5. Data model first
+
+The app is stateless — no server-side user data, no accounts. The logbook is the product. All feature design should begin by updating `DATAMODEL.md` to reflect what new data is needed and where it lives, before touching any code. If a feature can't be expressed as a clean addition to the data model, the feature design isn't ready yet.
+
 ---
 
 *Add principles here as they emerge from product decisions.*
