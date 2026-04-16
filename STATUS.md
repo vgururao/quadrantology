@@ -56,8 +56,6 @@ _Last updated: 2026-04-16 (Session 3)_
 
 ## Known Issues / Pending Review
 
-- Q011 answer A has all-zero dimension weights (only B scores). Review with author — intentional?
-- Q023 answer B has all-zero dimension weights (only A scores). Same question.
 - `game.html` is still a stub (lorem ipsum placeholder).
 - `history.html` should be renamed `analytics.html` when analytics are built.
 

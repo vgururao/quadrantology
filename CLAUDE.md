@@ -188,7 +188,7 @@ Calibration threshold (`protocol.json > calibration.min_samples`, default 100): 
 
 Dimensions (index order): `[exit, voice, virtue, consequentialist, deontological]`
 
-**Known issues to resolve:** Q011 answer A and Q023 answer B have all-zero weight vectors. May be intentional asymmetric questions — review with author.
+**Pending review:** Q011 answer A and Q023 answer B have all-zero weight vectors — see `TODO.md`.
 
 ### Own run records
 
