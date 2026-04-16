@@ -11,9 +11,16 @@
 
   "analytics": {
     "tiers": [
-      { "runs": 3, "label": "Trendline",  "description": "Archetype trend chart + baseline comment unlocked." },
-      { "runs": 5, "label": "Deeper",     "description": "Richer commentary, ethics drift chart." },
+      { "runs": 3, "label": "Trendline",   "description": "Archetype trend chart + baseline comment unlocked." },
+      { "runs": 5, "label": "Deeper",      "description": "Richer commentary, ethics drift chart." },
       { "runs": 10,"label": "Longitudinal","description": "Full longitudinal analysis." }
     ]
+  },
+
+  "relational": {
+    "max_others":          4,
+    "requires_subscription": true,
+
+    "_comment": "Users can add up to max_others shared results from other people to their logbook for relational analysis. Feature is locked on the single assessment sequence; subscription only."
   }
 }
