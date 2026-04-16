@@ -150,6 +150,19 @@ The fragment is never sent to the server. Decoded and rendered entirely client-s
 
 ---
 
+## Computed Views (no new storage)
+
+Some pages compute and display results from existing logbook + circle data without persisting anything new. These do not require data model changes — they are read-only views. Adding one of these features means updating UI only.
+
+| Page | Inputs | Description |
+|---|---|---|
+| `analytics.html` | `quadrantology_history` | Trendline chart + commentary across own runs. Unlocked at `min_runs`. |
+| `analysis.html` | Selected subset of circle + self | Relationship analysis across 2+ people. Selection is ephemeral (not saved). Analysis type chosen at runtime. |
+
+**Relationship analysis selection pool:** yourself (full run history) + any Personal Circle members (summary arcs). Yourself is optional — you can run an analysis on two circle members without including yourself (e.g., to mediate between two people who've asked for your perspective). Results are displayed only, not saved to the logbook.
+
+---
+
 ## Protocol Parameters
 
 Feature thresholds and limits are not hardcoded. They live in `docs/data/protocol.json` and should be read at runtime by any page that needs them. See that file for current values.
