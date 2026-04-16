@@ -4,9 +4,11 @@ Guidance for Claude Code when working in this repository.
 
 ## Project Overview
 
-Quadrantology is a personality test and card game website at **quadrantology.com**. It models organizational creative destruction through 6 archetypes in two groups: Exit (Hacker, Contrarian, Legalist) and Voice (Investigator, Holy Warrior, Operator), mapped onto a master 2×2 framework called "Death and Taxes" with 13 sub-models.
+Quadrantology is a **personality tracker** and card game website at **quadrantology.com**. It models organizational creative destruction through 6 archetypes in two groups: Exit (Hacker, Contrarian, Legalist) and Voice (Investigator, Holy Warrior, Operator), mapped onto a master 2×2 framework called "Death and Taxes" with 13 sub-models.
 
-The personality test is the primary active product. It is a paid service: users take the test free, then pay or enter an access code to view results. Access codes come in three types: `personal` (generated on Stripe purchase), `coupon` (batch-generated promos), and `org` (bulk org purchases). All code management is in Cloudflare D1.
+The core product is a logbook-based personality tracker, not a one-shot test. Users take the questionnaire multiple times over a period (minimum 3 runs over 90 days), building a logbook of results with journal entries. The trend across runs — the personality arc — is the primary result. See `DESIGN.md` for design principles and `DATAMODEL.md` for the full data model.
+
+Access is a paid service: users take the test free, then pay or enter an access code to view results. Three product tiers are planned: single assessment sequence, annual subscription, and Coach Mode. Access codes come in three types: `personal` (generated on Stripe purchase), `coupon` (batch-generated promos), and `org` (bulk org purchases). All code management is in Cloudflare D1.
 
 **Privacy principle:** we sell access (codes), not data. Sharing and aggregation are always user-initiated. We do not build data-collection tooling for orgs.
 
@@ -20,12 +22,13 @@ docs/              — Live website (Cloudflare Pages, custom domain quadrantolo
   understand.html  — Understanding Your Results: 13 models as 2×2 grids
   shop.html        — Card deck shop + print-at-home downloads
   game.html        — How to Play (stub)
-  history.html     — Per-device test history viewer
+  history.html     — Logbook viewer (rename to analytics.html when analytics built)
   hacker.html, contrarian.html, legalist.html,
   investigator.html, holywarrior.html, operator.html
   quadrantology.css — Full shared stylesheet with custom properties
   data/
-    questions.json — Question bank (schema v1): permanent IDs, weights, status
+    questions.json  — Question bank (schema v1): permanent IDs, weights, status
+    protocol.json   — Runtime feature parameters (min_runs, circle size, etc.)
   images/          — Site images and card print sheets
 
 functions/         — Cloudflare Pages Functions (deployed alongside docs/)
@@ -210,5 +213,7 @@ Top-level fields: `_note`, `name`, `code`, `history` (own runs), `circle` (Perso
 - System font stack, no external JS dependencies
 - Nav: The Test | The Theory | Shop | How to Play | Archetypes (dropdown)
 - Color scheme: bg `#f4f1eb`, card `#ffffff`, text `#2c2c2c`, accent `#c0713a`, exit `#3a7a8c` (teal), voice `#8c3a3a` (deep red)
-- Test flow: name intro → questions → compute results → check localStorage for code → paywall if none → results
+- Test flow: name intro → questions → compute results → check localStorage for code → paywall if none → results + journal entry → save to logbook
 - Price shown in UI is fetched live from Stripe `/api/price` so it always matches the product
+- Feature thresholds (min runs, circle size, etc.) are in `docs/data/protocol.json` — read at runtime, never hardcode
+- See `DATAMODEL.md` before adding any feature that touches stored data
