@@ -138,17 +138,56 @@ Questions are never deleted — only retired. Retired questions stay in the file
 
 **Known issues to resolve:** Q011 answer A and Q023 answer B have all-zero weight vectors. May be intentional asymmetric questions — review with author.
 
-### History records
+### Own run records
 
 Two versions coexist in localStorage and exported JSON:
 
 **v1** (legacy): `{ version:1, timestamp, archetype, evBias, scores:[array], answers:[array] }`
 
-**v2** (current): `{ version:2, timestamp, questions_version, run:[{qid,ans}], scores:{exit,voice,virtue,consequentialist,deontological}, position:{ev, ethics:{virtue,consequentialist,deontological}}, archetype, ev_bias }`
+**v2** (current): `{ version:2, timestamp, questions_version, run:[{qid,ans}], scores:{exit,voice,virtue,consequentialist,deontological}, position:{ev, ethics:{virtue,consequentialist,deontological}}, archetype, ev_bias, note:'' }`
 
 - `position.ev`: continuous E↔V position, -1 (pure Voice) to +1 (pure Exit)
 - `position.ethics`: simplex proportions summing to 1.0
 - `run`: exact question IDs + answers, enabling future replay and reanalysis
+- `note`: freeform journal entry, private to the user, never included in share payloads
+
+### Personal Circle records
+
+Stored alongside own runs. Each entry is a point-in-time snapshot received from another person's share URL. Up to `personal_circle.max_slots` entries (currently 8, see `docs/data/protocol.json`).
+
+```
+{
+  version: "circle-v1",
+  added:   <ISO timestamp when added to circle>,
+  name:    <string, as set by the sharer>,
+  results: [
+    { ts, archetype, ev, ethics:[virtue, consequentialist, deontological] },
+    ...  // up to 3 entries, newest first
+  ]
+}
+```
+
+- `results` contains summary data only — no Q/A run data, no journal notes
+- `ethics` is an array of proportions summing to 1.0 (virtue, consequentialist, deontological)
+- To update: user pastes a new share URL into that person's slot; `added` timestamp refreshes
+- Requires subscription to add entries; receiving and viewing a share URL is free
+
+### Share URL payload
+
+Generated client-side from own logbook when user clicks "Share my arc". Requires `min_runs_to_share` completed runs (currently 3). Fragment format: `r.html#v1:<base64url-deflate-json>`.
+
+```
+{
+  v:    1,
+  name: <string, editable by sharer before generating>,
+  results: [
+    { ts, archetype, ev, ethics:[virtue, consequentialist, deontological] },
+    ...  // most recent 3 own runs
+  ]
+}
+```
+
+Never sent to the server. Decoded and rendered entirely in `r.html`. Journal notes and full Q/A data are never included.
 
 ### localStorage keys
 
@@ -156,9 +195,12 @@ Two versions coexist in localStorage and exported JSON:
 |---|---|
 | `quadrantology_name` | User's display name |
 | `quadrantology_code` | Access code (personal/coupon/org) |
-| `quadrantology_history` | JSON array of history records (newest first) |
+| `quadrantology_history` | JSON array of own run records (newest first, v1+v2) |
+| `quadrantology_circle` | JSON array of Personal Circle entries (circle-v1, up to 8) |
 
-Downloaded history JSON includes `_note`, `name`, `code`, and `history` fields. The code is flagged in a note so users know to keep the file secure.
+### Downloaded logbook JSON
+
+Top-level fields: `_note`, `name`, `code`, `history` (own runs), `circle` (Personal Circle snapshots). The code is flagged in the note so users know to keep the file secure. Circle data is included so the full relational context is portable across devices.
 
 ## Architecture Notes
 
