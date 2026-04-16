@@ -58,16 +58,29 @@ devlog/            — Session-by-session development log (eventually published)
 
 ## Deployment
 
-### Active: Cloudflare Pages + Workers
-- CF Pages serves `docs/` on push to `master` — no build step
-- Pages Functions in `functions/api/` deploy automatically alongside
-- Staging: `quadrantology.pages.dev`
-- Production: `quadrantology.com` (DNS cutover pending — currently still on GH Pages DNS)
-- D1 database: `quadrantology` (bound as `DB` in CF Pages → Settings → Functions)
+Two separate deploy targets — **do not confuse them**:
 
-### Legacy: GitHub Pages
-- Tag `ghpages-v1` = last known-good GH Pages build
-- To restore: revert to that tag, re-enable GH Pages in repo settings
+| Target | URL | Branch | Purpose |
+|---|---|---|---|
+| Cloudflare Pages | `quadrantology.pages.dev` | `master` | Active development |
+| GitHub Pages | `quadrantology.com` | `gh-pages` | Stable production (pre-CF DNS cutover) |
+
+### Cloudflare Pages (active development)
+- Deploys automatically on push to `master` — no build step
+- Pages Functions in `functions/api/` deploy automatically alongside
+- D1 database: `quadrantology` (bound as `DB` in CF Pages → Settings → Functions)
+- `quadrantology.com` will point here after DNS cutover
+
+### GitHub Pages (stable, `quadrantology.com` via current DNS)
+- Serves from the `gh-pages` branch at `/docs`
+- `gh-pages` branch = snapshot at tag `ghpages-v1` (last clean build before CF migration)
+- **Do not push new features here** — this is the frozen stable build for current DNS
+- To update: cherry-pick specific commits onto `gh-pages`, or advance the branch intentionally
+
+### DNS cutover plan (when ready)
+1. Point `quadrantology.com` DNS to Cloudflare Pages
+2. Disable GitHub Pages in repo settings (or leave as fallback)
+3. Update Stripe webhook URL to `quadrantology.com/api/stripe-webhook`
 
 ### Local preview
 ```bash
