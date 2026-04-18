@@ -1,6 +1,11 @@
 {
   "_comment": "Site-wide configuration. Edit here; all pages read this at runtime.",
 
+  "format_version": 1,
+  "model_version":  1,
+
+  "_version_comment": "format_version governs JSON file/record structure. model_version governs scoring weights and archetype assignment. Both are frozen on each run record at save time. Old runs are never re-scored. Bump model_version only via the admin model-snapshot procedure (D1 + static file + git tag).",
+
   "protocol": {
     "min_runs":        3,
     "window_days":     90,
@@ -34,5 +39,12 @@
     "min_samples": 100,
 
     "_comment": "Questions in 'calibrating' status are included in the test pool and responses are anonymously recorded. After min_samples responses, a response_weight can be assigned via the admin interface. Questions stay in calibrating status until manually promoted to live by an admin."
+  },
+
+  "sync": {
+    "max_active_runs":    12,
+    "archive_batch_size":  6,
+
+    "_comment": "max_active_runs: own runs kept in the active localStorage window when a sync folder is set up. Should be >= the highest analytics tier run threshold (currently 10) so analytics always works from localStorage alone. archive_batch_size: evicted runs are buffered until this count is reached, then written as one closed archive file. Archive files are immutable once written."
   }
 }

@@ -19,20 +19,33 @@ The logbook is private by default. Nothing leaves the device unless the user exp
 |---|---|---|
 | `quadrantology_name` | string | User's display name |
 | `quadrantology_code` | string | Access code (personal / coupon / org) |
-| `quadrantology_history` | JSON array | Own run records, newest first |
+| `quadrantology_history` | JSON array | Own run records, newest first. When sync is active: rolling window of last `sync.max_active_runs` runs only. |
 | `quadrantology_circle` | JSON array | Personal Circle entries, up to `personal_circle.max_slots` |
+| `quadrantology_models` | JSON object | Map of `model_version` int → full canonical model doc. Cached at test time; used to enrich exports without a server call. |
+| `quadrantology_archive_buffer` | JSON array | Evicted runs waiting to form a closed archive batch. Oldest first. Present only when sync folder is active. |
+| `quadrantology_archive_index` | JSON object | `{ total_archived: N, files: [...] }` — lightweight index for run_number assignment without reading archive files. |
+| `quadrantology_questions_v{N}` | JSON object | `{ cached_at, questions: [{id, answer_a, answer_b}] }` — question bank cache keyed by `questions_version`. Seeded from `data/questions.json` on first load. |
+| `quadrantology_code_shown` | string `"1"` | Guard: first-purchase code display modal has been shown. |
+| `quadrantology_sync_folder` | string | Display name of active sync folder (e.g. `"quadrantology"`). Handle lives in IndexedDB. |
 
 ### Downloaded logbook JSON
+
+The exported file is self-contained: it embeds the full scoring model documentation for every `model_version` referenced by any run in the file. A user with only this file can understand and re-score all their historical runs without access to the app or any external reference.
 
 ```json
 {
   "_note": "Keep this file secure — it contains your access code.",
   "name":    "<display name>",
   "code":    "<access code>",
+  "scoring_models": {
+    "1": { "<full canonical model-v1 doc — dimensions, archetypes, algorithm, questions+weights>" }
+  },
   "history": [ <own run records> ],
   "circle":  [ <personal circle entries> ]
 }
 ```
+
+`scoring_models` is a map from model version integer to the full canonical model object (see Scoring Models section below). One entry per unique `model_version` found across all runs in `history`. Archive files in the sync folder follow the same pattern.
 
 Uploading this file on another device restores the full logbook, including Personal Circle.
 
@@ -60,10 +73,13 @@ Appended to `quadrantology_history` each time the user completes a test. Newest 
 ```json
 {
   "version":           2,
+  "run_number":        7,
+  "format_version":    1,
+  "model_version":     1,
   "timestamp":         "<ISO 8601>",
   "questions_version": 1,
   "archetype":         "<string>",
-  "ev_bias":           1,
+  "ev_bias":           "exit",
   "run": [
     { "qid": "Q001", "ans": "a" }
   ],
@@ -82,9 +98,12 @@ Appended to `quadrantology_history` each time the user completes a test. Newest 
 ```
 
 **Field notes:**
+- `run_number`: sequential 1-indexed integer, assigned at save time from lifetime run count. Stable identifier used for archive file naming. Re-numbered chronologically after a merge; `timestamp` is the identity key.
+- `format_version`: the file/record format version in effect when this run was saved. Frozen on the record; never updated retroactively.
+- `model_version`: the scoring model version in effect when this run was saved. Frozen on the record; never updated retroactively. Old runs are never re-scored (see Design Principle 6).
 - `position.ev`: continuous E↔V position, -1 (pure Voice) to +1 (pure Exit)
 - `position.ethics`: simplex proportions, sum to 1.0
-- `run`: full Q/A log, enables future replay and reanalysis as the scoring model evolves
+- `run`: full Q/A log, enables future replay and reanalysis. In exported files this array is enriched with `question`, `chosen`, and `not_chosen` text fields resolved from the question bank cache.
 - `calibrating`: question IDs that were in `calibrating` status at run time. Used by `submit-logbook` to correctly tag `is_calibrating` on response rows even for runs submitted later. Empty array `[]` if no calibrating questions were present or user declined opt-in.
 - `run_token`: 32-char hex token generated at run time if user opted into research. Stored in `research_sessions.run_token` for cross-dataset linkage. `null` if user declined. Never the same as the internal `session_id` (which never leaves the server).
 - `note`: freeform journal entry written at result time. Private — never included in share payloads.
@@ -243,12 +262,60 @@ Full audit trail in `question_state_log` (one row per status change, with reason
 
 ---
 
+## Scoring Models
+
+Scoring models are versioned snapshots of the complete algorithm: dimensions, archetype assignment table, tie-breaking rules, and the full question bank with per-answer weight vectors. Every export file embeds the model docs for all versions referenced by its runs (see Walk-Away Guarantee in `DESIGN.md`).
+
+### Canonical model file format
+
+`docs/data/quadrantology-model-v{N}.json` — publicly downloadable, CC BY 4.0 licensed. Published to GitHub (tagged `model-v{N}`) when each version is released. Never deleted.
+
+Top-level fields: `_meta` (format, version, created_at, license, attribution, git_tag, reference_implementation), `dimensions`, `archetypes`, `algorithm` (steps, archetype_table, tie_breaking), `questions` (id, answer_a, answer_b, weights {a,b}, response_weight, status).
+
+### D1 `scoring_models` table
+
+Stores the full canonical model JSON for each version. Used by the admin page to serve model downloads and to snapshot the current model when a new version is created.
+
+```sql
+CREATE TABLE IF NOT EXISTS scoring_models (
+  version      INTEGER PRIMARY KEY,
+  created_at   TEXT NOT NULL,
+  reason       TEXT,             -- why this version was created
+  git_tag      TEXT,             -- e.g. 'model-v1'
+  model_json   TEXT NOT NULL     -- full canonical JSON blob
+);
+```
+
+Creating a new model version is an admin action: snapshot the current `questions` table state into `model_json`, increment the version, write to D1, write the static file to `docs/data/`, and create a git tag. The `model_version` field in `protocol.json` is bumped at the same time.
+
+### `migrations.json` (sync folder)
+
+Written to the sync folder root when a non-compatible model or format change is deployed. Append-only. Each entry records the version transition, whether it was compatible, the reason, and the run number at which any open archive batch was force-flushed before the new version took effect. See Sync Profile spec for full format.
+
+---
+
+## IndexedDB
+
+Database: `quadrantology_sync`, version 1  
+Object store: `meta`, key-path `"key"`
+
+| `key` | Value type | Content |
+|---|---|---|
+| `"directory_handle"` | `FileSystemDirectoryHandle` | Persisted sync folder handle (Chrome/Chromium only) |
+| `"last_synced"` | string | ISO 8601 timestamp of last successful sync folder write |
+
+---
+
 ## Protocol Parameters
 
 Feature thresholds and limits are not hardcoded. They live in `docs/data/protocol.json` and should be read at runtime by any page that needs them. See that file for current values.
 
 Key parameters:
+- `format_version` — current file/record format version (top-level)
+- `model_version` — current scoring model version (top-level)
 - `protocol.min_runs` — runs needed to unlock analytics
 - `sharing.min_runs_to_share` — runs needed to generate a share URL
 - `personal_circle.max_slots` — maximum Personal Circle entries
 - `personal_circle.requires_subscription` — gating flag
+- `sync.max_active_runs` — runs kept in active localStorage window when sync folder is active
+- `sync.archive_batch_size` — evicted runs buffered before writing a closed archive file

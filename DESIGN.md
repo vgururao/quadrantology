@@ -28,6 +28,29 @@ Like a character arc in a story, what matters is the shape of the trajectory —
 
 The app is stateless — no server-side user data, no accounts. The logbook is the product. All feature design should begin by updating `DATAMODEL.md` to reflect what new data is needed and where it lives, before touching any code. If a feature can't be expressed as a clean addition to the data model, the feature design isn't ready yet.
 
+## 6. Historical runs are never re-scored
+
+A logbook entry is an honest record of what the scoring model computed at the time. Retroactively applying a new scoring model would be like altering a journal entry — it destroys the integrity of the arc. When a scoring model is updated, all past runs keep their original scores and their original `model_version`. Analytics code must handle mixed-model logbooks transparently: show model version boundaries as visible annotations on trendline charts rather than silently homogenizing across versions. This also means every historical model version must be preserved indefinitely — old scores are only meaningful if the model that produced them remains accessible.
+
+## 7. The Walk-Away Guarantee and data dignity
+
+*Adapted from Vitalik Buterin's "walk-away test" for Ethereum.*
+
+A personality logbook represents real time, honest self-reflection, and lived experience. That investment of attention belongs to the user, not to this service. We call this **data dignity**: the user's data should remain useful and interpretable on its own terms, independent of whether this product continues to exist.
+
+The walk-away guarantee: *if Quadrantology.com disappeared tomorrow — the domain lapses, the servers go dark, the developer moves on — a user with their profile file should be able to understand all their past results, re-score any historical run independently, and continue using the questionnaire locally.*
+
+This guarantee is retrospective: it covers all runs you have already taken. It is not a promise of future model development.
+
+**How the guarantee is maintained:**
+
+- Every export file (profile, archive) embeds the full scoring model documentation for every model version it references — weights, algorithm, archetype table, tie-breaking rules. No external lookup required.
+- Scoring models are versioned and published under CC BY 4.0 from the moment each new version is released. No model version is ever deleted.
+- The questionnaire is static HTML/CSS/JS with no runtime server dependency. It can be opened from a local file.
+- Paid access features (codes, Stripe) are layered on top of a fully functional free core. They are access mechanisms, not capability locks on the data itself.
+
+The scoring algorithm is documented precisely enough that a competent programmer can reimplement it in an afternoon from the model file alone.
+
 ---
 
 *Add principles here as they emerge from product decisions.*

@@ -95,3 +95,16 @@ CREATE TABLE IF NOT EXISTS admin_challenges (
 );
 
 CREATE INDEX IF NOT EXISTS idx_challenges_created_at ON admin_challenges(created_at);
+
+-- Canonical scoring model snapshots (one row per model version).
+-- model_json contains the full canonical model object: dimensions, archetypes,
+-- algorithm (steps + tie-breaking), and the question bank with weights at snapshot time.
+-- These are never deleted — old runs are only meaningful if their model remains accessible.
+-- When a new version is created: snapshot questions table → insert here → bump protocol.json model_version → git tag model-v{N}.
+CREATE TABLE IF NOT EXISTS scoring_models (
+  version      INTEGER PRIMARY KEY,
+  created_at   TEXT    NOT NULL,
+  reason       TEXT,                    -- why this version was created
+  git_tag      TEXT,                    -- e.g. 'model-v1', links to reference implementation
+  model_json   TEXT    NOT NULL         -- full canonical JSON blob (CC BY 4.0)
+);

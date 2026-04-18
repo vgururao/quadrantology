@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Principles — Quadrantology</title>
+  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="quadrantology.css">
+  <style>
+    .principles-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .principles-header h1 { margin-bottom: 0; }
+    .doc-version {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+    .principles-intro {
+      color: var(--text-secondary);
+      margin-bottom: 2.5rem;
+      font-size: 0.95rem;
+    }
+    .principle {
+      margin-bottom: 2.25rem;
+      padding-bottom: 2.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .principle:last-of-type { border-bottom: none; }
+    .principle h2 {
+      font-size: 1.05rem;
+      margin-bottom: 0.6rem;
+      color: var(--text);
+    }
+    .principle p { margin-bottom: 0.75rem; }
+    .principle p:last-child { margin-bottom: 0; }
+    .walkaway-box {
+      margin: 2rem 0;
+      padding: 1.25rem 1.5rem;
+      background: var(--card-bg);
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+    }
+    .walkaway-box p { margin-bottom: 0.75rem; font-size: 0.95rem; }
+    .walkaway-box p:last-child { margin-bottom: 0; }
+    .walkaway-box strong { color: var(--accent); }
+    .walkaway-verify {
+      margin-top: 1rem;
+      padding: 0.9rem 1.1rem;
+      background: var(--bg);
+      border-radius: 4px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    .walkaway-verify p { margin-bottom: 0.5rem; }
+    .walkaway-verify p:last-child { margin-bottom: 0; }
+    .version-history {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .version-history h3 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+    }
+    .version-history ul {
+      list-style: none;
+      padding: 0;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    .version-history li { margin-bottom: 0.25rem; }
+    .version-history .current { font-weight: 600; color: var(--text); }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">Quadrantology</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+    <ul class="nav-links">
+      <li><a href="test.html">The Test</a></li>
+      <li><a href="theory.html">The Theory</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="game.html">How to Play</a></li>
+      <li class="nav-dropdown">
+        <a href="#archetypes">Archetypes &#9662;</a>
+        <div class="nav-dropdown-content">
+          <div class="dropdown-exit">Exit</div>
+          <a href="hacker.html">Hacker</a>
+          <a href="contrarian.html">Contrarian</a>
+          <a href="legalist.html">Legalist</a>
+          <div class="dropdown-voice">Voice</div>
+          <a href="investigator.html">Investigator</a>
+          <a href="holywarrior.html">Holy Warrior</a>
+          <a href="operator.html">Operator</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main class="content">
+
+  <div class="principles-header">
+    <h1>Design Principles</h1>
+    <span class="doc-version">v1 &middot; April 2026</span>
+  </div>
+
+  <p class="principles-intro">These principles guide how Quadrantology is built and what commitments it makes to its users. They inform feature decisions, data architecture, and product framing. This document is versioned — older versions remain accessible as it evolves.</p>
+
+  <div class="principle">
+    <h2>1. This is a personality tracker, not a personality test</h2>
+    <p>A "test" implies a single authoritative result — pass/fail, score, label. Quadrantology is not that. It is a tracking tool for something that evolves over time, like a mood journal or a fitness log. The word "test" is used in entry-level marketing copy because it's familiar, but the product experience pushes people toward the tracker framing as quickly as possible.</p>
+  </div>
+
+  <div class="principle">
+    <h2>2. The model is continuous monitors, not spot tests</h2>
+    <p>Reference products: continuous glucose monitors, sleep trackers, fitness trackers. These deal in trends, baselines, drift, and variance — not in single readings. A single glucose reading tells you almost nothing; the trend over days tells you everything. The same is true here. One run of the questionnaire is almost meaningless. The arc across multiple runs is the product.</p>
+    <p>A complementary reference is the Dexa scan model: a service you can use as a one-off (single body composition scan) or subscribe to annually for regular scans. The one-off gives you a snapshot; the subscription gives you a longitudinal picture that compounds in value over time.</p>
+  </div>
+
+  <div class="principle">
+    <h2>3. Personal Circle, not social network</h2>
+    <p>The relational feature is called the Personal Circle. It is not an address book, a social network, or a contact list. It is a small set of intimate people — partners, close friends, mentors, key colleagues — whose personality arcs you track alongside your own, because those relationships actively shape who you are. The model is closer to a therapist's genogram or a coach's relationship map than to LinkedIn connections.</p>
+    <p>Sharing is intentionally friction-ful and bilateral: you generate a share URL from your own logbook, send it to someone directly, and they add it to their circle. There is no follow, no discovery, no feed. The circle is private to each user and stored only in their logbook.</p>
+  </div>
+
+  <div class="principle">
+    <h2>4. The main result is the personality arc, not a point state</h2>
+    <p>Like a character arc in a story, what matters is the shape of the trajectory — where you started, where you moved, what inflection points appeared, whether you're converging or oscillating. A single archetype label is a thumbnail; the arc is the full picture. Features and copy should consistently reinforce this: the trendline is not a bonus feature, it is the core deliverable.</p>
+  </div>
+
+  <div class="principle">
+    <h2>5. Data model first</h2>
+    <p>The app is stateless — no server-side user data, no accounts. The logbook is the product. All feature design begins by updating the data model documentation to reflect what new data is needed and where it lives, before touching any code. If a feature can't be expressed as a clean addition to the data model, the feature design isn't ready yet.</p>
+  </div>
+
+  <div class="principle">
+    <h2>6. Historical runs are never re-scored</h2>
+    <p>A logbook entry is an honest record of what the scoring model computed at the time. Retroactively applying a new scoring model would be like altering a journal entry — it destroys the integrity of the arc. When a scoring model is updated, all past runs keep their original scores and their original model version. Analytics code handles mixed-model logbooks transparently: model version boundaries are visible annotations on trendline charts, never silently homogenized.</p>
+    <p>This also means every historical model version is preserved indefinitely. Old scores are only meaningful if the model that produced them remains accessible.</p>
+  </div>
+
+  <div class="principle">
+    <h2>7. The Walk-Away Guarantee and data dignity</h2>
+    <p>A personality logbook represents real time, honest self-reflection, and lived experience. That investment of attention belongs to the user, not to this service. We call this <strong>data dignity</strong>: your data should remain useful and interpretable on its own terms, independent of whether this product continues to exist.</p>
+
+    <div class="walkaway-box">
+      <p><strong>The walk-away guarantee:</strong> if Quadrantology.com disappeared tomorrow &mdash; the domain lapses, the servers go dark, the developer moves on &mdash; a user with their profile file should be able to understand all their past results, re-score any historical run independently, and continue using the questionnaire locally.</p>
+      <p>This guarantee is retrospective: it covers all runs you have already taken.</p>
+    </div>
+
+    <p>How the guarantee is maintained:</p>
+    <ul>
+      <li>Every export file embeds the full scoring model documentation for every model version it references &mdash; weights, algorithm, archetype table, tie-breaking rules. No external lookup required.</li>
+      <li>Scoring models are versioned and published under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> from the moment each new version is released. No model version is ever deleted.</li>
+      <li>The questionnaire is static HTML/CSS/JS with no runtime server dependency. It can be opened from a local file.</li>
+      <li>Paid access features are layered on top of a fully functional free core. They are access mechanisms, not capability locks on the data itself.</li>
+    </ul>
+
+    <div class="walkaway-verify">
+      <p><strong>How to verify this guarantee:</strong></p>
+      <p>Download your profile file from the logbook page. It contains your full run history plus the scoring model documentation for every version you have been scored under. The algorithm is documented in plain steps &mdash; a programmer can reimplement it in an afternoon from the model file alone.</p>
+      <p>Scoring models are published to <a href="https://github.com/vgururao/quadrantology" target="_blank" rel="noopener">GitHub</a> under CC BY 4.0 when each version is released.</p>
+    </div>
+  </div>
+
+  <div class="version-history">
+    <h3>Version history</h3>
+    <ul>
+      <li class="current">v1 &mdash; April 2026 (this page)</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="site-footer">&copy; Quadrantology &middot; <a href="design_principles.html">Design Principles</a></footer>
+
+</body>
+</html>
