@@ -80,7 +80,7 @@ Two separate deploy targets — **do not confuse them**:
 | Target | URL | Branch | Purpose |
 |---|---|---|---|
 | Cloudflare Pages | `quadrantology.pages.dev` | `master` | Active development |
-| GitHub Pages | `quadrantology.com` | `gh-pages` | Stable production (pre-CF DNS cutover) |
+| GitHub Pages | `quadrantology.com` | `gh-pages` | Marketing/preview site (V1 free test + V2 sign-up) |
 
 ### Cloudflare Pages (active development)
 - Deploys automatically on push to `master` — no build step
@@ -88,11 +88,13 @@ Two separate deploy targets — **do not confuse them**:
 - D1 database: `quadrantology` (bound as `DB` in CF Pages → Settings → Functions)
 - `quadrantology.com` will point here after DNS cutover
 
-### GitHub Pages (stable, `quadrantology.com` via current DNS)
+### GitHub Pages (marketing site, `quadrantology.com` via current DNS)
 - Serves from the `gh-pages` branch at `/docs`
-- `gh-pages` branch = snapshot at tag `ghpages-v1` (last clean build before CF migration)
-- **Do not push new features here** — this is the frozen stable build for current DNS
-- To update: cherry-pick specific commits onto `gh-pages`, or advance the branch intentionally
+- This is the **active marketing site** while V2 (CF Pages) is in development
+- V1 simple test (no paywall, no logbook), static copy pages, V2 sign-up CTA on home + results
+- Shop and How to Play are removed from nav (pages still exist at their URLs)
+- `docs/data/v2-cta.html` — shared CTA content fragment, fetched by both `index.html` and `test.html`; edit this file to update sign-up text/link on both pages at once
+- Work directly on the `gh-pages` branch via a git worktree; commit and push when done
 
 ### DNS cutover plan (when ready)
 1. Point `quadrantology.com` DNS to Cloudflare Pages
@@ -275,7 +277,7 @@ When the user says **"wrap up"**, perform all of the following before committing
 Stage all modified tracked files plus any new files created during the session. Do not stage `.wrangler/` or other local tooling artifacts. Commit message: one-line summary of session scope.
 
 ### 3. Push to origin/master
-Cloudflare Pages auto-deploys on push. Do **not** push to `gh-pages` — that branch is the frozen stable build.
+Cloudflare Pages auto-deploys on push. Changes to the marketing site (`gh-pages`) are made separately via a git worktree — they do not affect master.
 
 ### Notes
 - `DESIGN.md` changes are rare; don't update it unless a principle actually changed.

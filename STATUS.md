@@ -1,15 +1,15 @@
 # Quadrantology — Project Status
 
-_Last updated: 2026-04-16 (Session 3)_
+_Last updated: 2026-04-18 (Session 5)_
 
 ## Live
 
 | Environment | URL | Branch | Status |
 |---|---|---|---|
 | Staging / active dev | https://quadrantology.pages.dev | `master` | ✅ Live, fully functional |
-| Production | https://quadrantology.com | `gh-pages` (frozen at `ghpages-v1`) | ✅ Stable pre-paywall build |
+| Marketing site | https://quadrantology.com | `gh-pages` (active, not frozen) | ✅ V1 free test + V2 sign-up |
 
-`quadrantology.com` still points to GitHub Pages via DNS. CF Pages takes over after DNS cutover.
+`quadrantology.com` points to GitHub Pages via DNS. `gh-pages` is now an actively maintained marketing/preview site: V1 free test (no paywall), static copy pages, V2 sign-up CTA. CF Pages (`master`) takes over after DNS cutover.
 
 ## What's Working (staging)
 
@@ -80,6 +80,7 @@ _Last updated: 2026-04-16 (Session 3)_
 
 - `game.html` is still a stub (lorem ipsum placeholder).
 - `history.html` should be renamed `analytics.html` when analytics are built.
+- `gh-pages` marketing site: Shop and How to Play pages still exist at direct URLs but are unlinked from nav. Fine for now; remove or update when V2 is ready.
 
 ## Key Documents
 
