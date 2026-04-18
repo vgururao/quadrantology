@@ -46,5 +46,15 @@
     "archive_batch_size":  6,
 
     "_comment": "max_active_runs: own runs kept in the active localStorage window when a sync folder is set up. Should be >= the highest analytics tier run threshold (currently 10) so analytics always works from localStorage alone. archive_batch_size: evicted runs are buffered until this count is reached, then written as one closed archive file. Archive files are immutable once written."
+  },
+
+  "sampling": {
+    "target_count":        20,
+    "calibration_slots":    2,
+    "recency_slots":        2,
+    "recency_window_days": 90,
+    "max_overlap_pct":     30,
+
+    "_comment": "target_count: questions served per run. calibration_slots: reserved for questions in 'calibrating' status (data collection). recency_slots: reserved for recently-promoted live questions (within recency_window_days) to build response history. max_overlap_pct: upper bound on how many questions may repeat from the user's previous run (0–100). Stratified balance across 4 discrimination types (ev, virtue_conseq, virtue_deon, conseq_deon) fills remaining slots."
   }
 }

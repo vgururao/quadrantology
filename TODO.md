@@ -26,6 +26,15 @@ Two questions have answer options with all-zero dimension weights — only the o
 
 Once intent is confirmed, update weights via the admin UI at `/admin/questions` and add a status note to the state log.
 
+### Create first canonical model snapshot
+
+Create `docs/data/quadrantology-model-v1.json` — the CC BY 4.0 published model file for v1. Steps:
+1. Ensure questions are seeded in D1 (`worker/seed-questions.sql`)
+2. From the admin page, trigger the model snapshot procedure: snapshot questions table → insert into `scoring_models` → creates the JSON blob
+3. Download and save as `docs/data/quadrantology-model-v1.json`
+4. Run `git tag model-v1` and push with tags
+5. Confirm `protocol.json` `model_version` is set to 1
+
 ---
 
 ## Go-Live Checklist (when ready)

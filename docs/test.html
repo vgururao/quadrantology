@@ -117,9 +117,23 @@
       '</div>';
   }
 
-  // Fetch questions from D1-backed API; fall back to static file if unavailable or empty
+  // Fetch a sampled question set from D1-backed API; fall back to static file if unavailable
   function fetchQuestions() {
-    return fetch('/api/questions')
+    // Pass previous run's QIDs so the sampler can apply the overlap constraint
+    var prevRun = [];
+    try {
+      var history = JSON.parse(localStorage.getItem('quadrantology_history') || '[]');
+      var lastRun = history[0]; // newest first
+      if (lastRun && lastRun.run) {
+        prevRun = lastRun.run.map(function(r) { return r.qid; });
+      }
+    } catch (_) {}
+
+    return fetch('/api/sample-questions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ previous_qids: prevRun })
+    })
       .then(function(r) { return r.json(); })
       .then(function(d) {
         if (d.questions && d.questions.length > 0) return d;

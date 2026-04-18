@@ -44,6 +44,7 @@ functions/         — Cloudflare Pages Functions (deployed alongside docs/)
     stripe-webhook.js   — POST: handle checkout.session.completed, generate code
     price.js            — GET:  fetch live price display from Stripe
     questions.js        — GET:  serve live+calibrating questions from D1 (falls back to 503)
+    sample-questions.js — POST: proprietary balanced sampling (target count, calibration/recency slots, overlap constraint, type balance)
     admin/
       _middleware.js    — HMAC token verification for all /api/admin/* routes
       challenge.js      — GET:  issue nonce for ECDSA challenge-response auth
@@ -119,7 +120,8 @@ Worker-dependent features (Stripe, code validation) require `wrangler pages dev`
 | `POST /api/checkout` | Create Stripe Checkout session |
 | `GET  /api/session-code?session_id=` | Exchange Stripe session_id for personal code |
 | `POST /api/stripe-webhook` | Handle payment events, generate personal code |
-| `GET  /api/questions` | Serve live+calibrating questions from D1 |
+| `GET  /api/questions` | Serve live+calibrating questions from D1 (full pool, admin/fallback) |
+| `POST /api/sample-questions` | Serve a balanced sampled subset for a test run (body: `{previous_qids}`) |
 | `GET  /api/admin/challenge` | Issue ECDSA auth nonce |
 | `POST /api/admin/auth` | Verify ECDSA signature, return HMAC session token |
 | `GET  /api/admin/questions` | List all questions (with optional `?id=Q001` for single+state log) |

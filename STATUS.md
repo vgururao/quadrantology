@@ -1,6 +1,6 @@
 # Quadrantology — Project Status
 
-_Last updated: 2026-04-18 (Session 5)_
+_Last updated: 2026-04-18 (Session 6)_
 
 ## Live
 
@@ -26,6 +26,11 @@ _Last updated: 2026-04-18 (Session 5)_
 - **Admin UI** (`/admin/questions`) — ECDSA P-256 challenge-response auth (keys in browser IndexedDB, never extractable); question CRUD with status toggles (`live`/`calibrating`/`archived`), per-question response weight, full state log; research data panel with A/B breakdown and archetype discrimination view; bulk import from `questions.json`
 - **Personal Circle** (`circle.html`) — 8 slots for contact arc snapshots; add/update via pasted share URL (deflate-decompressed); mini arc chips, E/V bar, slot age; demo mode with 3 sci-fi-named contacts clearly flagged as dummy
 - **Relationship Analysis** (`analysis.html`) — 4 analysis types over selected circle members + optionally yourself: Working Dynamic (E/V composition + archetype pair notes), Values Map (ethics simplex group average + outlier), Fault Lines (pairwise dimension gaps ranked), Collective Blind Spots (underweight dimensions flagged); demo data matching circle.html
+- **Design Principles page** (`design_principles.html`) — all 7 principles published as a versioned public page; linked from site footer; Walk-Away Guarantee and data dignity documented publicly
+- **Proprietary sampling endpoint** (`POST /api/sample-questions`) — stratified sampling across 4 discrimination types, calibration slots, recency slots, overlap constraint vs previous run; `test.html` now POSTs to this endpoint with previous run QIDs; algorithm lives server-side only
+- **Logbook rename** — `history.html` → `logbook.html`; old URL redirects via meta-refresh
+- **Scoring models table** in D1 schema (`scoring_models`) — one row per model version, full canonical JSON blob, never deleted
+- **v2 run record** fields extended: `run_number`, `format_version`, `model_version` frozen at save time; `scoring_models` block embedded in all logbook exports
 
 ## Go-Live Checklist
 
@@ -51,7 +56,7 @@ _Last updated: 2026-04-18 (Session 5)_
 
 - **Copy and explanatory material** — improve landing page, about/theory, and results-page copy to reinforce the tracker framing. Add FAQ or explainer for first-time users.
 - **Question bank expansion** — add questions beyond the initial 28 to the D1 bank (new Q/A pairs, all starting in `calibrating` status to gather data before promoting to `live`).
-- **Question sampling logic** — when the bank grows beyond the run size, each run draws a balanced subset by archetype/dimension coverage rather than serving all questions. Scoring must remain comparable across runs with different subsets. Design in DATAMODEL.md before coding.
+- **Question sampling logic** — endpoint built (`POST /api/sample-questions`); currently pass-through (28 questions, target 20). Activates fully when question bank exceeds run size. Scoring comparability across different subsets is an open design question — address in DATAMODEL.md when expanding the bank.
 - **Subscription state design** — `circle.html` and `analysis.html` are supposed to be subscription-gated; `protocol.json` has `requires_subscription: true` but nothing enforces it. Design where subscription state lives (D1 + localStorage?) and add to DATAMODEL.md before building the enforcement.
 - **Product portfolio UI** — paywall presents three tiers: single assessment sequence, annual subscription, Coach Mode. Requires subscription state design above + Stripe subscription Price IDs.
 - **Offline-verifiable bundle** — signed zip of `docs/` with SHA256 manifest. Users can verify and run locally with `python3 -m http.server`. Stepping stone toward ZK client.
@@ -79,15 +84,16 @@ _Last updated: 2026-04-18 (Session 5)_
 ## Known Issues / Pending Review
 
 - `game.html` is still a stub (lorem ipsum placeholder).
-- `history.html` should be renamed `analytics.html` when analytics are built.
+- `logbook.html` (was `history.html`) still shows a raw run log only; full analytics page (trendline chart, tier commentary) is deferred to Tier 2.
 - `gh-pages` marketing site: Shop and How to Play pages still exist at direct URLs but are unlinked from nav. Fine for now; remove or update when V2 is ready.
+- `docs/data/quadrantology-model-v1.json` not yet created (first canonical model snapshot pending admin model-snapshot procedure).
 
 ## Key Documents
 
 | File | Purpose |
 |---|---|
 | `DATAMODEL.md` | Canonical data model — update before touching code |
-| `DESIGN.md` | Founding design principles |
+| `DESIGN.md` | Founding design principles (also published at `docs/design_principles.html`) |
 | `CLAUDE.md` | Full technical reference + wrap-up procedure for Claude Code sessions |
 | `TODO.md` | Manual action items (CF dashboard, DNS, Stripe, content review) |
 | `docs/data/protocol.json` | Runtime feature parameters (min_runs, circle size, calibration, etc.) |
