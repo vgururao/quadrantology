@@ -535,3 +535,20 @@ p { margin-bottom: 1rem; }
   .hero h1 { font-size: 1.8rem; }
   .archetype-result-name { font-size: 1.4rem; }
 }
+
+/* ===== V2 Teaser ===== */
+.v2-teaser {
+  margin: 1.75rem 0 0.5rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--card-bg);
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  text-align: left;
+}
+.v2-teaser p {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+.v2-teaser p strong { color: var(--accent); }
+.v2-teaser a.btn { display: inline-block; margin-top: 0.25rem; }

@@ -6,6 +6,11 @@
   <title>Quadrantology Test</title>
   <meta name="theme-color" content="#ffffff">
   <link rel="stylesheet" href="quadrantology.css">
+  <style>
+    .intro-view { text-align: left; }
+    .intro-view p { margin-bottom: 1rem; line-height: 1.7; }
+    .intro-view .begin-btn { margin-top: 1.5rem; }
+  </style>
 </head>
 <body>
 
@@ -17,8 +22,6 @@
     <ul class="nav-links">
       <li><a href="test.html">The Test</a></li>
       <li><a href="theory.html">The Theory</a></li>
-      <li><a href="shop.html">Shop</a></li>
-      <li><a href="game.html">How to Play</a></li>
       <li class="nav-dropdown">
         <a href="#archetypes">Archetypes &#9662;</a>
         <div class="nav-dropdown-content">
@@ -39,7 +42,13 @@
 <main class="content">
   <div class="test-container">
 
-    <div id="question-view">
+    <div id="intro-view" class="intro-view">
+      <p>Unlike traditional personality tests, Quadrantology is designed as a tracker that tracks shifting attitudes as your life circumstances and relationships evolve, so you might enjoy re-taking it after significant changes.</p>
+      <p>This is Version 1 of the test, developed in 2015 and administered to hundreds of people over the last decade. Version 2 (planned for Summer 2026) will add features to help you track and log your evolution.</p>
+      <button class="btn btn-primary begin-btn" id="begin-btn" onclick="beginTest()">Begin &rarr;</button>
+    </div>
+
+    <div id="question-view" style="display:none;">
       <div class="progress-bar-wrap">
         <div class="progress-bar-fill" id="progress-bar" style="width: 0%"></div>
       </div>
@@ -63,6 +72,7 @@
         <a href="test.html" class="btn btn-primary">Take Again</a>
         <a href="index.html" class="btn btn-secondary">Home</a>
       </div>
+      <div id="v2-cta-container"></div>
     </div>
 
   </div>
@@ -78,10 +88,21 @@
 
   fetch('data/questions.json')
     .then(function(r) { return r.json(); })
-    .then(function(d) {
-      data = d;
+    .then(function(d) { data = d; });
+
+  window.beginTest = function() {
+    document.getElementById('intro-view').style.display = 'none';
+    if (data) {
       showQuestion();
-    });
+    } else {
+      var btn = document.getElementById('begin-btn');
+      btn.disabled = true;
+      btn.textContent = 'Loading\u2026';
+      var poll = setInterval(function() {
+        if (data) { clearInterval(poll); showQuestion(); }
+      }, 100);
+    }
+  };
 
   function showQuestion() {
     if (!data) return;
@@ -159,6 +180,9 @@
   function showResults(resultsVec, stateString, evBias) {
     document.getElementById('question-view').style.display = 'none';
     document.getElementById('results-view').style.display = '';
+    fetch('data/v2-cta.html').then(function(r){return r.text();}).then(function(html){
+      document.getElementById('v2-cta-container').innerHTML = html;
+    });
     document.getElementById('progress-bar').style.width = '100%';
 
     // Result icon
