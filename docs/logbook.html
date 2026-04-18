@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quadrantology: Your Logbook</title>
+  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="quadrantology.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">Quadrantology</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+    <ul class="nav-links">
+      <li><a href="test.html">The Test</a></li>
+      <li><a href="theory.html">The Theory</a></li>
+      <li><a href="logbook.html">Logbook</a></li>
+      <li><a href="circle.html">Circle</a></li>
+      <li><a href="analysis.html">Analysis</a></li>
+      <li class="nav-dropdown">
+        <a href="#archetypes">Archetypes &#9662;</a>
+        <div class="nav-dropdown-content">
+          <div class="dropdown-exit">Exit</div>
+          <a href="hacker.html">Hacker</a>
+          <a href="contrarian.html">Contrarian</a>
+          <a href="legalist.html">Legalist</a>
+          <div class="dropdown-voice">Voice</div>
+          <a href="investigator.html">Investigator</a>
+          <a href="holywarrior.html">Holy Warrior</a>
+          <a href="operator.html">Operator</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main class="content">
+  <div class="history-page">
+    <div class="history-page-header">
+      <div>
+        <h1 id="history-title">Your Logbook</h1>
+        <p id="history-subtitle" class="history-page-subtitle"></p>
+      </div>
+      <div class="history-page-actions" id="history-page-actions"></div>
+    </div>
+    <div id="history-list"></div>
+  </div>
+</main>
+
+<footer class="site-footer">&copy; Quadrantology &middot; <a href="design_principles.html">Design Principles</a></footer>
+
+<script>
+(function() {
+  var STORAGE_KEY = 'quadrantology_history';
+  var SCORE_LABELS = ['Exit', 'Voice', 'Virtue', 'Consequentialist', 'Deontological'];
+  var SCORE_CLASSES = ['exit-bar', 'voice-bar', 'ethics-bar', 'ethics-bar', 'ethics-bar'];
+
+  function loadHistory() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+    catch(e) { return []; }
+  }
+
+  function formatDate(iso) {
+    try {
+      var d = new Date(iso);
+      return d.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) +
+             ' at ' + d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+    } catch(e) { return iso; }
+  }
+
+  function render() {
+    var name = localStorage.getItem('quadrantology_name') || '';
+    var h = loadHistory();
+    var count = h.length;
+
+    document.getElementById('history-title').textContent = name ? name + '\u2019s Logbook' : 'Your Logbook';
+    document.getElementById('history-subtitle').textContent =
+      count === 0 ? '' :
+      count === 1 ? '1 result' : count + ' results';
+
+    var actionsEl = document.getElementById('history-page-actions');
+    if (count > 0) {
+      actionsEl.innerHTML =
+        '<button class="btn btn-secondary btn-sm" onclick="downloadHistory()">Download logbook</button> ' +
+        '<button class="btn btn-secondary btn-sm" onclick="clearHistory()">Clear logbook</button>';
+    } else {
+      actionsEl.innerHTML = '';
+    }
+
+    var listEl = document.getElementById('history-list');
+    if (count === 0) {
+      listEl.innerHTML =
+        '<div class="history-empty">' +
+          '<p>No logbook entries on this device yet.</p>' +
+          '<a href="test.html" class="btn btn-primary" style="margin-top:1rem;">Take the test</a>' +
+        '</div>';
+      return;
+    }
+
+    listEl.innerHTML = '';
+    for (var i = 0; i < h.length; i++) {
+      var entry = h[i];
+      listEl.appendChild(renderEntry(entry, i + 1, h.length));
+    }
+  }
+
+  // Normalize a history record to a common shape regardless of version
+  function normalize(entry) {
+    if (entry.version === 2) {
+      var s = entry.scores;
+      return {
+        archetype: entry.archetype,
+        evBias: entry.ev_bias,
+        scoresArr: [s.exit, s.voice, s.virtue, s.consequentialist, s.deontological],
+        position: entry.position || null,
+        questionCount: entry.run ? entry.run.length : null,
+        version: 2
+      };
+    }
+    // v1 legacy
+    return {
+      archetype: entry.archetype,
+      evBias: entry.evBias,
+      scoresArr: Array.isArray(entry.scores) ? entry.scores : [],
+      position: null,
+      questionCount: Array.isArray(entry.answers) ? entry.answers.length : null,
+      version: 1
+    };
+  }
+
+  function renderEntry(entry, num, total) {
+    var n = normalize(entry);
+    var card = document.createElement('div');
+    card.className = 'history-entry';
+
+    var biasLabel = '', biasClass = '';
+    if (n.evBias === 1) { biasLabel = 'Exit'; biasClass = 'badge-exit'; }
+    else if (n.evBias === 2) { biasLabel = 'Voice'; biasClass = 'badge-voice'; }
+    var badgeHtml = biasLabel ? '<span class="badge ' + biasClass + '">' + biasLabel + '</span>' : '';
+
+    var posHtml = '';
+    if (n.position && n.position.ev !== undefined) {
+      var evPct = ((n.position.ev + 1) / 2 * 100).toFixed(0); // map -1..+1 to 0..100%
+      var e = n.position.ethics;
+      posHtml =
+        '<div class="history-position">' +
+          '<span class="history-pos-label">E&harr;V</span>' +
+          '<div class="history-pos-track">' +
+            '<div class="history-pos-fill" style="width:' + evPct + '%"></div>' +
+          '</div>' +
+          '<span class="history-pos-labels"><span class="voice-label">V</span><span class="exit-label">E</span></span>' +
+        '</div>' +
+        '<div class="history-ethics-bar">' +
+          '<div class="history-ethics-seg ethics-virtue" style="width:' + (e.virtue*100).toFixed(1) + '%" title="Virtue ' + (e.virtue*100).toFixed(0) + '%"></div>' +
+          '<div class="history-ethics-seg ethics-conseq" style="width:' + (e.consequentialist*100).toFixed(1) + '%" title="Consequentialist ' + (e.consequentialist*100).toFixed(0) + '%"></div>' +
+          '<div class="history-ethics-seg ethics-deont" style="width:' + (e.deontological*100).toFixed(1) + '%" title="Deontological ' + (e.deontological*100).toFixed(0) + '%"></div>' +
+        '</div>' +
+        '<div class="history-ethics-legend">' +
+          '<span class="ethics-virtue-dot">&#9632;</span> Virtue ' + (e.virtue*100).toFixed(0) + '%' +
+          ' &nbsp; <span class="ethics-conseq-dot">&#9632;</span> Conseq. ' + (e.consequentialist*100).toFixed(0) + '%' +
+          ' &nbsp; <span class="ethics-deont-dot">&#9632;</span> Deont. ' + (e.deontological*100).toFixed(0) + '%' +
+        '</div>';
+    }
+
+    var metaExtra = n.questionCount ? ' &middot; ' + n.questionCount + ' questions' : '';
+    metaExtra += n.version === 1 ? ' &middot; <span class="version-tag">v1</span>' : '';
+
+    card.innerHTML =
+      '<div class="history-entry-header">' +
+        '<div class="history-entry-meta">' +
+          '<span class="history-entry-num">Run ' + (total - num + 1) + '</span>' +
+          '<span class="history-entry-date">' + formatDate(entry.timestamp) + metaExtra + '</span>' +
+        '</div>' +
+        '<div class="history-entry-archetype">' +
+          '<span class="history-archetype-name">' + entry.archetype + '</span> ' + badgeHtml +
+        '</div>' +
+      '</div>' +
+      posHtml;
+
+    if (n.scoresArr.length === 5) {
+      var maxVal = Math.max.apply(null, n.scoresArr) || 1;
+      var barsEl = document.createElement('div');
+      barsEl.className = 'history-score-bars';
+      for (var j = 0; j < 5; j++) {
+        var pct = (n.scoresArr[j] / maxVal * 100).toFixed(0);
+        var row = document.createElement('div');
+        row.className = 'history-score-row';
+        row.innerHTML =
+          '<span class="history-score-label">' + SCORE_LABELS[j] + '</span>' +
+          '<div class="history-score-track">' +
+            '<div class="history-score-fill ' + SCORE_CLASSES[j] + '" style="width:' + pct + '%"></div>' +
+          '</div>' +
+          '<span class="history-score-val">' + n.scoresArr[j].toFixed(1) + '</span>';
+        barsEl.appendChild(row);
+      }
+      card.appendChild(barsEl);
+    }
+
+    if (entry.note) {
+      var noteEl = document.createElement('div');
+      noteEl.className = 'history-note';
+      noteEl.textContent = entry.note;
+      card.appendChild(noteEl);
+    }
+
+    return card;
+  }
+
+  window.downloadHistory = function() {
+    var h = loadHistory();
+    var blob = new Blob([JSON.stringify(h, null, 2)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'quadrantology-logbook.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
+  window.clearHistory = function() {
+    var overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML =
+      '<div class="modal-card">' +
+        '<p class="modal-question">Download your history first?</p>' +
+        '<div class="modal-actions">' +
+          '<button class="btn btn-primary" id="modal-yes">Yes, download</button>' +
+          '<button class="btn btn-secondary" id="modal-did">I already did</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+
+    function close() { document.body.removeChild(overlay); }
+
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) close(); });
+    document.getElementById('modal-yes').onclick = function() { downloadHistory(); close(); };
+    document.getElementById('modal-did').onclick = function() {
+      close();
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem('quadrantology_name');
+      render();
+    };
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>
