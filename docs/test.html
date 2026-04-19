@@ -50,9 +50,13 @@
       </div>
       <p class="progress-text" id="progress-text"></p>
       <p class="question-prompt">Choose the statement that resonates more with you:</p>
-      <button class="choice-btn" id="btn-a" onclick="answer('a')"></button>
-      <button class="choice-btn" id="btn-b" onclick="answer('b')"></button>
-      <button class="back-btn" id="back-btn" onclick="goBack()" style="display:none;">&#8592; Back</button>
+      <button class="choice-btn" id="btn-a" onclick="selectAnswer('a')"></button>
+      <button class="choice-btn" id="btn-b" onclick="selectAnswer('b')"></button>
+      <p class="response-changed" id="response-changed"></p>
+      <div class="question-nav">
+        <button class="back-btn" id="back-btn" onclick="goBack()" disabled>&#8592; Back</button>
+        <button class="next-btn" id="next-btn" onclick="advance()" disabled>Next &rarr;</button>
+      </div>
     </div>
 
     <div id="paywall-view" style="display:none;">
@@ -264,20 +268,46 @@
 
   // ===== QUESTIONS =====
 
+  var responseChangedTimer = null;
+
   function showQuestion() {
     if (!testQuestions) return;
     var q = testQuestions[current];
     var total = testQuestions.length;
     document.getElementById('progress-bar').style.width = (current / total * 100).toFixed(0) + '%';
     document.getElementById('progress-text').textContent = 'Question ' + (current + 1) + ' of ' + total;
-    document.getElementById('btn-a').textContent = q.a;
-    document.getElementById('btn-b').textContent = q.b;
-    document.getElementById('back-btn').style.display = current > 0 ? 'inline-block' : 'none';
+    var btnA = document.getElementById('btn-a');
+    var btnB = document.getElementById('btn-b');
+    btnA.textContent = q.a;
+    btnB.textContent = q.b;
+    btnA.classList.remove('selected');
+    btnB.classList.remove('selected');
+    if (answers[current]) {
+      document.getElementById('btn-' + answers[current]).classList.add('selected');
+    }
+    document.getElementById('back-btn').disabled = (current === 0);
+    document.getElementById('next-btn').disabled = !answers[current];
+    clearTimeout(responseChangedTimer);
+    document.getElementById('response-changed').textContent = '';
     document.getElementById('question-view').style.display = '';
   }
 
-  window.answer = function(choice) {
+  window.selectAnswer = function(choice) {
+    var prev = answers[current];
     answers[current] = choice;
+    document.getElementById('btn-a').classList.toggle('selected', choice === 'a');
+    document.getElementById('btn-b').classList.toggle('selected', choice === 'b');
+    document.getElementById('next-btn').disabled = false;
+    if (prev && prev !== choice) {
+      var msg = document.getElementById('response-changed');
+      msg.textContent = 'Response changed!';
+      clearTimeout(responseChangedTimer);
+      responseChangedTimer = setTimeout(function() { msg.textContent = ''; }, 2000);
+    }
+  };
+
+  window.advance = function() {
+    if (!answers[current]) return;
     current++;
     if (current < testQuestions.length) {
       showQuestion();
