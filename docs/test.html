@@ -108,8 +108,10 @@
     if (!data) return;
     var btnA = document.getElementById('btn-a');
     var btnB = document.getElementById('btn-b');
-    // iOS Safari keeps :active state after a tap even after blur().
-    // Setting disabled=true forces an immediate style reset; re-enable after updating text.
+    // iOS Safari batches synchronous disabled=true/false in one task and never paints the
+    // intermediate disabled state, so :active never clears. Disabling here and re-enabling
+    // in a rAF callback puts a frame boundary between them, forcing a paint of the
+    // disabled state first — which drops :active — before the buttons come back live.
     btnA.disabled = true;
     btnB.disabled = true;
     var q = data.questions[current];
@@ -119,11 +121,13 @@
     document.getElementById('progress-text').textContent = 'Question ' + (current + 1) + ' of ' + total;
     btnA.textContent = q.a;
     btnB.textContent = q.b;
-    btnA.disabled = false;
-    btnB.disabled = false;
     document.getElementById('back-btn').style.display = current > 0 ? 'inline-block' : 'none';
     document.getElementById('question-view').style.display = '';
     document.getElementById('results-view').style.display = 'none';
+    requestAnimationFrame(function() {
+      btnA.disabled = false;
+      btnB.disabled = false;
+    });
   }
 
   window.answer = function(choice) {
