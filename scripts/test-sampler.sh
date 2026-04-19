@@ -32,7 +32,7 @@ for i in $(seq 1 "$N"); do
   fi
 
   # Extract fields with python3 (available on macOS without extra deps)
-  /usr/local/bin/python3 - "$RESPONSE" "$i" <<'PYEOF'
+  /opt/homebrew/bin/python3 - "$RESPONSE" "$i" <<'PYEOF'
 import sys, json
 
 raw   = sys.argv[1]
@@ -69,7 +69,7 @@ for q in qs:
 PYEOF
 
   # Extract QID array from this run and prepend to previous_runs (keep newest first, max 3)
-  THIS_QIDS=$(/usr/local/bin/python3 -c "
+  THIS_QIDS=$(/opt/homebrew/bin/python3 -c "
 import sys, json
 d = json.loads(sys.argv[1])
 qs = d.get('questions', [])
@@ -77,7 +77,7 @@ print(json.dumps([q['id'] for q in qs]))
 " "$RESPONSE")
 
   # Prepend this run, cap at 3
-  previous_runs=$(/usr/local/bin/python3 -c "
+  previous_runs=$(/opt/homebrew/bin/python3 -c "
 import sys, json
 prev = json.loads(sys.argv[1])
 this = json.loads(sys.argv[2])
