@@ -66,7 +66,7 @@
     {
       "a": "When one project ends, I like to line up a new one and jump in quickly",
       "b": "When one project ends I like to think hard before jumping into a new one",
-      "weights": { "a": [0,0,0,0,0], "b": [0,0,1,0,0] }
+      "weights": { "a": [0,0,0,0,1], "b": [0,0,1,0,0] }
     },
     {
       "a": "When I see or experience injustice, I get even",
@@ -124,9 +124,9 @@
       "weights": { "a": [0,1,0,0,0], "b": [1,0,0,0,0] }
     },
     {
-      "a": "Building a sustainable civilization is possible if we all do our share",
-      "b": "Sustainability is an illusion, take care of today and tomorrow will take care of itself",
-      "weights": { "a": [0,0,1,0,0], "b": [0,0,0,0,0] }
+      "a": "I am more likely to think about what lessons we are leaving for future generations",
+      "b": "I am more likely to think about what kind of world we are leaving for future generations",
+      "weights": { "a": [0,0,1,0,0], "b": [0,0,0,1,0] }
     },
     {
       "a": "The right strategy may cost you in the short term, but you will win in the long term",
