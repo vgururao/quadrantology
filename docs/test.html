@@ -106,7 +106,9 @@
 
   function showQuestion() {
     if (!data) return;
-    if (document.activeElement) document.activeElement.blur();
+    // Explicitly blur both choice buttons to clear :active/:focus state on the reused DOM nodes
+    document.getElementById('btn-a').blur();
+    document.getElementById('btn-b').blur();
     var q = data.questions[current];
     var total = data.questions.length;
     var pct = ((current) / total * 100).toFixed(0);

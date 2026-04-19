@@ -337,6 +337,7 @@ p { margin-bottom: 1rem; }
   font-family: var(--font);
   color: var(--text);
   transition: border-color 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
 }
 .choice-btn:hover {
   border-color: var(--accent);
