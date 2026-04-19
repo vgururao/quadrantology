@@ -17,7 +17,7 @@ CREATE INDEX IF NOT EXISTS idx_codes_org_id ON codes(org_id);
 CREATE INDEX IF NOT EXISTS idx_codes_stripe_session ON codes(stripe_session_id);
 
 -- Questions database (admin-editable, replaces static questions.json for live reads)
--- Statuses: live = in pool | calibrating = in pool + responses recorded | archived = retired
+-- Statuses: draft = placeholder, not served | live = in pool | calibrating = in pool + responses recorded | archived = retired
 CREATE TABLE IF NOT EXISTS questions (
   id                TEXT    PRIMARY KEY,             -- e.g. Q001
   answer_a          TEXT    NOT NULL,
@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS questions (
   weights_a         TEXT    NOT NULL,                -- JSON array [exit, voice, virtue, consequentialist, deontological]
   weights_b         TEXT    NOT NULL,                -- JSON array
   response_weight   REAL    NOT NULL DEFAULT 1.0,    -- contribution to scoring; calibrated over time
-  status            TEXT    NOT NULL DEFAULT 'live'
-                    CHECK(status IN ('live','calibrating','archived')),
+  status            TEXT    NOT NULL DEFAULT 'draft'
+                    CHECK(status IN ('draft','live','calibrating','archived')),
   questions_version INTEGER NOT NULL DEFAULT 1,      -- schema version when question was added
   added_at          TEXT    NOT NULL,                -- ISO timestamp
   created_by        TEXT,                            -- admin key fingerprint

@@ -7,7 +7,7 @@
 // All routes protected by token middleware (_middleware.js).
 // `context.data.adminPk` contains the authenticated admin's key fingerprint.
 
-const VALID_STATUSES = ['live', 'calibrating', 'archived'];
+const VALID_STATUSES = ['draft', 'live', 'calibrating', 'archived'];
 
 export async function onRequestGet(context) {
   const { env, request } = context;
@@ -86,7 +86,7 @@ export async function onRequestPost(context) {
     await env.DB.batch(stmts);
   } else {
     // Create new question
-    const initialStatus = status || 'live';
+    const initialStatus = status || 'draft';
     await env.DB.batch([
       env.DB.prepare(
         `INSERT INTO questions (id, answer_a, answer_b, weights_a, weights_b, response_weight, status, questions_version, added_at, created_by, notes)

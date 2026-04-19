@@ -20,6 +20,8 @@
       --calib-bg:    #fff8e6;
       --arch:        #6b6459;
       --arch-bg:     #f0ede8;
+      --draft:       #5b5f7b;
+      --draft-bg:    #eeeff5;
       --danger:      #a83232;
       --sidebar-w:   280px;
     }
@@ -238,6 +240,7 @@
     .badge-live { background: var(--live-bg); color: var(--live); }
     .badge-calibrating { background: var(--calib-bg); color: var(--calib); }
     .badge-archived { background: var(--arch-bg); color: var(--arch); }
+    .badge-draft { background: var(--draft-bg); color: var(--draft); }
 
     .sidebar-footer {
       padding: 10px 14px;
@@ -334,6 +337,13 @@
     .status-btn.active-live { background: var(--live-bg); color: var(--live); font-weight: 600; }
     .status-btn.active-calibrating { background: var(--calib-bg); color: var(--calib); font-weight: 600; }
     .status-btn.active-archived { background: var(--arch-bg); color: var(--arch); font-weight: 600; }
+    .status-btn.active-draft { background: var(--draft-bg); color: var(--draft); font-weight: 600; }
+    .publish-btn {
+      background: var(--draft); color: #fff; border: none; border-radius: 4px;
+      padding: 6px 14px; font-size: 13px; cursor: pointer; margin-top: 8px;
+    }
+    .publish-btn:hover { opacity: 0.85; }
+    #publish-section { display: none; }
 
     /* Weight grid */
     .weight-grid {
@@ -546,6 +556,7 @@
       </div>
       <div class="sidebar-filters">
         <button class="filter-btn active" data-filter="all" onclick="setFilter(this,'all')">All</button>
+        <button class="filter-btn" data-filter="draft" onclick="setFilter(this,'draft')">Draft</button>
         <button class="filter-btn" data-filter="live" onclick="setFilter(this,'live')">Live</button>
         <button class="filter-btn" data-filter="calibrating" onclick="setFilter(this,'calibrating')">Calib</button>
         <button class="filter-btn" data-filter="archived" onclick="setFilter(this,'archived')">Arch</button>
@@ -599,9 +610,13 @@
         <div class="form-section">
           <label class="form-label">Status</label>
           <div class="status-toggle">
+            <button class="status-btn" data-status="draft" onclick="setStatus('draft')">Draft</button>
             <button class="status-btn" data-status="live" onclick="setStatus('live')">Live</button>
             <button class="status-btn" data-status="calibrating" onclick="setStatus('calibrating')">Calibrating</button>
             <button class="status-btn" data-status="archived" onclick="setStatus('archived')">Archived</button>
+          </div>
+          <div id="publish-section">
+            <button class="publish-btn" onclick="publishDraft()">Publish → Calibrating</button>
           </div>
         </div>
 
@@ -996,6 +1011,7 @@ function fillForm(q) {
   currentStatus = q.status;
   updateStatusButtons();
   document.getElementById('state-note-section').style.display = 'none';
+  document.getElementById('publish-section').style.display = q.status === 'draft' ? '' : 'none';
   document.getElementById('q-state-note').value = '';
 }
 
@@ -1013,6 +1029,7 @@ window.setStatus = function(s) {
   updateStatusButtons();
   const changed = s !== originalStatus;
   document.getElementById('state-note-section').style.display = changed ? '' : 'none';
+  document.getElementById('publish-section').style.display = s === 'draft' ? '' : 'none';
   if (s === 'calibrating' && current) {
     loadResearchData(current.id);
     document.getElementById('research-panel').style.display = '';
@@ -1020,6 +1037,12 @@ window.setStatus = function(s) {
     document.getElementById('research-panel').style.display = 'none';
   }
   markDirty();
+};
+
+window.publishDraft = function() {
+  setStatus('calibrating');
+  document.getElementById('q-state-note').value = 'Published from draft';
+  saveQuestion();
 };
 
 window.markDirty = function() { dirty = true; };
