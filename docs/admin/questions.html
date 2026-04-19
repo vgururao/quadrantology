@@ -505,7 +505,13 @@
 <body>
 
 <div class="topbar">
-  <div class="topbar-title">Quadrantology Admin — Questions</div>
+  <div style="display:flex;align-items:center;gap:20px">
+    <span class="topbar-title">Quadrantology Admin</span>
+    <nav style="display:flex;gap:4px">
+      <a href="questions.html" style="color:#fff;text-decoration:none;font-size:12px;padding:4px 10px;border-radius:4px;border:1px solid #666">Questions</a>
+      <a href="diagnostics.html" style="color:#aaa;text-decoration:none;font-size:12px;padding:4px 10px;border-radius:4px;border:1px solid transparent">Diagnostics</a>
+    </nav>
+  </div>
   <div class="topbar-right" id="topbar-right" style="display:none">
     <span class="topbar-fp" id="topbar-fp"></span>
     <button class="topbar-signout" onclick="signOut()">Sign out</button>

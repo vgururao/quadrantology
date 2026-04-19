@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Diagnostics | Quadrantology</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f4f1eb;
+      --card:      #ffffff;
+      --text:      #2c2c2c;
+      --text2:     #6b6459;
+      --accent:    #c0713a;
+      --border:    #e0dbd3;
+      --live:      #2e7d51;
+      --live-bg:   #edf7f1;
+      --calib:     #a06b00;
+      --calib-bg:  #fff8e6;
+      --danger:    #a83232;
+      --danger-bg: #fdf2f2;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Top bar ── */
+    .topbar {
+      background: var(--text);
+      color: #fff;
+      padding: 0 20px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      font-size: 13px;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 20px; }
+    .topbar-title { font-weight: 600; letter-spacing: 0.5px; }
+    .topbar-nav { display: flex; gap: 4px; }
+    .topbar-nav a {
+      color: #aaa; text-decoration: none; font-size: 12px;
+      padding: 4px 10px; border-radius: 4px; border: 1px solid transparent;
+    }
+    .topbar-nav a:hover { color: #fff; border-color: #555; }
+    .topbar-nav a.active { color: #fff; border-color: #666; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .topbar-fp { color: #aaa; font-family: monospace; font-size: 11px; }
+    .topbar-signout {
+      background: none; border: 1px solid #666; color: #ccc;
+      padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;
+    }
+    .topbar-signout:hover { border-color: #999; color: #fff; }
+
+    /* ── Auth panel ── */
+    #auth-panel {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    .auth-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 32px;
+      width: 100%;
+      max-width: 440px;
+    }
+    .auth-card h2 { font-size: 18px; margin-bottom: 6px; }
+    .auth-card p { color: var(--text2); margin-bottom: 24px; font-size: 13px; }
+    .btn {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      text-align: center;
+    }
+    .btn-primary { background: var(--text); color: #fff; }
+    .btn-primary:hover { background: #444; }
+    .btn-full { width: 100%; }
+    .auth-status { margin-top: 12px; font-size: 12px; min-height: 18px; }
+    .auth-status.error { color: var(--danger); }
+    .auth-status.ok { color: var(--live); }
+
+    /* ── Main app ── */
+    #main-app { display: none; flex: 1; padding: 24px; }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      gap: 16px;
+    }
+    .page-header h1 { font-size: 20px; font-weight: 600; }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .controls label { font-size: 12px; color: var(--text2); }
+    .controls select, .controls input[type=number] {
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 13px;
+      background: var(--card);
+    }
+    .btn-sm {
+      padding: 5px 14px;
+      font-size: 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .btn-sm.btn-primary { background: var(--text); color: #fff; }
+    .btn-sm.btn-primary:hover { background: #444; }
+
+    /* ── Summary cards ── */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 16px;
+    }
+    .stat-card .label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .stat-card .value { font-size: 24px; font-weight: 600; }
+    .stat-card .value.ok { color: var(--live); }
+    .stat-card .value.warn { color: var(--calib); }
+    .stat-card .value.bad { color: var(--danger); }
+
+    /* ── Sections ── */
+    .section { margin-bottom: 32px; }
+    .section h2 {
+      font-size: 13px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--text2); margin-bottom: 12px;
+      padding-bottom: 6px; border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Tables ── */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th {
+      text-align: left; padding: 6px 10px;
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.4px; color: var(--text2);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    tbody tr:hover { background: var(--bg); }
+    tbody td { padding: 6px 10px; border-bottom: 1px solid var(--border); }
+    tbody tr:last-child td { border-bottom: none; }
+    .mono { font-family: monospace; font-size: 12px; }
+    .ok-badge {
+      display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 11px;
+    }
+    .ok-badge.ok { background: var(--live-bg); color: var(--live); }
+    .ok-badge.fail { background: var(--danger-bg); color: var(--danger); }
+
+    .type-balance-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .type-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 14px;
+    }
+    .type-card .type-name {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--text2); margin-bottom: 8px;
+    }
+    .type-card .type-stats { display: flex; flex-direction: column; gap: 3px; }
+    .type-card .type-row {
+      display: flex; justify-content: space-between; font-size: 12px;
+    }
+    .type-card .type-row .t-label { color: var(--text2); }
+    .type-card .type-row .t-val { font-weight: 500; font-family: monospace; }
+
+    .bar-wrap { display: flex; align-items: center; gap: 8px; }
+    .bar-bg {
+      flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;
+    }
+    .bar-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+    .bar-label { font-size: 11px; color: var(--text2); width: 36px; text-align: right; }
+
+    #status-msg { font-size: 13px; color: var(--text2); }
+    #status-msg.error { color: var(--danger); }
+  </style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="topbar-title">Quadrantology Admin</span>
+    <nav class="topbar-nav">
+      <a href="questions.html">Questions</a>
+      <a href="diagnostics.html" class="active">Diagnostics</a>
+    </nav>
+  </div>
+  <div class="topbar-right">
+    <span class="topbar-fp" id="fp-display"></span>
+    <button class="topbar-signout" id="signout-btn">Sign out</button>
+  </div>
+</div>
+
+<!-- Auth panel -->
+<div id="auth-panel">
+  <div class="auth-card">
+    <h2>Admin Authentication</h2>
+    <p>Sign in with your admin key to access diagnostics.</p>
+    <button class="btn btn-primary btn-full" id="auth-btn">Authenticate</button>
+    <div class="auth-status" id="auth-status"></div>
+  </div>
+</div>
+
+<!-- Main app -->
+<div id="main-app">
+  <div class="page-header">
+    <h1>Sequence Diagnostics</h1>
+    <div class="controls">
+      <label>Window</label>
+      <select id="window-select">
+        <option value="7">7 days</option>
+        <option value="30" selected>30 days</option>
+        <option value="90">90 days</option>
+        <option value="0">All time</option>
+      </select>
+      <label>Recent rows</label>
+      <input type="number" id="recent-n" value="20" min="1" max="200" style="width:70px">
+      <button class="btn-sm btn-primary" id="refresh-btn">Refresh</button>
+      <span id="status-msg"></span>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary-grid" id="summary-grid"></div>
+
+  <!-- Type balance -->
+  <div class="section" id="type-balance-section">
+    <h2>Type Balance</h2>
+    <div class="type-balance-grid" id="type-balance-grid"></div>
+  </div>
+
+  <!-- Exposure -->
+  <div class="section">
+    <h2>Question Exposure</h2>
+    <table id="exposure-table">
+      <thead><tr>
+        <th>Question</th>
+        <th>Appearances</th>
+        <th style="width:200px">% of sequences</th>
+      </tr></thead>
+      <tbody id="exposure-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- Top co-occurring pairs -->
+  <div class="section">
+    <h2>Top Co-occurring Pairs</h2>
+    <table id="cooc-table">
+      <thead><tr>
+        <th>Pair</th>
+        <th>Count</th>
+      </tr></thead>
+      <tbody id="cooc-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- Recent sequences -->
+  <div class="section">
+    <h2>Recent Sequences</h2>
+    <table>
+      <thead><tr>
+        <th>ID</th>
+        <th>Sampled at</th>
+        <th>Q count</th>
+        <th>Parity</th>
+        <th>ev / vc / vd / cd</th>
+        <th>QIDs</th>
+      </tr></thead>
+      <tbody id="recent-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+// ── Auth ──────────────────────────────────────────────────────────────────────
+let token       = sessionStorage.getItem('admin_token') || null;
+let fingerprint = sessionStorage.getItem('admin_fp')    || null;
+
+function setFp(fp) {
+  fingerprint = fp;
+  const el = document.getElementById('fp-display');
+  if (el && fp) el.textContent = `fp: ${fp.slice(0, 16)}…`;
+}
+
+function showApp() {
+  document.getElementById('auth-panel').style.display = 'none';
+  document.getElementById('main-app').style.display   = 'block';
+  setFp(fingerprint);
+  load();
+}
+
+function showAuth() {
+  token = null;
+  fingerprint = null;
+  sessionStorage.removeItem('admin_token');
+  sessionStorage.removeItem('admin_fp');
+  document.getElementById('auth-panel').style.display = '';
+  document.getElementById('main-app').style.display   = 'none';
+}
+
+document.getElementById('signout-btn').addEventListener('click', showAuth);
+
+// Auth flow: challenge → sign → token
+document.getElementById('auth-btn').addEventListener('click', async () => {
+  const status = document.getElementById('auth-status');
+  status.textContent = 'Requesting challenge…';
+  status.className = 'auth-status';
+
+  try {
+    // Get or generate key pair
+    let keyPair = await loadKeyPair();
+    if (!keyPair) {
+      status.textContent = 'Generating admin key pair…';
+      keyPair = await generateAndStoreKeyPair();
+    }
+
+    // Fetch challenge
+    const cr = await fetch('/api/admin/challenge');
+    if (!cr.ok) throw new Error('Challenge request failed');
+    const { challenge } = await cr.json();
+
+    // Sign
+    const enc = new TextEncoder();
+    const sig = await crypto.subtle.sign({ name: 'ECDSA', hash: 'SHA-256' }, keyPair.privateKey, enc.encode(challenge));
+    const sigB64 = btoa(String.fromCharCode(...new Uint8Array(sig)));
+
+    // Export public key
+    const spki = await crypto.subtle.exportKey('spki', keyPair.publicKey);
+    const pubB64 = btoa(String.fromCharCode(...new Uint8Array(spki)));
+
+    // Auth
+    const ar = await fetch('/api/admin/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ challenge, signature: sigB64, public_key: pubB64 })
+    });
+    const ad = await ar.json();
+    if (!ar.ok) throw new Error(ad.error || 'Auth failed');
+
+    token       = ad.token;
+    fingerprint = ad.fingerprint;
+    sessionStorage.setItem('admin_token', token);
+    sessionStorage.setItem('admin_fp', fingerprint);
+    status.textContent = 'Authenticated.';
+    status.className = 'auth-status ok';
+    setTimeout(showApp, 300);
+
+  } catch (e) {
+    status.textContent = e.message;
+    status.className = 'auth-status error';
+  }
+});
+
+// Key pair helpers
+const KEY_STORE = 'qntlg_admin_key';
+async function loadKeyPair() {
+  return new Promise(resolve => {
+    const req = indexedDB.open('qntlg_admin', 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore('keys');
+    req.onsuccess = e => {
+      const tx = e.target.result.transaction('keys', 'readonly');
+      const r  = tx.objectStore('keys').get(KEY_STORE);
+      r.onsuccess = () => resolve(r.result || null);
+      r.onerror   = () => resolve(null);
+    };
+    req.onerror = () => resolve(null);
+  });
+}
+async function generateAndStoreKeyPair() {
+  const kp = await crypto.subtle.generateKey(
+    { name: 'ECDSA', namedCurve: 'P-256' },
+    false,
+    ['sign', 'verify']
+  );
+  await new Promise((resolve, reject) => {
+    const req = indexedDB.open('qntlg_admin', 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore('keys');
+    req.onsuccess = e => {
+      const tx = e.target.result.transaction('keys', 'readwrite');
+      tx.objectStore('keys').put(kp, KEY_STORE);
+      tx.oncomplete = resolve;
+      tx.onerror = reject;
+    };
+    req.onerror = reject;
+  });
+  return kp;
+}
+
+// ── Data loading ──────────────────────────────────────────────────────────────
+async function apiFetch(path) {
+  const r = await fetch(path, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  if (r.status === 401) { showAuth(); throw new Error('Session expired'); }
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}
+
+async function load() {
+  const statusEl  = document.getElementById('status-msg');
+  const windowVal = document.getElementById('window-select').value;
+  const recentN   = document.getElementById('recent-n').value;
+
+  statusEl.textContent = 'Loading…';
+  statusEl.className   = '';
+
+  try {
+    const data = await apiFetch(
+      `/api/admin/sequences?window_days=${windowVal}&recent=${recentN}&include=summary,type_balance,exposure,cooccurrence,recent`
+    );
+    renderSummary(data);
+    renderTypeBalance(data.type_balance);
+    renderExposure(data.exposure || []);
+    renderCooc(data.cooccurrence || []);
+    renderRecent(data.recent || []);
+    statusEl.textContent = `${data.row_count} sequence${data.row_count !== 1 ? 's' : ''} in window`;
+  } catch (e) {
+    statusEl.textContent = e.message;
+    statusEl.className   = 'error';
+  }
+}
+
+document.getElementById('refresh-btn').addEventListener('click', load);
+
+// ── Renderers ─────────────────────────────────────────────────────────────────
+function renderSummary(data) {
+  const s = data.summary || {};
+  const failPct = s.parity_fail_pct ?? 0;
+  const cards = [
+    { label: 'Sequences', value: s.total_sequences ?? 0, cls: '' },
+    { label: 'Parity OK', value: s.parity_ok_count ?? 0, cls: 'ok' },
+    { label: 'Parity Fail', value: s.parity_fail_count ?? 0, cls: failPct > 5 ? 'bad' : failPct > 0 ? 'warn' : 'ok' },
+    { label: 'Fail %', value: `${failPct}%`, cls: failPct > 5 ? 'bad' : failPct > 0 ? 'warn' : 'ok' },
+    { label: 'Avg Q count', value: s.avg_q_count ?? '—', cls: '' },
+    { label: 'Min Q count', value: s.min_q_count ?? '—', cls: '' },
+    { label: 'Max Q count', value: s.max_q_count ?? '—', cls: '' }
+  ];
+  document.getElementById('summary-grid').innerHTML = cards.map(c =>
+    `<div class="stat-card">
+      <div class="label">${c.label}</div>
+      <div class="value ${c.cls}">${c.value}</div>
+    </div>`
+  ).join('');
+}
+
+function renderTypeBalance(tb) {
+  if (!tb) { document.getElementById('type-balance-grid').innerHTML = '<em style="color:var(--text2)">No data</em>'; return; }
+  const labels = { ev: 'EV — Exit/Voice', vc: 'VC — Virtue/Conseq', vd: 'VD — Virtue/Deont', cd: 'CD — Conseq/Deont' };
+  document.getElementById('type-balance-grid').innerHTML = ['ev','vc','vd','cd'].map(t => {
+    const s = tb[t];
+    if (!s) return `<div class="type-card"><div class="type-name">${labels[t]}</div><div style="color:var(--text2);font-size:12px">No data</div></div>`;
+    return `<div class="type-card">
+      <div class="type-name">${labels[t]}</div>
+      <div class="type-stats">
+        <div class="type-row"><span class="t-label">min</span><span class="t-val">${s.min}</span></div>
+        <div class="type-row"><span class="t-label">median</span><span class="t-val">${s.p50}</span></div>
+        <div class="type-row"><span class="t-label">avg</span><span class="t-val">${s.avg}</span></div>
+        <div class="type-row"><span class="t-label">max</span><span class="t-val">${s.max}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderExposure(rows) {
+  if (!rows.length) { document.getElementById('exposure-tbody').innerHTML = '<tr><td colspan="3" style="color:var(--text2)">No data</td></tr>'; return; }
+  const maxPct = Math.max(...rows.map(r => r.pct), 1);
+  document.getElementById('exposure-tbody').innerHTML = rows.map(r =>
+    `<tr>
+      <td class="mono">${r.id}</td>
+      <td>${r.count}</td>
+      <td>
+        <div class="bar-wrap">
+          <div class="bar-bg"><div class="bar-fill" style="width:${Math.round(100 * r.pct / maxPct)}%"></div></div>
+          <span class="bar-label">${r.pct}%</span>
+        </div>
+      </td>
+    </tr>`
+  ).join('');
+}
+
+function renderCooc(rows) {
+  if (!rows.length) { document.getElementById('cooc-tbody').innerHTML = '<tr><td colspan="2" style="color:var(--text2)">No data</td></tr>'; return; }
+  document.getElementById('cooc-tbody').innerHTML = rows.map(r =>
+    `<tr>
+      <td class="mono">${r.pair}</td>
+      <td>${r.count}</td>
+    </tr>`
+  ).join('');
+}
+
+function renderRecent(rows) {
+  if (!rows.length) { document.getElementById('recent-tbody').innerHTML = '<tr><td colspan="6" style="color:var(--text2)">No data</td></tr>'; return; }
+  document.getElementById('recent-tbody').innerHTML = rows.map(r => {
+    const tc = r.type_counts || {};
+    const typeStr = `${tc.ev ?? '?'} / ${tc.vc ?? '?'} / ${tc.vd ?? '?'} / ${tc.cd ?? '?'}`;
+    const ts = r.sampled_at ? new Date(r.sampled_at).toLocaleString() : '—';
+    return `<tr>
+      <td>${r.id}</td>
+      <td>${ts}</td>
+      <td>${r.q_count}</td>
+      <td><span class="ok-badge ${r.parity_ok ? 'ok' : 'fail'}">${r.parity_ok ? 'OK' : 'FAIL'}</span></td>
+      <td class="mono">${typeStr}</td>
+      <td class="mono" style="font-size:11px;max-width:300px;word-break:break-all">${r.qids}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+if (token) {
+  showApp();
+} else {
+  document.getElementById('auth-panel').style.display = '';
+  document.getElementById('main-app').style.display   = 'none';
+}
+</script>
+</body>
+</html>

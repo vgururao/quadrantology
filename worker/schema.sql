@@ -31,7 +31,8 @@ CREATE TABLE IF NOT EXISTS questions (
   added_at          TEXT    NOT NULL,                -- ISO timestamp
   created_by        TEXT,                            -- admin key fingerprint
   notes             TEXT,
-  times_sampled     INTEGER NOT NULL DEFAULT 0       -- incremented each time the question is included in a sample
+  times_sampled     INTEGER NOT NULL DEFAULT 0,      -- incremented each time the question is included in a sample
+  last_sampled_at   TEXT                             -- ISO timestamp of most recent sample inclusion
 );
 
 -- Full audit log of status transitions per question (questions are never deleted)
@@ -96,6 +97,19 @@ CREATE TABLE IF NOT EXISTS admin_challenges (
 );
 
 CREATE INDEX IF NOT EXISTS idx_challenges_created_at ON admin_challenges(created_at);
+
+-- Sequence log: one row per sample-questions call (no user data, no answers)
+-- qids: compact sorted question numbers, Q-prefix/zero-stripped, comma-separated ("1,7,11,20,23")
+-- type_counts: JSON {"ev":5,"vc":3,"vd":3,"cd":3}
+CREATE TABLE IF NOT EXISTS question_sequences (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  sampled_at  TEXT    NOT NULL,
+  qids        TEXT    NOT NULL,
+  type_counts TEXT    NOT NULL,
+  parity_ok   INTEGER NOT NULL DEFAULT 1,
+  q_count     INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_sequences_sampled_at ON question_sequences(sampled_at);
 
 -- Canonical scoring model snapshots (one row per model version).
 -- model_json contains the full canonical model object: dimensions, archetypes,
