@@ -56,9 +56,10 @@
       <p class="question-prompt">Choose the statement that resonates more with you:</p>
       <button class="choice-btn" id="btn-a" onclick="selectAnswer('a')"></button>
       <button class="choice-btn" id="btn-b" onclick="selectAnswer('b')"></button>
+      <p class="response-changed" id="response-changed"></p>
       <div class="question-nav">
-        <button class="back-btn" id="back-btn" onclick="goBack()" style="display:none;">&#8592; Back</button>
-        <button class="next-btn" id="next-btn" onclick="advance()" style="display:none;">Next &rarr;</button>
+        <button class="back-btn" id="back-btn" onclick="goBack()" disabled>&#8592; Back</button>
+        <button class="next-btn" id="next-btn" onclick="advance()" disabled>Next &rarr;</button>
       </div>
     </div>
 
@@ -107,6 +108,8 @@
     }
   };
 
+  var responseChangedTimer = null;
+
   function showQuestion() {
     if (!data) return;
     var q = data.questions[current];
@@ -117,24 +120,32 @@
     var btnB = document.getElementById('btn-b');
     btnA.textContent = q.a;
     btnB.textContent = q.b;
-    // Clear any previous selection state — JS-controlled class, not CSS pseudo-state
     btnA.classList.remove('selected');
     btnB.classList.remove('selected');
-    // Restore selection if user navigated back to a previously answered question
     if (answers[current]) {
       document.getElementById('btn-' + answers[current]).classList.add('selected');
     }
-    document.getElementById('back-btn').style.display = current > 0 ? 'inline-block' : 'none';
-    document.getElementById('next-btn').style.display = answers[current] ? 'inline-block' : 'none';
+    document.getElementById('back-btn').disabled = (current === 0);
+    document.getElementById('next-btn').disabled = !answers[current];
+    // Clear any lingering "response changed" message on navigation
+    clearTimeout(responseChangedTimer);
+    document.getElementById('response-changed').textContent = '';
     document.getElementById('question-view').style.display = '';
     document.getElementById('results-view').style.display = 'none';
   }
 
   window.selectAnswer = function(choice) {
+    var prev = answers[current];
     answers[current] = choice;
     document.getElementById('btn-a').classList.toggle('selected', choice === 'a');
     document.getElementById('btn-b').classList.toggle('selected', choice === 'b');
-    document.getElementById('next-btn').style.display = 'inline-block';
+    document.getElementById('next-btn').disabled = false;
+    if (prev && prev !== choice) {
+      var msg = document.getElementById('response-changed');
+      msg.textContent = 'Response changed!';
+      clearTimeout(responseChangedTimer);
+      responseChangedTimer = setTimeout(function() { msg.textContent = ''; }, 2000);
+    }
   };
 
   window.advance = function() {
