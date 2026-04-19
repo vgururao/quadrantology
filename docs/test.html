@@ -123,20 +123,22 @@
 
   // Fetch a sampled question set from D1-backed API; fall back to static file if unavailable
   function fetchQuestions() {
-    // Pass previous run's QIDs so the sampler can apply the overlap constraint
-    var prevRun = [];
+    // Pass QIDs from recent runs so the sampler can apply multi-run overlap avoidance.
+    // Send last 3 runs as previous_runs (newest first); sampler penalizes questions seen
+    // in any of them, with a stricter constraint on the most recent run.
+    var previousRuns = [];
     try {
       var history = JSON.parse(localStorage.getItem('quadrantology_history') || '[]');
-      var lastRun = history[0]; // newest first
-      if (lastRun && lastRun.run) {
-        prevRun = lastRun.run.map(function(r) { return r.qid; });
-      }
+      var v2Runs = history.filter(function(r) { return r.version === 2 && Array.isArray(r.run); });
+      previousRuns = v2Runs.slice(0, 3).map(function(r) {
+        return r.run.map(function(q) { return q.qid; });
+      });
     } catch (_) {}
 
     return fetch('/api/sample-questions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ previous_qids: prevRun })
+      body: JSON.stringify({ previous_runs: previousRuns })
     })
       .then(function(r) { return r.json(); })
       .then(function(d) {
