@@ -30,7 +30,8 @@ CREATE TABLE IF NOT EXISTS questions (
   questions_version INTEGER NOT NULL DEFAULT 1,      -- schema version when question was added
   added_at          TEXT    NOT NULL,                -- ISO timestamp
   created_by        TEXT,                            -- admin key fingerprint
-  notes             TEXT
+  notes             TEXT,
+  times_sampled     INTEGER NOT NULL DEFAULT 0       -- incremented each time the question is included in a sample
 );
 
 -- Full audit log of status transitions per question (questions are never deleted)

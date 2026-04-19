@@ -276,6 +276,14 @@ export async function onRequestPost(context) {
   // Trim to targetCount in case of edge-case overfill (shouldn't happen in practice)
   const trimmed = finalSet.slice(0, targetCount);
 
+  // Increment times_sampled for each selected question (fire-and-forget)
+  if (trimmed.length > 0) {
+    const placeholders = trimmed.map(() => '?').join(',');
+    env.DB.prepare(
+      `UPDATE questions SET times_sampled = times_sampled + 1 WHERE id IN (${placeholders})`
+    ).bind(...trimmed.map(q => q.id)).run().catch(() => {});
+  }
+
   // --------------------------------------------------------------------------
   // Build meta (diagnostic, not exposed to end users — for admin/debugging)
   // --------------------------------------------------------------------------

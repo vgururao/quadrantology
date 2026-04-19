@@ -23,7 +23,7 @@
       --draft:       #5b5f7b;
       --draft-bg:    #eeeff5;
       --danger:      #a83232;
-      --sidebar-w:   280px;
+      --sidebar-w:   380px;
     }
 
     body {
@@ -224,10 +224,15 @@
       align-items: center;
       gap: 8px;
     }
-    .q-item:hover { background: var(--bg); }
-    .q-item.selected { background: #f0e8e0; }
+    .q-item:hover { filter: brightness(0.96); }
+    .q-item.selected { outline: 2px solid var(--accent); outline-offset: -2px; }
+    .q-item.status-live       { background: var(--live-bg); }
+    .q-item.status-calibrating{ background: var(--calib-bg); }
+    .q-item.status-draft      { background: var(--draft-bg); }
+    .q-item.status-archived   { background: var(--arch-bg); }
     .q-item-id { font-family: monospace; font-size: 11px; font-weight: 600; color: var(--text2); width: 36px; flex-shrink: 0; }
     .q-item-text { flex: 1; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .q-item-count { font-size: 10px; color: var(--text2); flex-shrink: 0; }
     .badge {
       font-size: 10px;
       font-weight: 600;
@@ -559,7 +564,7 @@
         <button class="filter-btn" data-filter="draft" onclick="setFilter(this,'draft')">Draft</button>
         <button class="filter-btn" data-filter="live" onclick="setFilter(this,'live')">Live</button>
         <button class="filter-btn" data-filter="calibrating" onclick="setFilter(this,'calibrating')">Calib</button>
-        <button class="filter-btn" data-filter="archived" onclick="setFilter(this,'archived')">Arch</button>
+        <button class="filter-btn" data-filter="archived" onclick="setFilter(this,'archived')">Archived</button>
       </div>
       <div class="q-list" id="q-list"></div>
       <div class="sidebar-footer">
@@ -947,11 +952,11 @@ function renderList() {
   }
 
   list.innerHTML = filtered.map(q => `
-    <div class="q-item${current && current.id === q.id ? ' selected' : ''}"
+    <div class="q-item status-${q.status}${current && current.id === q.id ? ' selected' : ''}"
          onclick="selectQuestion('${q.id}')">
       <span class="q-item-id">${q.id}</span>
       <span class="q-item-text">${escHtml(q.answer_a)}</span>
-      <span class="badge badge-${q.status}">${q.status === 'calibrating' ? 'cal' : q.status}</span>
+      ${q.times_sampled > 0 ? `<span class="q-item-count">${q.times_sampled}×</span>` : ''}
     </div>
   `).join('');
 }

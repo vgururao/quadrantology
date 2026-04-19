@@ -26,7 +26,7 @@ export async function onRequestGet(context) {
   }
 
   const { results } = await env.DB.prepare(
-    `SELECT * FROM questions ORDER BY id`
+    `SELECT *, times_sampled FROM questions ORDER BY id`
   ).all();
   return json({ questions: results.map(formatQuestion) });
 }
@@ -120,7 +120,8 @@ function formatQuestion(row) {
     questions_version:row.questions_version,
     added_at:         row.added_at,
     created_by:       row.created_by,
-    notes:            row.notes
+    notes:            row.notes,
+    times_sampled:    row.times_sampled ?? 0
   };
 }
 
