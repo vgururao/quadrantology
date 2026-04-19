@@ -1,5 +1,5 @@
 // Build stamp — edit VERSION and DATE here whenever deploying an update
-var BUILD_VERSION = '1.0.2';
+var BUILD_VERSION = '1.0.3';
 var BUILD_DATE    = '2026-04-19';
 
 document.addEventListener('DOMContentLoaded', function () {

@@ -357,9 +357,7 @@ p { margin-bottom: 1rem; }
   border-color: var(--accent);
   background: #fdf9f5;
 }
-.choice-btn:active {
-  background: #f5ede4;
-}
+/* :active intentionally omitted — iOS Safari keeps the state stuck on reused DOM nodes */
 
 .back-btn {
   display: inline-block;
