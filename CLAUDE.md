@@ -33,7 +33,8 @@ docs/              — Live website (Cloudflare Pages, custom domain quadrantolo
     protocol.json   — Runtime feature parameters (min_runs, circle size, calibration, etc.)
   images/          — Site images and card print sheets
   admin/
-    questions.html  — Admin UI: question CRUD, status toggles, research data view (ECDSA key auth)
+    questions.html   — Admin UI: question CRUD, status toggles, research data view (ECDSA key auth)
+    diagnostics.html — Sequence log diagnostics: exposure, type balance, co-occurrence, parity stats
 
 functions/         — Cloudflare Pages Functions (deployed alongside docs/)
   api/
@@ -44,7 +45,7 @@ functions/         — Cloudflare Pages Functions (deployed alongside docs/)
     stripe-webhook.js   — POST: handle checkout.session.completed, generate code
     price.js            — GET:  fetch live price display from Stripe
     questions.js        — GET:  serve live+calibrating questions from D1 (falls back to 503)
-    sample-questions.js — POST: proprietary balanced sampling (target count, calibration/recency slots, overlap constraint, type balance)
+    sample-questions.js — POST: proprietary balanced sampling (pairwise tie-free, co-occurrence-aware, multi-run overlap avoidance)
     admin/
       _middleware.js    — HMAC token verification for all /api/admin/* routes
       challenge.js      — GET:  issue nonce for ECDSA challenge-response auth
@@ -52,6 +53,7 @@ functions/         — Cloudflare Pages Functions (deployed alongside docs/)
       questions.js      — GET/POST: question CRUD + state log
       research-data.js  — GET:  per-question response counts + archetype breakdown
       generate-codes.js — POST: batch-generate coupon/org codes
+      sequences.js      — GET:  sequence log diagnostics (summary, exposure, type balance, cooccurrence, recent)
     research/
       record-response.js  — POST: store opted-in test run anonymously (per-run pathway)
       submit-logbook.js   — POST: store full logbook history anonymously (bulk pathway)
@@ -70,6 +72,9 @@ history/           — Archived materials
   docs/            — Archived PDFs and superseded materials
   qtest/           — Legacy Matlab scoring scripts
   typeform/        — Legacy Typeform batch processing + pilot data
+
+scripts/           — Developer utilities (not deployed)
+  test-sampler.sh  — Smoke-test /api/sample-questions: N sequential runs, compact summary output
 
 devlog/            — Session-by-session development log (eventually published)
 ```
@@ -121,19 +126,20 @@ Worker-dependent features (Stripe, code validation) require `wrangler pages dev`
 | `GET  /api/session-code?session_id=` | Exchange Stripe session_id for personal code |
 | `POST /api/stripe-webhook` | Handle payment events, generate personal code |
 | `GET  /api/questions` | Serve live+calibrating questions from D1 (full pool, admin/fallback) |
-| `POST /api/sample-questions` | Serve a balanced sampled subset for a test run (body: `{previous_qids}`) |
+| `POST /api/sample-questions` | Serve a balanced sampled subset for a test run (body: `{previous_runs}`) |
 | `GET  /api/admin/challenge` | Issue ECDSA auth nonce |
 | `POST /api/admin/auth` | Verify ECDSA signature, return HMAC session token |
 | `GET  /api/admin/questions` | List all questions (with optional `?id=Q001` for single+state log) |
 | `POST /api/admin/questions` | Create or update question |
 | `GET  /api/admin/research-data` | Response counts + archetype breakdown (`?question_id=` or `?all=1`) |
 | `POST /api/admin/generate-codes` | Batch-generate coupon/org codes |
+| `GET  /api/admin/sequences` | Sequence log diagnostics (`?window_days=`, `?recent=`, `?include=`) |
 | `POST /api/research/record-response` | Store anonymised per-run response (opted-in users) |
 | `POST /api/research/submit-logbook` | Store anonymised full logbook history (bulk opt-in) |
 
 ### D1 schema (`worker/schema.sql`)
 
-Tables: `codes`, `questions`, `question_state_log`, `research_subjects`, `research_sessions`, `research_responses`, `admin_challenges`
+Tables: `codes`, `questions`, `question_state_log`, `question_sequences`, `research_subjects`, `research_sessions`, `research_responses`, `admin_challenges`, `scoring_models`
 
 **`codes`** (unchanged)
 

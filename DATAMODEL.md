@@ -254,11 +254,33 @@ Managed via `/admin/questions` UI. Schema in `worker/schema.sql`. Seed file: `wo
 Each question: `id`, `status` (`live`/`calibrating`/`archived`), `response_weight`, `questions_version`, `answer_a/b`, `weights_a/b` (5-element arrays: exit, voice, virtue, consequentialist, deontological), `notes`.
 
 Status meanings:
+- `draft` — placeholder, not served; default for newly created questions
 - `live` — in pool, responses not recorded
 - `calibrating` — in pool AND responses recorded anonymously (triggers opt-in consent on intro)
 - `archived` — not in pool; preserved for replay
 
 Full audit trail in `question_state_log` (one row per status change, with reason note).
+
+Operational columns on `questions`:
+- `times_sampled` — incremented each time the question is included in a sample draw
+- `last_sampled_at` — ISO timestamp of most recent inclusion; null for never-sampled questions (treated as highest priority)
+
+### D1 `question_sequences` table
+
+One row per `/api/sample-questions` call. Records which questions were drawn together (no user data, no answers). Used by the sampler to build a co-occurrence frequency map and avoid repeatedly serving the same question combinations.
+
+```sql
+CREATE TABLE IF NOT EXISTS question_sequences (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  sampled_at  TEXT    NOT NULL,
+  qids        TEXT    NOT NULL,   -- compact: sorted question numbers, Q-prefix/zeros stripped, comma-sep ("1,7,11,20")
+  type_counts TEXT    NOT NULL,   -- JSON {"ev":5,"vc":3,"vd":3,"cd":3}
+  parity_ok   INTEGER NOT NULL DEFAULT 1,
+  q_count     INTEGER NOT NULL
+);
+```
+
+Privacy: contains only question IDs and timestamps — no user identity, answers, or scores. Sequence logging does not increase user data vulnerability.
 
 ---
 

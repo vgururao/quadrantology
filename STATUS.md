@@ -1,6 +1,6 @@
 # Quadrantology — Project Status
 
-_Last updated: 2026-04-19 (Session 7)_
+_Last updated: 2026-04-19 (Session 8)_
 
 ## Live
 
@@ -27,7 +27,10 @@ _Last updated: 2026-04-19 (Session 7)_
 - **Personal Circle** (`circle.html`) — 8 slots for contact arc snapshots; add/update via pasted share URL (deflate-decompressed); mini arc chips, E/V bar, slot age; demo mode with 3 sci-fi-named contacts clearly flagged as dummy
 - **Relationship Analysis** (`analysis.html`) — 4 analysis types over selected circle members + optionally yourself: Working Dynamic (E/V composition + archetype pair notes), Values Map (ethics simplex group average + outlier), Fault Lines (pairwise dimension gaps ranked), Collective Blind Spots (underweight dimensions flagged); demo data matching circle.html
 - **Design Principles page** (`design_principles.html`) — all 7 principles published as a versioned public page; linked from site footer; Walk-Away Guarantee and data dignity documented publicly
-- **Proprietary sampling endpoint** (`POST /api/sample-questions`) — stratified sampling across 4 discrimination types, calibration slots, recency slots, overlap constraint vs previous run; `test.html` now POSTs to this endpoint with previous run QIDs; algorithm lives server-side only
+- **Proprietary sampling endpoint** (`POST /api/sample-questions`) — pairwise tie-free sampling: per-type odd-count targets (ev/vc/vd/cd) make ties structurally impossible; co-occurrence-aware (loads last 200 sequences, penalizes frequently co-occurring pairs); multi-run overlap avoidance via `previous_runs[]` (last 3 runs' QID arrays, no server-side user tracking); `last_sampled_at` + `times_sampled` recency sorting; fire-and-forget sequence logging to D1
+- **Sequence log** (`question_sequences` D1 table) — one compact row per sample draw; used by sampler for co-occurrence diversification and by diagnostics API
+- **Admin diagnostics page** (`/admin/diagnostics`) — sequence log stats: summary cards, type balance min/max/avg/p50, per-question exposure bars, top co-occurring pairs, recent sequence list; window_days + recent row controls
+- **Sampler smoke test** (`scripts/test-sampler.sh`) — runs N sequential sample calls chaining previous_runs, prints compact per-run summary; works against live or local wrangler dev
 - **Logbook rename** — `history.html` → `logbook.html`; old URL redirects via meta-refresh
 - **Scoring models table** in D1 schema (`scoring_models`) — one row per model version, full canonical JSON blob, never deleted
 - **v2 run record** fields extended: `run_number`, `format_version`, `model_version` frozen at save time; `scoring_models` block embedded in all logbook exports
@@ -58,7 +61,7 @@ _Last updated: 2026-04-19 (Session 7)_
 
 - **Copy and explanatory material** — improve landing page, about/theory, and results-page copy to reinforce the tracker framing. Add FAQ or explainer for first-time users.
 - **Question bank expansion** — add questions beyond the initial 28 to the D1 bank (new Q/A pairs, all starting in `calibrating` status to gather data before promoting to `live`).
-- **Question sampling logic** — endpoint built (`POST /api/sample-questions`); currently pass-through (28 questions, target 20). Activates fully when question bank exceeds run size. Scoring comparability across different subsets is an open design question — address in DATAMODEL.md when expanding the bank.
+- **Question bank expansion** — add draft questions (stubs in `worker/seed-stubs.sql`: Q029–Q063) to improve pool coverage. All start in `draft` status; promote to `calibrating` via admin UI to gather data. Target: enough vc/vd/cd questions that no single question is structurally required every run (currently Q006 appears in almost every draw as the only dual-coded ev+vc question).
 - **Subscription state design** — `circle.html` and `analysis.html` are supposed to be subscription-gated; `protocol.json` has `requires_subscription: true` but nothing enforces it. Design where subscription state lives (D1 + localStorage?) and add to DATAMODEL.md before building the enforcement.
 - **Product portfolio UI** — paywall presents three tiers: single assessment sequence, annual subscription, Coach Mode. Requires subscription state design above + Stripe subscription Price IDs.
 - **Offline-verifiable bundle** — signed zip of `docs/` with SHA256 manifest. Users can verify and run locally with `python3 -m http.server`. Stepping stone toward ZK client.

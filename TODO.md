@@ -18,13 +18,12 @@ After the session 3 deploy, two manual steps are needed before the admin UI and 
    - `ADMIN_PUBLIC_KEYS` (plain) — base64url SPKI public key(s), generated via the key setup flow on `/admin/questions`
    - `ADMIN_TOKEN_SECRET` (secret) — at least 32 bytes random entropy: `openssl rand -base64 32`
 
-### Review zero-weight question vectors
-Two questions have answer options with all-zero dimension weights — only the other answer scores anything. May be intentional asymmetric design; needs author review:
-
-- **Q011 answer A** — all-zero weights (only answer B scores)
-- **Q023 answer B** — all-zero weights (only answer A scores)
-
-Once intent is confirmed, update weights via the admin UI at `/admin/questions` and add a status note to the state log.
+### Seed draft question stubs into D1
+`worker/seed-stubs.sql` contains Q029–Q063 placeholder questions (vc/vd/cd coverage). Run once after the schema migration to load them into the admin UI for editing:
+```bash
+wrangler d1 execute quadrantology --file=worker/seed-stubs.sql --remote
+```
+Then edit text via `/admin/questions` and promote to `calibrating` when ready.
 
 ### Create first canonical model snapshot
 
@@ -49,4 +48,6 @@ Create `docs/data/quadrantology-model-v1.json` — the CC BY 4.0 published model
 
 ## Done
 
-_(move completed items here)_
+- **D1 schema migrations applied** — `schema.sql` (with `question_sequences`, `times_sampled`, `last_sampled_at`, `draft` status) executed remotely via wrangler
+- **Admin UI activated** — `ADMIN_PUBLIC_KEYS` and `ADMIN_TOKEN_SECRET` set in CF Pages env vars; ECDSA keypair generated in browser; auth working
+- **Zero-weight questions fixed** — Q011 answer A and Q023 answer B weights corrected in D1 (via admin UI) and in `docs/data/questions.json` on both `master` and `gh-pages`
