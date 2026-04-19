@@ -888,7 +888,7 @@ window.signOut = function() {
 // ── Show main app ──────────────────────────────────────────────────────────
 async function showApp() {
   document.getElementById('auth-panel').style.display = 'none';
-  document.getElementById('main-app').style.display = 'flex';
+  document.getElementById('main-app').style.display = 'block';
   if (fingerprint) {
     document.getElementById('topbar-fp').textContent = 'fp: ' + fingerprint;
     document.getElementById('topbar-right').style.display = '';
