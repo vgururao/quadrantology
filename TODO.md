@@ -18,12 +18,6 @@ After the session 3 deploy, two manual steps are needed before the admin UI and 
    - `ADMIN_PUBLIC_KEYS` (plain) — base64url SPKI public key(s), generated via the key setup flow on `/admin/questions`
    - `ADMIN_TOKEN_SECRET` (secret) — at least 32 bytes random entropy: `openssl rand -base64 32`
 
-### Seed draft question stubs into D1
-`worker/seed-stubs.sql` contains Q029–Q063 placeholder questions (vc/vd/cd coverage). Run once after the schema migration to load them into the admin UI for editing:
-```bash
-wrangler d1 execute quadrantology --file=worker/seed-stubs.sql --remote
-```
-Then edit text via `/admin/questions` and promote to `calibrating` when ready.
 
 ### Create first canonical model snapshot
 
