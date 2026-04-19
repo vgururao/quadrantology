@@ -266,24 +266,14 @@
 
   function showQuestion() {
     if (!testQuestions) return;
-    var btnA = document.getElementById('btn-a');
-    var btnB = document.getElementById('btn-b');
-    // iOS Safari: disable both buttons before updating, re-enable via rAF so the browser
-    // paints the disabled state first — forcing :active to clear before going live again.
-    btnA.disabled = true;
-    btnB.disabled = true;
     var q = testQuestions[current];
     var total = testQuestions.length;
     document.getElementById('progress-bar').style.width = (current / total * 100).toFixed(0) + '%';
     document.getElementById('progress-text').textContent = 'Question ' + (current + 1) + ' of ' + total;
-    btnA.textContent = q.a;
-    btnB.textContent = q.b;
+    document.getElementById('btn-a').textContent = q.a;
+    document.getElementById('btn-b').textContent = q.b;
     document.getElementById('back-btn').style.display = current > 0 ? 'inline-block' : 'none';
     document.getElementById('question-view').style.display = '';
-    requestAnimationFrame(function() {
-      btnA.disabled = false;
-      btnB.disabled = false;
-    });
   }
 
   window.answer = function(choice) {
