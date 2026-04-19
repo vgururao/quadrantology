@@ -54,9 +54,12 @@
       </div>
       <p class="progress-text" id="progress-text"></p>
       <p class="question-prompt">Choose the statement that resonates more with you:</p>
-      <button class="choice-btn" id="btn-a" onclick="answer('a')"></button>
-      <button class="choice-btn" id="btn-b" onclick="answer('b')"></button>
-      <button class="back-btn" id="back-btn" onclick="goBack()" style="display:none;">&#8592; Back</button>
+      <button class="choice-btn" id="btn-a" onclick="selectAnswer('a')"></button>
+      <button class="choice-btn" id="btn-b" onclick="selectAnswer('b')"></button>
+      <div class="question-nav">
+        <button class="back-btn" id="back-btn" onclick="goBack()" style="display:none;">&#8592; Back</button>
+        <button class="next-btn" id="next-btn" onclick="advance()" style="display:none;">Next &rarr;</button>
+      </div>
     </div>
 
     <div id="results-view" class="results-section" style="display:none;">
@@ -108,18 +111,34 @@
     if (!data) return;
     var q = data.questions[current];
     var total = data.questions.length;
-    var pct = ((current) / total * 100).toFixed(0);
-    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('progress-bar').style.width = (current / total * 100).toFixed(0) + '%';
     document.getElementById('progress-text').textContent = 'Question ' + (current + 1) + ' of ' + total;
-    document.getElementById('btn-a').textContent = q.a;
-    document.getElementById('btn-b').textContent = q.b;
+    var btnA = document.getElementById('btn-a');
+    var btnB = document.getElementById('btn-b');
+    btnA.textContent = q.a;
+    btnB.textContent = q.b;
+    // Clear any previous selection state — JS-controlled class, not CSS pseudo-state
+    btnA.classList.remove('selected');
+    btnB.classList.remove('selected');
+    // Restore selection if user navigated back to a previously answered question
+    if (answers[current]) {
+      document.getElementById('btn-' + answers[current]).classList.add('selected');
+    }
     document.getElementById('back-btn').style.display = current > 0 ? 'inline-block' : 'none';
+    document.getElementById('next-btn').style.display = answers[current] ? 'inline-block' : 'none';
     document.getElementById('question-view').style.display = '';
     document.getElementById('results-view').style.display = 'none';
   }
 
-  window.answer = function(choice) {
+  window.selectAnswer = function(choice) {
     answers[current] = choice;
+    document.getElementById('btn-a').classList.toggle('selected', choice === 'a');
+    document.getElementById('btn-b').classList.toggle('selected', choice === 'b');
+    document.getElementById('next-btn').style.display = 'inline-block';
+  };
+
+  window.advance = function() {
+    if (!answers[current]) return;
     current++;
     if (current < data.questions.length) {
       showQuestion();
