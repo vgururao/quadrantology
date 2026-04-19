@@ -1,6 +1,6 @@
 # Quadrantology — Project Status
 
-_Last updated: 2026-04-18 (Session 6)_
+_Last updated: 2026-04-19 (Session 7)_
 
 ## Live
 
@@ -31,6 +31,8 @@ _Last updated: 2026-04-18 (Session 6)_
 - **Logbook rename** — `history.html` → `logbook.html`; old URL redirects via meta-refresh
 - **Scoring models table** in D1 schema (`scoring_models`) — one row per model version, full canonical JSON blob, never deleted
 - **v2 run record** fields extended: `run_number`, `format_version`, `model_version` frozen at save time; `scoring_models` block embedded in all logbook exports
+- **Build stamp** (`docs/v.js`) — discreet `vX.Y.Z · date` fixed bottom-right on every page; semantic versioning: `gh-pages` is v1.x.x, `master` is v2.x.x-dev
+- **Select-then-confirm question flow** (both branches) — choice buttons set JS-controlled `.selected` class; always-visible Back/Next nav with disabled states; "Response changed!" notification on answer revision; fixes touch `:active` state persistence on mobile
 
 ## Go-Live Checklist
 
@@ -47,7 +49,7 @@ _Last updated: 2026-04-18 (Session 6)_
 ## Next Up (Tier 1 — pre-onboarding)
 
 1. **URL fragment sharing + `r.html`** — "Share my arc" generates a ~220-char URL fragment with name + most recent 3 archetypes + summary scores. `r.html` renders received arcs client-side and has an "Add to Circle" button. Prerequisite for circle.html to be usable by real people. Requires `min_runs_to_share` completed runs. Name set at share time, not persisted.
-2. **Mobile-friendly UX** — responsive pass on test, paywall, logbook, circle pages.
+2. **Mobile-friendly UX** — responsive pass on paywall, logbook, circle pages. (Test question flow is now touch-friendly; remaining pages still need a responsive pass.)
 3. **.ics retake schedule** — client-side calendar file generation, ~30-day spacing, anchored to first test date.
 4. **Research submission payload preview** — before any research data leaves the browser (per-run opt-in POST or logbook submission), show the user the exact JSON being sent in a scrollable modal. Raw stripped object, not a summary — so they can verify name/notes/code are absent.
 5. **Entry points to circle + analysis** — link from results page and logbook to `circle.html`; link from circle to `analysis.html`. Currently these pages are only reachable by direct URL.
