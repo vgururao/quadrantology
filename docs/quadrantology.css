@@ -322,6 +322,20 @@ p { margin-bottom: 1rem; }
   margin-bottom: 1rem;
 }
 
+/* Build stamp — injected by v.js */
+.build-stamp {
+  position: fixed;
+  bottom: 8px;
+  right: 12px;
+  font-size: 0.68rem;
+  font-family: monospace;
+  color: var(--text-secondary);
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 9999;
+  user-select: none;
+}
+
 .choice-btn {
   display: block;
   width: 100%;
