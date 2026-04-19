@@ -1,67 +1,67 @@
 // POST /api/sample-questions
-// Proprietary balanced sampling strategy. Returns a shuffled subset of M questions
-// drawn from the live+calibrating pool, with:
-//   - Stratified balance across 4 discrimination types
-//   - Overlap constraint against a previous run's question IDs
-//   - Recency slots for recently-added questions still building response history
-//   - Calibration slots reserved for questions in 'calibrating' status
+// Pairwise tie-free sampling strategy.
+//
+// Guarantees an ODD count for each of the 4 comparison types:
+//   ev  — exit vs voice
+//   vc  — virtue vs conseq
+//   vd  — virtue vs deont
+//   cd  — conseq vs deont
+//
+// Odd counts make pairwise ties structurally impossible on all four axes.
+// Circular orderings (e.g. virtue > conseq > deont > virtue) are valid results.
+//
+// Dual questions (e.g. Q006: EV + VC) count toward multiple type quotas,
+// reducing the total questions needed when they appear in the pool.
+//
+// Minimum achievable total: 9 (if all ethics questions are also EV-coded),
+// practical default: 14 (ev=5, vc=3, vd=3, cd=3, assuming orthogonal pool).
 //
 // Request body (JSON):
 //   previous_qids   string[]   QIDs from the user's most recent run ([] for first run)
-//   target_count    number?    Override protocol default
+//   ev_target       number?    Override ev count (rounded up to odd if even)
+//   vc_target       number?    Override vc count
+//   vd_target       number?    Override vd count
+//   cd_target       number?    Override cd count
 //   calibration_slots number?  Override protocol default
-//   recency_slots   number?    Override protocol default
-//   recency_window_days number? Override protocol default
-//   max_overlap_pct number?    Override protocol default (0–100)
+//   max_overlap_pct number?    Override protocol default (0–100, soft guideline)
 //
 // Response (JSON):
-//   questions   QuestionRecord[]   Ordered for presentation (shuffled)
-//   meta        SamplingMeta       Diagnostic info (type counts, overlap %, slots used)
+//   questions   QuestionRecord[]
+//   meta        SamplingMeta     { total, type_counts, parity_ok, overlap_count,
+//                                  overlap_pct, calibration_used, targets }
 
 // --------------------------------------------------------------------------
-// Discrimination type classification
+// Type classification
 // --------------------------------------------------------------------------
-
 // Weight vector indices: [exit(0), voice(1), virtue(2), consequentialist(3), deontological(4)]
-// A question discriminates a dimension pair if, across answers A and B, at least one answer
-// scores nonzero on each of the two dimensions in the pair.
+// A question covers a type if one answer scores that dimension's "A side"
+// and the other answer scores its "B side".
 
-function classifyDiscriminationType(weightsA, weightsB) {
-  // EV: discriminates exit vs voice — one answer favours exit, other favours voice
-  const aEV = weightsA[0] !== 0 || weightsA[1] !== 0;
-  const bEV = weightsB[0] !== 0 || weightsB[1] !== 0;
-  // For EV: the question is an exit/voice discriminator if between the two answers
-  // there is meaningful exit/voice signal (combined nonzero on indices 0 or 1)
-  const evScore = (weightsA[0] + weightsA[1]) - (weightsB[0] + weightsB[1]);
-  const isEV = Math.abs(evScore) > 0 || (aEV && bEV);
-
-  // Ethics discriminators: check which ethics dimensions (indices 2,3,4) have nonzero
-  // combined weight across both answers. A pair discriminates if each dimension in the
-  // pair appears nonzero in at least one answer.
-  const ethicsActive = [2, 3, 4].map(i => weightsA[i] !== 0 || weightsB[i] !== 0);
-  // ethicsActive[0] = virtue, [1] = consequentialist, [2] = deontological
-
-  const isVirtueConseq  = ethicsActive[0] && ethicsActive[1];
-  const isVirtueDeon    = ethicsActive[0] && ethicsActive[2];
-  const isConseqDeon    = ethicsActive[1] && ethicsActive[2];
-
-  // A question may technically fit multiple types (e.g. EV + ethics); we assign
-  // the primary type by what it most strongly discriminates.
-  // Priority: if it has any ethics signal, classify by the dominant ethics pair.
-  // Tie-break: virtue_conseq > virtue_deon > conseq_deon > ev.
-  // Pure EV questions (no ethics signal) get type 'ev'.
-  const hasEthics = isVirtueConseq || isVirtueDeon || isConseqDeon;
-  if (!hasEthics) return 'ev';
-  if (isVirtueConseq && isVirtueDeon && isConseqDeon) return 'virtue_conseq'; // all three active: rare, assign first
-  if (isVirtueConseq) return 'virtue_conseq';
-  if (isVirtueDeon)   return 'virtue_deon';
-  if (isConseqDeon)   return 'conseq_deon';
-  return 'ev'; // fallback
+function classifyTypes(wa, wb) {
+  const types = [];
+  // ev: one answer favours exit, other favours voice
+  if ((wa[0] > 0 && wb[1] > 0) || (wa[1] > 0 && wb[0] > 0)) types.push('ev');
+  // vc: one answer favours virtue, other favours conseq
+  if ((wa[2] > 0 && wb[3] > 0) || (wa[3] > 0 && wb[2] > 0)) types.push('vc');
+  // vd: one answer favours virtue, other favours deont
+  if ((wa[2] > 0 && wb[4] > 0) || (wa[4] > 0 && wb[2] > 0)) types.push('vd');
+  // cd: one answer favours conseq, other favours deont
+  if ((wa[3] > 0 && wb[4] > 0) || (wa[4] > 0 && wb[3] > 0)) types.push('cd');
+  return types;
 }
 
-// --------------------------------------------------------------------------
+// Round n up to the nearest odd integer ≥ 1
+function ensureOdd(n) {
+  const num = Math.max(1, Math.round(n));
+  return num % 2 === 0 ? num + 1 : num;
+}
+
+// How many of this question's types are still below target?
+function typesStillNeeded(q, counts, targets) {
+  return q.types.filter(t => counts[t] < targets[t]).length;
+}
+
 // Fisher-Yates shuffle (in-place)
-// --------------------------------------------------------------------------
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -71,118 +71,64 @@ function shuffle(arr) {
 }
 
 // --------------------------------------------------------------------------
-// Stratified sampling with type balance and overlap constraint
-// --------------------------------------------------------------------------
-// buckets: Map<type, QuestionRecord[]>  (pre-shuffled within each bucket)
-// target:  number of questions to draw from these buckets
-// prevSet: Set<string>  previous run QIDs
-// maxOverlapCount: maximum questions allowed from prevSet
-// Returns { selected: QuestionRecord[], overlapCount: number }
-function stratifiedSample(buckets, target, prevSet, maxOverlapCount) {
-  const types = ['ev', 'virtue_conseq', 'virtue_deon', 'conseq_deon'];
-  const base  = Math.floor(target / types.length);
-  const extra = target % types.length; // distribute remainder to first N types
-
-  // Quota per type — try to fill evenly; unfilled quotas redistribute below
-  const quotas = new Map(types.map((t, i) => [t, base + (i < extra ? 1 : 0)]));
-
-  // Two-pass draw: prefer non-overlapping questions, then allow overlap up to cap
-  const selected = [];
-  let overlapUsed = 0;
-
-  // Per-bucket: partition into non-prev and prev
-  const fresh   = new Map(); // type → non-prev questions
-  const overlap = new Map(); // type → prev-run questions
-  for (const t of types) {
-    const bucket = buckets.get(t) || [];
-    fresh.set(t,   bucket.filter(q => !prevSet.has(q.id)));
-    overlap.set(t, bucket.filter(q =>  prevSet.has(q.id)));
-  }
-
-  // Pass 1: fill each quota from fresh pool
-  const unfilled = []; // types that couldn't fill quota from fresh
-  for (const t of types) {
-    const quota  = quotas.get(t);
-    const avail  = fresh.get(t);
-    const drawn  = avail.splice(0, quota);
-    selected.push(...drawn);
-    if (drawn.length < quota) unfilled.push({ t, remaining: quota - drawn.length });
-  }
-
-  // Pass 2: satisfy unfilled quotas from other types' fresh surplus
-  const surplusFresh = [];
-  for (const t of types) surplusFresh.push(...fresh.get(t));
-  shuffle(surplusFresh);
-  for (const { remaining } of unfilled) {
-    selected.push(...surplusFresh.splice(0, remaining));
-  }
-
-  // Pass 3: if still short, allow overlap questions up to cap
-  let shortfall = target - selected.length;
-  if (shortfall > 0 && overlapUsed < maxOverlapCount) {
-    const allOverlap = [];
-    for (const t of types) allOverlap.push(...overlap.get(t));
-    shuffle(allOverlap);
-    const canUse = Math.min(shortfall, maxOverlapCount - overlapUsed);
-    const drawn  = allOverlap.splice(0, canUse);
-    selected.push(...drawn);
-    overlapUsed += drawn.length;
-  }
-
-  return { selected, overlapCount: overlapUsed };
-}
-
-// --------------------------------------------------------------------------
-// Main handler
+// Constants
 // --------------------------------------------------------------------------
 
 const DIMENSIONS     = ['exit', 'voice', 'virtue', 'consequentialist', 'deontological'];
 const ARCHETYPES     = { exit: ['Legalist', 'Contrarian', 'Hacker'], voice: ['Holy Warrior', 'Operator', 'Investigator'] };
 const ARCHETYPE_PAGES = { Legalist: 'legalist.html', Contrarian: 'contrarian.html', Hacker: 'hacker.html', 'Holy Warrior': 'holywarrior.html', Operator: 'operator.html', Investigator: 'investigator.html' };
 
-// Protocol defaults — overridden by protocol.json values at runtime, or request body
 const DEFAULTS = {
-  target_count:        20,
-  calibration_slots:    2,
-  recency_slots:        2,
-  recency_window_days: 90,
-  max_overlap_pct:     30
+  ev_target:         5,   // odd — E/V axis
+  vc_target:         3,   // odd — virtue vs conseq
+  vd_target:         3,   // odd — virtue vs deont
+  cd_target:         3,   // odd — conseq vs deont
+  calibration_slots: 2,   // reserved for 'calibrating' status questions
+  max_overlap_pct:  30    // soft guideline: prefer fresh questions from prev run
 };
+
+// --------------------------------------------------------------------------
+// Main handler
+// --------------------------------------------------------------------------
 
 export async function onRequestPost(context) {
   const { env, request } = context;
 
-  // Parse request
   let body = {};
   try { body = await request.json(); } catch (_) {}
 
-  const previousQids       = Array.isArray(body.previous_qids) ? body.previous_qids : [];
-  const prevSet            = new Set(previousQids);
+  const previousQids = Array.isArray(body.previous_qids) ? body.previous_qids : [];
+  const prevSet      = new Set(previousQids);
 
-  // Load protocol params (best-effort; fall back to hardcoded defaults)
+  // Load protocol params (best-effort)
   let proto = {};
   try {
     const r = await fetch(new URL('/data/protocol.json', request.url));
     if (r.ok) proto = (await r.json()).sampling || {};
   } catch (_) {}
 
-  const targetCount       = body.target_count        ?? proto.target_count        ?? DEFAULTS.target_count;
-  const calibrationSlots  = body.calibration_slots   ?? proto.calibration_slots   ?? DEFAULTS.calibration_slots;
-  const recencySlots      = body.recency_slots        ?? proto.recency_slots        ?? DEFAULTS.recency_slots;
-  const recencyWindowDays = body.recency_window_days  ?? proto.recency_window_days  ?? DEFAULTS.recency_window_days;
-  const maxOverlapPct     = body.max_overlap_pct      ?? proto.max_overlap_pct      ?? DEFAULTS.max_overlap_pct;
+  const targets = {
+    ev: ensureOdd(body.ev_target ?? proto.ev_target ?? DEFAULTS.ev_target),
+    vc: ensureOdd(body.vc_target ?? proto.vc_target ?? DEFAULTS.vc_target),
+    vd: ensureOdd(body.vd_target ?? proto.vd_target ?? DEFAULTS.vd_target),
+    cd: ensureOdd(body.cd_target ?? proto.cd_target ?? DEFAULTS.cd_target)
+  };
+  const calibSlots    = body.calibration_slots ?? proto.calibration_slots ?? DEFAULTS.calibration_slots;
 
-  // Fetch all eligible questions from D1
+  // --------------------------------------------------------------------------
+  // Fetch and classify all eligible questions
+  // --------------------------------------------------------------------------
   let rows;
   try {
     const { results } = await env.DB.prepare(
-      `SELECT id, answer_a, answer_b, weights_a, weights_b, response_weight, status, questions_version, added_at
+      `SELECT id, answer_a, answer_b, weights_a, weights_b, response_weight,
+              status, questions_version, times_sampled
        FROM questions
        WHERE status IN ('live', 'calibrating')
        ORDER BY id`
     ).all();
     rows = results;
-  } catch (err) {
+  } catch (_) {
     return json({ error: 'questions unavailable', questions: [] }, 503);
   }
 
@@ -190,130 +136,134 @@ export async function onRequestPost(context) {
     return json({ error: 'no questions available', questions: [] }, 503);
   }
 
-  // Parse and classify all questions
-  const now = Date.now();
-  const recencyCutoffMs = recencyWindowDays * 24 * 60 * 60 * 1000;
-
   const allQuestions = rows.map(row => {
     const wA = JSON.parse(row.weights_a);
     const wB = JSON.parse(row.weights_b);
     return {
-      id:          row.id,
-      status:      row.status,
-      weight:      row.response_weight,
-      a:           row.answer_a,
-      b:           row.answer_b,
-      weights:     { a: wA, b: wB },
-      discType:    classifyDiscriminationType(wA, wB),
-      isRecent:    row.added_at && (now - new Date(row.added_at).getTime()) < recencyCutoffMs,
-      addedAt:     row.added_at
+      id:           row.id,
+      status:       row.status,
+      weight:       row.response_weight,
+      a:            row.answer_a,
+      b:            row.answer_b,
+      weights:      { a: wA, b: wB },
+      types:        classifyTypes(wA, wB),
+      timesSampled: row.times_sampled ?? 0,
+      isFresh:      !prevSet.has(row.id)
     };
   });
 
-  // Partition by status
-  const calibratingPool = allQuestions.filter(q => q.status === 'calibrating');
-  const livePool        = allQuestions.filter(q => q.status === 'live');
+  // --------------------------------------------------------------------------
+  // Selection state
+  // --------------------------------------------------------------------------
+  const selected    = [];
+  const selectedIds = new Set();
+  const counts      = { ev: 0, vc: 0, vd: 0, cd: 0 };
+  let   calibUsed   = 0;
 
-  // Max overlap count
-  const maxOverlapCount = Math.round(targetCount * maxOverlapPct / 100);
+  function pick(q) {
+    selected.push(q);
+    selectedIds.add(q.id);
+    for (const t of q.types) {
+      if (t in counts) counts[t]++;
+    }
+  }
+
+  // Sort comparator: most underfilled types first → fresh first → less sampled first
+  function sortKey(q) {
+    return [-typesStillNeeded(q, counts, targets), q.isFresh ? 0 : 1, q.timesSampled];
+  }
+  function bySortKey(a, b) {
+    const ka = sortKey(a), kb = sortKey(b);
+    for (let i = 0; i < ka.length; i++) {
+      if (ka[i] !== kb[i]) return ka[i] - kb[i];
+    }
+    return 0;
+  }
 
   // --------------------------------------------------------------------------
   // Step 1: Reserve calibration slots
-  // Pick from calibrating pool (prefer non-overlap, then allow overlap)
+  // Calibrating questions get priority exposure for data collection.
+  // They count toward type quotas like any other question.
   // --------------------------------------------------------------------------
-  const actualCalibSlots = Math.min(calibrationSlots, calibratingPool.length);
-  shuffle(calibratingPool);
-  const calibFresh   = calibratingPool.filter(q => !prevSet.has(q.id));
-  const calibOverlap = calibratingPool.filter(q =>  prevSet.has(q.id));
-  const calibPicked  = [
-    ...calibFresh.slice(0, actualCalibSlots),
-    ...calibOverlap.slice(0, Math.max(0, actualCalibSlots - calibFresh.length))
+  const calibPool = shuffle(allQuestions.filter(q => q.status === 'calibrating'));
+  // Prefer fresh calibrating questions first
+  const calibOrdered = [
+    ...calibPool.filter(q => q.isFresh),
+    ...calibPool.filter(q => !q.isFresh)
   ];
-  const calibOverlapCount = calibPicked.filter(q => prevSet.has(q.id)).length;
-  const pickedIds = new Set(calibPicked.map(q => q.id));
-
-  // --------------------------------------------------------------------------
-  // Step 2: Reserve recency slots from live pool
-  // Pick recently-added live questions that are past initial calibration
-  // (status = live, not calibrating, and within recency window)
-  // --------------------------------------------------------------------------
-  const recentLive = livePool.filter(q => q.isRecent && !pickedIds.has(q.id));
-  shuffle(recentLive);
-  const recencyFresh   = recentLive.filter(q => !prevSet.has(q.id));
-  const recencyOverlap = recentLive.filter(q =>  prevSet.has(q.id));
-  const actualRecencySlots = Math.min(recencySlots, recentLive.length);
-  const recencyPicked = [
-    ...recencyFresh.slice(0, actualRecencySlots),
-    ...recencyOverlap.slice(0, Math.max(0, actualRecencySlots - recencyFresh.length))
-  ];
-  const recencyOverlapCount = recencyPicked.filter(q => prevSet.has(q.id)).length;
-  recencyPicked.forEach(q => pickedIds.add(q.id));
-
-  // --------------------------------------------------------------------------
-  // Step 3: Stratified sampling for remaining slots
-  // --------------------------------------------------------------------------
-  const remainingTarget = targetCount - calibPicked.length - recencyPicked.length;
-  const remainingOverlapBudget = maxOverlapCount - calibOverlapCount - recencyOverlapCount;
-  const corePool = allQuestions.filter(q => !pickedIds.has(q.id));
-
-  // Build per-type buckets (shuffled)
-  const buckets = new Map();
-  for (const q of corePool) {
-    if (!buckets.has(q.discType)) buckets.set(q.discType, []);
-    buckets.get(q.discType).push(q);
+  for (const q of calibOrdered) {
+    if (calibUsed >= calibSlots) break;
+    pick(q);
+    calibUsed++;
   }
-  for (const [, arr] of buckets) shuffle(arr);
-
-  const { selected: stratPicked, overlapCount: stratOverlapCount } =
-    stratifiedSample(buckets, Math.max(0, remainingTarget), prevSet, Math.max(0, remainingOverlapBudget));
 
   // --------------------------------------------------------------------------
-  // Step 4: Assemble and shuffle final set
+  // Step 2: Greedy fill — satisfy all type quotas
+  // Re-sort on each pass since picking a dual question changes what's needed.
   // --------------------------------------------------------------------------
-  const finalSet = [...calibPicked, ...recencyPicked, ...stratPicked];
-  shuffle(finalSet);
+  let changed = true;
+  while (changed) {
+    changed = false;
+    // Are all quotas met?
+    if (Object.entries(targets).every(([t, n]) => counts[t] >= n)) break;
 
-  // Trim to targetCount in case of edge-case overfill (shouldn't happen in practice)
-  const trimmed = finalSet.slice(0, targetCount);
+    const candidates = allQuestions
+      .filter(q => !selectedIds.has(q.id) && typesStillNeeded(q, counts, targets) > 0)
+      .sort(bySortKey);
 
-  // Increment times_sampled for each selected question (fire-and-forget)
-  if (trimmed.length > 0) {
-    const placeholders = trimmed.map(() => '?').join(',');
+    if (candidates.length === 0) break;
+
+    pick(candidates[0]);
+    changed = true;
+  }
+
+  // --------------------------------------------------------------------------
+  // Step 3: Parity correction
+  // If any type count is even (pool too small to reach target), add one more
+  // question of that type to restore odd parity.
+  // --------------------------------------------------------------------------
+  for (const type of ['ev', 'vc', 'vd', 'cd']) {
+    if (counts[type] % 2 === 0) {
+      const extra = allQuestions
+        .filter(q => !selectedIds.has(q.id) && q.types.includes(type))
+        .sort(bySortKey)[0];
+      if (extra) pick(extra);
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // Step 4: Increment times_sampled (fire-and-forget)
+  // --------------------------------------------------------------------------
+  if (selected.length > 0) {
+    const placeholders = selected.map(() => '?').join(',');
     env.DB.prepare(
       `UPDATE questions SET times_sampled = times_sampled + 1 WHERE id IN (${placeholders})`
-    ).bind(...trimmed.map(q => q.id)).run().catch(() => {});
+    ).bind(...selected.map(q => q.id)).run().catch(() => {});
   }
 
   // --------------------------------------------------------------------------
-  // Build meta (diagnostic, not exposed to end users — for admin/debugging)
+  // Step 5: Shuffle and build response
   // --------------------------------------------------------------------------
-  const typeCounts = { ev: 0, virtue_conseq: 0, virtue_deon: 0, conseq_deon: 0 };
-  for (const q of trimmed) typeCounts[q.discType] = (typeCounts[q.discType] || 0) + 1;
-  const totalOverlap = trimmed.filter(q => prevSet.has(q.id)).length;
+  shuffle(selected);
+
+  const totalOverlap = selected.filter(q => !q.isFresh).length;
+  const parityOk     = ['ev', 'vc', 'vd', 'cd'].every(t => counts[t] % 2 === 1);
 
   const meta = {
-    total:             trimmed.length,
-    calibration_used:  calibPicked.length,
-    recency_used:      recencyPicked.length,
-    stratified_used:   stratPicked.length,
-    overlap_count:     totalOverlap,
-    overlap_pct:       trimmed.length > 0 ? Math.round(100 * totalOverlap / trimmed.length) : 0,
-    type_counts:       typeCounts
+    total:            selected.length,
+    type_counts:      { ev: counts.ev, vc: counts.vc, vd: counts.vd, cd: counts.cd },
+    parity_ok:        parityOk,
+    targets,
+    calibration_used: calibUsed,
+    overlap_count:    totalOverlap,
+    overlap_pct:      selected.length > 0 ? Math.round(100 * totalOverlap / selected.length) : 0
   };
 
-  // Strip internal fields before returning
-  const questions = trimmed.map(({ id, status, weight, a, b, weights }) => ({
+  const questions = selected.map(({ id, status, weight, a, b, weights }) => ({
     id, status, weight, a, b, weights
   }));
 
-  return json({
-    schema_version:  2,
-    dimensions:      DIMENSIONS,
-    archetypes:      ARCHETYPES,
-    archetypePages:  ARCHETYPE_PAGES,
-    questions,
-    meta
-  });
+  return json({ schema_version: 2, dimensions: DIMENSIONS, archetypes: ARCHETYPES, archetypePages: ARCHETYPE_PAGES, questions, meta });
 }
 
 function json(data, status = 200) {

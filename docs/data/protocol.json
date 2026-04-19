@@ -49,12 +49,13 @@
   },
 
   "sampling": {
-    "target_count":        20,
-    "calibration_slots":    2,
-    "recency_slots":        2,
-    "recency_window_days": 90,
-    "max_overlap_pct":     30,
+    "ev_target":           5,
+    "vc_target":           3,
+    "vd_target":           3,
+    "cd_target":           3,
+    "calibration_slots":   2,
+    "max_overlap_pct":    30,
 
-    "_comment": "target_count: questions served per run. calibration_slots: reserved for questions in 'calibrating' status (data collection). recency_slots: reserved for recently-promoted live questions (within recency_window_days) to build response history. max_overlap_pct: upper bound on how many questions may repeat from the user's previous run (0–100). Stratified balance across 4 discrimination types (ev, virtue_conseq, virtue_deon, conseq_deon) fills remaining slots."
+    "_comment": "Per-type targets (must be odd) guarantee pairwise tie-free results on all four comparison axes: ev (exit/voice), vc (virtue/conseq), vd (virtue/deont), cd (conseq/deont). Odd counts make pairwise ties structurally impossible; circular orderings (rock-paper-scissors) are valid. Default total: 14 questions (5+3+3+3, assuming orthogonal pool). calibration_slots: reserved for 'calibrating' status questions for data collection. max_overlap_pct: soft guideline — sampler prefers fresh questions but will reuse if pool is depleted."
   }
 }
