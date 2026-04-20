@@ -1,0 +1,93 @@
+# Synperson rig: Svetlana Bauer (H5)
+# Archetype: Hacker
+
+identity:
+  id: H5
+  archetype: Hacker
+  name: Svetlana Bauer
+
+demographics:
+  birth_date: "1981-12-05"
+  birth_city: "Kyiv, Ukraine"
+  nationality:
+    - Austrian
+    - Ukrainian
+  ethnicity: Ukrainian
+  gender: woman
+
+location:
+  city: Vienna
+  country: Austria
+  neighbourhood: Alsergrund (9th district)
+  living_situation: owns a flat; husband co-owns
+
+work:
+  employer: Refract GmbH
+  employer_type: private startup (founder/CEO)
+  role: CEO and Co-Founder
+  industry: Enterprise software (B2B SaaS; currently pivoting into supply chain intelligence)
+  work_city: Vienna, Austria
+
+languages:
+  first: Ukrainian
+  others:
+    - language: Russian
+      proficiency: native (childhood; uses rarely now; politically loaded since 2022)
+    - language: German
+      proficiency: professional (near-native; Austria home language since 2003)
+    - language: English
+      proficiency: professional
+
+education:
+  - degree: MSc
+    field: International Business
+    institution: Vienna University of Economics and Business (WU Wien)
+    year: 2005
+
+finances:
+  income:
+    local_amount: "148000"
+    local_currency: EUR
+    usd_equivalent: 160000
+    notes: salary from Refract; equity is illiquid until exit or next round; income was higher at previous company
+  net_worth:
+    usd_equivalent: 950000
+    notes: €250k cash (from 2019 startup exit); Vienna flat equity ~€400k; unvested Refract equity (illiquid, estimated €300k at last valuation)
+
+politics:
+  leaning: libertarian-leaning; economically liberal, skeptical of state intervention in markets; pro-EU integration as a rules-based order; strongly and personally anti-Putin (the 2022 invasion of Ukraine radicalized her on geopolitics); skeptical of Austrian far-right's Russian sympathies; her libertarianism is tempered by lived experience of state failure
+  religion: Orthodox Christian (cultural identity; does not practice; attends Easter liturgy with her mother by phone; faith is nationalist-cultural more than theological)
+
+health:
+  height_cm: 167
+  weight_kg: 62
+  chronic_conditions:
+    - hypothyroidism (Hashimoto's; well-managed with levothyroxine; monitored annually)
+  notes: manages stress through early-morning cycling; hypothyroid fatigue is the most significant day-to-day constraint
+
+relationships:
+  - name: Felix Bauer
+    relation: husband and co-founder
+    archetype: Contrarian
+    stub: loves puncturing his own company's assumptions as much as competitors'; will argue any position to stress-test it
+    dynamic: a productive creative partnership that tips into unproductive stalemate at board level; they each have veto power and both know it; the fourth pivot was decided in a three-day argument
+  - name: Katya Bauer
+    relation: daughter (age 16)
+    archetype: TBD (minor; emerging Investigator tendencies)
+    stub: curious and analytically sharp; asks uncomfortable questions and doesn't accept the first answer
+    dynamic: often more perceptive about the company's dynamics than Svetlana expects; Svetlana is fiercely protective and slightly afraid of what Katya will see
+  - name: Dieter Wenzel
+    relation: lead investor (Vienna-based VC)
+    archetype: Legalist
+    stub: process-adherent; wants documented milestones and formal governance before releasing capital
+    dynamic: patience is genuinely expiring; his next tranche is contingent on a Q3 2026 milestone; Svetlana is managing him as much as the business
+  - name: Priya Kaur
+    relation: VP Engineering
+    archetype: Operator
+    stub: translates pivot decisions into executable roadmaps; the person who actually makes things ship
+    dynamic: loyal; carries the fourth pivot without complaint; quietly worried this is the last one investors will fund; Svetlana depends on her more than she says
+  - name: Olena Marchenko
+    relation: mother (age 68, Kyiv — remained through the war)
+    archetype: Holy Warrior
+    stub: retired physician; stubborn, morally uncompromising, refused to leave Kyiv in February 2022
+    dynamic: Svetlana's most admired and most anxiety-producing relationship; calls twice a week; the war has changed both of them in ways they haven't fully articulated to each other

@@ -1,0 +1,96 @@
+# Synperson rig: Fatima Hasan (L5)
+# Archetype: Legalist
+
+identity:
+  id: L5
+  archetype: Legalist
+  name: Fatima Hasan
+
+demographics:
+  birth_date: "1987-04-03"
+  birth_city: "Lahore, Pakistan"
+  nationality:
+    - British
+  ethnicity: Punjabi Pakistani
+  gender: woman
+
+location:
+  city: Manchester
+  country: UK
+  neighbourhood: Didsbury
+  living_situation: owns a two-bedroom flat (significant mortgage; first property, bought 2022)
+
+work:
+  employer: Hasan & Partners Solicitors
+  employer_type: private law firm (founder/director)
+  role: Principal Solicitor and Director
+  industry: Law (immigration specialisation)
+  work_city: Manchester, UK
+
+languages:
+  first: Urdu
+  others:
+    - language: English
+      proficiency: professional (arrived age 12; near-native; schooled entirely in English)
+    - language: Punjabi
+      proficiency: native (family and community language; the emotional register language)
+    - language: Arabic
+      proficiency: functional (Quranic; can read the Quran; not conversational modern Arabic)
+
+education:
+  - degree: LPC
+    field: Legal Practice Course
+    institution: BPP University
+    year: 2010
+  - degree: LLB
+    field: Law
+    institution: University of Manchester
+    year: 2009
+
+finances:
+  income:
+    local_amount: "74000"
+    local_currency: GBP
+    usd_equivalent: 94000
+    notes: principal solicitor salary from the firm she owns; firm profit not yet significant enough to draw dividends; income growing
+  net_worth:
+    usd_equivalent: 220000
+    notes: Didsbury flat equity ~£80k; firm goodwill (estimated ~£60k); savings ~£40k; no other assets
+
+politics:
+  leaning: centre-left on most policy; legally formalist in professional context in a way that cuts across her personal politics — she will run the best procedural case for a client regardless of whether the underlying policy is the policy she would vote for; frustrated by both the hostile environment (morally wrong) and by activist lawyers who bypass process to achieve outcomes (procedurally corrosive and ultimately self-defeating); votes Labour without enthusiasm; thinks Yvette Cooper is better than her public image
+  religion: Muslim (practicing; Barelvi tradition; daily prayers; Ramadan fasting; hijab; the faith is sincere and not merely performative; it shapes her sense of accountability without dominating her professional reasoning)
+
+health:
+  height_cm: 162
+  weight_kg: 59
+  chronic_conditions:
+    - stress migraines (occur during heavy case load periods; manages with sumatriptan; 3–4 per year currently)
+  notes: healthy otherwise; fasting Ramadan is medically straightforward; runs twice a week when the schedule allows
+
+relationships:
+  - name: Tariq Hasan
+    relation: husband
+    archetype: Investigator
+    stub: investigative journalist at The Guardian; covers immigration and asylum policy; follows evidence wherever it leads and publishes when he can prove it
+    dynamic: tense professional overlap — his stories sometimes expose the systemic failures Fatima's clients are caught in, which occasionally makes individual cases harder; they debate this at home without resolution; the tension makes both of them better at their work
+  - name: Dr. Khalid Choudhry
+    relation: father (age 67, Manchester)
+    archetype: Operator
+    stub: retired GP who ran his practice with methodical care; outcome-focused; pragmatic about what the system can and cannot deliver
+    dynamic: proud of Fatima's independence; wished she had chosen medicine; does not understand the formalism of immigration law but senses it matters to her in a way he respects even when he can't follow it
+  - name: Saira Malik
+    relation: junior associate at Hasan & Partners
+    archetype: Holy Warrior
+    stub: driven by justice rather than procedure; challenges Fatima's formalism on moral grounds at least weekly
+    dynamic: productive friction; Saira makes Fatima defend her procedural reasoning in terms of outcome and consequence; Fatima makes Saira use the rules that actually protect their clients; they make each other better and occasionally make each other furious
+  - name: Anwar Choudhry
+    relation: brother (age 33, Birmingham)
+    archetype: Contrarian
+    stub: accountant who has developed strong heterodox views on immigration economics and publishes them under a pseudonym
+    dynamic: the sibling who most directly challenges her; he believes immigration policy is economically rational in ways that make her uncomfortable; she believes the law must operate independently of economic rationality and they have not resolved this
+  - name: Miriam Gold
+    relation: senior colleague and mentor (partner at a larger Manchester firm)
+    archetype: Legalist
+    stub: deeply proceduralist immigration lawyer with 25 years of practice; has seen fashions in advocacy come and go
+    dynamic: the clearest view Fatima has of where her career could go; Gold is honest about the cost of the formalist position — clients sometimes don't get what they need — and Fatima is still deciding whether she can live with that

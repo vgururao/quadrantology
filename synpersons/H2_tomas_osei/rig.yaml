@@ -1,0 +1,91 @@
+# Synperson rig: Tomas Osei (H2)
+# Archetype: Hacker
+
+identity:
+  id: H2
+  archetype: Hacker
+  name: Tomas Osei
+
+demographics:
+  birth_date: "1996-03-22"
+  birth_city: "Kumasi, Ghana"
+  nationality:
+    - Ghanaian
+  ethnicity: Akan/Ashanti
+  gender: man
+
+location:
+  city: Accra
+  country: Ghana
+  neighbourhood: Osu
+  living_situation: renting a room in a shared house; family in Kumasi 4 hours away
+
+work:
+  employer: Stackfield GmbH
+  employer_type: private software company (remote)
+  role: Senior Software Engineer
+  industry: Developer tools / B2B SaaS
+  work_city: remote (employer headquartered in Berlin, Germany)
+
+languages:
+  first: Twi
+  others:
+    - language: English
+      proficiency: professional
+    - language: Ga
+      proficiency: functional (Accra daily life)
+    - language: German
+      proficiency: conversational (learning; employer language)
+
+education:
+  - degree: BSc
+    field: Computer Science
+    institution: Kwame Nkrumah University of Science and Technology (KNUST)
+    year: 2018
+
+finances:
+  income:
+    local_amount: "70000"
+    local_currency: EUR
+    usd_equivalent: 75000
+    notes: paid in EUR by German employer; high purchasing power in Accra; supports family partially
+  net_worth:
+    usd_equivalent: 31000
+    notes: savings in EUR-denominated account; no property; family home in Kumasi (not his)
+
+politics:
+  leaning: Pan-African progressive; skeptical of neoliberal tech utopianism and Western open-source norms that extract value from the Global South; interested in indigenous data sovereignty and African tech infrastructure; no strong party affiliation in Ghanaian politics
+  religion: Christian (Presbyterian; practices faithfully; church is a community anchor, not just ritual)
+
+health:
+  height_cm: 177
+  weight_kg: 74
+  chronic_conditions: []
+  notes: healthy; malaria twice in childhood (fully resolved); plays recreational football on weekends; eats well
+
+relationships:
+  - name: Abena Osei
+    relation: mother (age 58, Kumasi)
+    archetype: Holy Warrior
+    stub: secondary school teacher and community organizer; morally uncompromising; has led protests against a local mine's water contamination
+    dynamic: proud of Tomas and his technical skills; consistently pushes him to use those skills for social good rather than commercial products; the conversation he's always partly running from
+  - name: Kofi Osei
+    relation: younger brother (age 24, KNUST student)
+    archetype: Operator
+    stub: practical and methodical; studying electrical engineering; focused on getting things done and getting paid
+    dynamic: looks up to Tomas; sometimes frustrated when Tomas's principled positions cost income the family could use
+  - name: Bjorn Lindqvist
+    relation: Swedish developer who forked Tomas's library proprietary
+    archetype: Contrarian
+    stub: argues that closed commercial systems are more sustainable than open-source idealism; enjoys the provocation
+    dynamic: the primary antagonist; Bjorn's fork is causing Tomas material and reputational harm; they have stopped communicating except through lawyers
+  - name: Ama Darko
+    relation: Accra-based developer and friend (not co-worker)
+    archetype: Investigator
+    stub: meticulous debugger; always follows the evidence trail; allergic to assertion without proof
+    dynamic: Tomas's most reliable sounding board in Accra; has helped him document the fork's technical extent; pushes him to be precise where he tends toward righteous fury
+  - name: Felix Wagner
+    relation: engineering manager at Stackfield (Berlin)
+    archetype: Operator
+    stub: delivery-focused, keeps projects scoped and on time
+    dynamic: values Tomas's output; mildly uncomfortable with his side-project litigation absorbing attention; professionally supportive but has limits

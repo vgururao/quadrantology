@@ -1,0 +1,97 @@
+# Synperson rig: Ananya Rajan (C2)
+# Archetype: Contrarian
+
+identity:
+  id: C2
+  archetype: Contrarian
+  name: Ananya Rajan
+
+demographics:
+  birth_date: "1973-08-19"
+  birth_city: "Chennai, India"
+  nationality:
+    - British
+    - Indian
+  ethnicity: Tamil Brahmin
+  gender: woman
+
+location:
+  city: London
+  country: UK
+  neighbourhood: Hampstead, North London
+  living_situation: owns a flat (jointly with husband; partial mortgage remaining)
+
+work:
+  employer: London School of Economics and Political Science
+  employer_type: public university
+  role: Professor of Economics
+  industry: Academia / International economics
+  work_city: London, UK (occasional IMF consulting in Washington DC)
+
+languages:
+  first: Tamil
+  others:
+    - language: English
+      proficiency: professional (near-native; primary academic and social language since age 18)
+    - language: Hindi
+      proficiency: conversational (mandatory schooling; comfortable but not preferred)
+    - language: French
+      proficiency: reading (academic literature)
+
+education:
+  - degree: PhD
+    field: Economics
+    institution: Massachusetts Institute of Technology
+    year: 2000
+  - degree: BA
+    field: Economics (Honours)
+    institution: University of Delhi
+    year: 1994
+
+finances:
+  income:
+    local_amount: "127000"
+    local_currency: GBP
+    usd_equivalent: 162000
+    notes: professor salary plus occasional IMF consulting fees (~£15k/year); no performance variability
+  net_worth:
+    usd_equivalent: 620000
+    notes: Hampstead flat equity ~£380k; LSE pension accrual ~£120k equivalent; liquid savings ~£80k
+
+politics:
+  leaning: left of centre; Keynesian; believes in counter-cyclical public investment and that austerity is an ideology masquerading as economics; frustrated with both Corbyn's politics and Starmer's timidity; a genuine contrarian in her field — her willingness to say "the consensus is wrong" is independent of political direction; was correct about some things (euro crisis dynamics) and wrong about others (UK recession timing); the wrongness bothers her more than she shows
+  religion: Hindu (culturally observant; practices major festivals, especially Diwali and Pongal; has a small puja space at home; secular in her public intellectual persona; the faith and the economics don't conflict for her because they operate in different registers)
+
+health:
+  height_cm: 161
+  weight_kg: 62
+  chronic_conditions:
+    - Type 2 diabetes (diagnosed at 47; well-managed with metformin and diet; A1C 6.4; monitors quarterly)
+  notes: vegetarian by both conviction and religion; practices yoga three mornings a week (20-year habit); the diabetes diagnosis prompted a serious diet overhaul
+
+relationships:
+  - name: Ravi Krishnan
+    relation: husband (age 54)
+    archetype: Holy Warrior
+    stub: director of a London development NGO focused on South Asian climate adaptation; mission-driven and impatient with incrementalism
+    dynamic: 25-year partnership; they argue about timescales and what counts as change — she thinks in decades, he thinks in crises; the argument is affectionate and ongoing; he is the person who reminds her that economics has human consequences
+  - name: Arjun Rajan
+    relation: son (age 27, San Francisco)
+    archetype: Hacker
+    stub: machine learning engineer; builds tools that challenge assumptions; inherited her skeptical streak and deployed it technically
+    dynamic: warmly close despite the distance; he reads her papers and argues with them; she doesn't understand his work technically but recognizes the intellectual temperament
+  - name: Prof. Oliver Stanton
+    relation: departmental colleague and longstanding critic
+    archetype: Legalist
+    stub: orthodox in method; believes academic credibility requires following the methodological playbook precisely
+    dynamic: cites her missed recession call in peer review; she finds him procedurally scrupulous and intellectually timid; he finds her dangerously comfortable with being wrong; the dynamic has been stable for fifteen years
+  - name: Priya Mehta
+    relation: PhD student and advisee (age 28)
+    archetype: Investigator
+    stub: obsessively thorough; builds arguments one verified brick at a time; allergic to speculation
+    dynamic: Ananya's most admired current student; Priya is methodically building a case that some of Ananya's wrong predictions were right in a different timeframe; Ananya finds this simultaneously touching and slightly unsettling
+  - name: Dr. Lakshmi Rajan
+    relation: mother (age 78, Chennai)
+    archetype: Operator
+    stub: retired civil servant; managed a district education office for 25 years; focused on delivery and practicality
+    dynamic: proud of Ananya's career; slightly bewildered by what economists actually do; calls every Sunday from Chennai; the calls are warm and deliberately avoid economics

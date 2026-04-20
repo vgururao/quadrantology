@@ -1,0 +1,89 @@
+# Synperson rig: Ben Okafor (L2)
+# Archetype: Legalist
+
+identity:
+  id: L2
+  archetype: Legalist
+  name: Ben Okafor
+
+demographics:
+  birth_date: "1990-07-25"
+  birth_city: "Lagos, Nigeria"
+  nationality:
+    - British
+  ethnicity: Yoruba Nigerian
+  gender: man
+
+location:
+  city: Birmingham
+  country: UK
+  neighbourhood: Handsworth
+  living_situation: renting a one-bedroom flat; grew up in Handsworth, still here
+
+work:
+  employer: GMB Union
+  employer_type: trade union (public institution)
+  role: Regional Representative, Manufacturing Section
+  industry: Labour relations
+  work_city: Birmingham, UK (regional; occasional London for national meetings)
+
+languages:
+  first: English
+  others:
+    - language: Yoruba
+      proficiency: conversational (family language; not literate)
+    - language: Nigerian Pidgin
+      proficiency: functional (family and community; fading in Birmingham)
+
+education:
+  - degree: BA
+    field: Labour Studies and Industrial Relations
+    institution: University of Warwick
+    year: 2013
+
+finances:
+  income:
+    local_amount: "44000"
+    local_currency: GBP
+    usd_equivalent: 56000
+    notes: union salary scale; no bonus; steady
+  net_worth:
+    usd_equivalent: 72000
+    notes: savings ~£40k; no property; contributing to small union pension; sends money to family in Lagos quarterly
+
+politics:
+  leaning: democratic socialist; union left; frustrated with the Labour Party for being too centrist but will not vote for anyone else; believes class solidarity is the primary political category and that identity politics, while not wrong, has been used to fragment it; skeptical of consultants, NGOs, and anyone who talks about "stakeholder engagement" instead of collective bargaining; reads union history for pleasure; Bevan and Hardie on his bookshelf
+  religion: Anglican (practicing; quiet faith; attends St Michael's in Handsworth; faith is personal and community-sustaining; does not bring it to work)
+
+health:
+  height_cm: 177
+  weight_kg: 79
+  chronic_conditions: []
+  notes: healthy; had a knee injury from factory floor in 2015 that required physiotherapy (fully recovered, occasional ache in cold weather); runs 5k twice a week; the physical discipline is important to him
+
+relationships:
+  - name: Patricia Okafor
+    relation: mother (age 57, Birmingham — Handsworth)
+    archetype: Operator
+    stub: NHS nurse for 24 years; keeps things running through methodical, persistent effort; focused on outcomes not credit
+    dynamic: Ben's most grounding relationship; she is proud of him and frightened for him simultaneously; she does not think the union is as powerful as he believes it is
+  - name: Rev. Marcus Adeyemi
+    relation: GMB regional director and mentor
+    archetype: Holy Warrior
+    stub: veteran labour organizer who came through the miners' strike era; driven by a moral vision of worker dignity that is almost theological
+    dynamic: the person who brought Ben into union work; now increasingly worried that Ben's procedural escalations are creating enemies inside the movement and outside it; their relationship is strained without being broken
+  - name: Dave Sutherland
+    relation: factory general manager (primary antagonist)
+    archetype: Legalist
+    stub: uses procedure to protect management prerogatives; has read every clause of the collective agreement and knows where the grey zones are
+    dynamic: a legalist mirror fight — Sutherland weaponizes the same procedures Ben uses; Ben finds this philosophically disorienting and practically exhausting; it forces him to wonder if his faith in rules is his strength or his trap
+  - name: Aisha Okafor
+    relation: younger sister (age 26, Birmingham; studying law at University of Birmingham)
+    archetype: Investigator
+    stub: methodical; not easily convinced by anything; follows evidence chains with unusual patience for her age
+    dynamic: the family member who challenges Ben's reasoning most effectively; she's been advising him on the legal dimensions of the grievance cascade; occasionally tells him his case is stronger or weaker than he thinks; he trusts this
+  - name: Callum Reid
+    relation: GMB shop steward at the factory (colleague and ally)
+    archetype: Legalist
+    stub: procedurally exacting; knows the collective agreement chapter and verse; deeply cautious about escalation
+    dynamic: Ben's closest on-the-ground ally at the factory; they agree on principles and disagree on tactics; Callum thinks Ben pushed too far with the cascade; Ben thinks Callum is right and would do it again anyway

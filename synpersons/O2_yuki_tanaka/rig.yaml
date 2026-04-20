@@ -1,0 +1,90 @@
+# Synperson rig: Yuki Tanaka (O2)
+# Archetype: Operator
+
+identity:
+  id: O2
+  archetype: Operator
+  name: Yuki Tanaka
+
+demographics:
+  birth_date: "1987-05-19"
+  birth_city: "Matsuyama, Ehime Prefecture, Japan"
+  nationality:
+    - Japanese
+  ethnicity: Japanese
+  gender: woman
+
+location:
+  city: Yokosuka
+  country: Japan
+  neighbourhood: JMSDF base housing, Yokosuka, Kanagawa
+  living_situation: subsidised JMSDF housing (rotates with posting assignments; not permanent)
+
+work:
+  employer: Japan Maritime Self-Defense Force (JMSDF)
+  employer_type: Japanese military (national defence institution)
+  role: Lieutenant Commander, Logistics and Supply Chain (destroyer group)
+  industry: Military / National defence
+  work_city: Yokosuka, Japan (Fleet operations; occasional exercises in Sea of Japan)
+
+languages:
+  first: Japanese
+  others:
+    - language: English
+      proficiency: professional (NATO interoperability exercises; formal reporting to US Navy liaison officers; technically fluent with occasional register stiffness)
+    - language: Korean
+      proficiency: functional (limited; Yokosuka harbour community; improving slowly)
+
+education:
+  - degree: BS
+    field: Applied Physics (Naval Systems emphasis)
+    institution: National Defense Academy of Japan
+    year: 2009
+
+finances:
+  income:
+    local_amount: "9800000"
+    local_currency: JPY
+    usd_equivalent: 64000
+    notes: JMSDF lieutenant commander pay scale; housing subsidised; meals subsidised during sea duty; effective compensation higher than nominal salary suggests
+  net_worth:
+    usd_equivalent: 140000
+    notes: JMSDF pension accrual (significant; 15 years of service); savings ¥14M; no property
+
+politics:
+  leaning: moderate institutionalist; respects the post-war constitutional settlement limiting Japanese military force; privately troubled by recent nationalist drift in defence policy and the reinterpretation of Article 9; loyal to the institution while holding private reservations about its direction; pragmatic about the US-Japan security alliance — it is what it is, and she manages her part of it; has no strong party affiliation
+  religion: Shinto (cultural observances: New Year shrine visit, Obon ancestor rites, midsummer festival); not deeply religious; the rituals are about continuity, not belief
+
+health:
+  height_cm: 162
+  weight_kg: 54
+  chronic_conditions:
+    - tension headaches (operational pressure related; no medication; managed with sleep and water)
+  notes: excellent physical fitness (mandatory JMSDF standards; runs 10k twice a week; swimming); the physical discipline is load-bearing for her mental state
+
+relationships:
+  - name: Commander Daisuke Mori
+    relation: superior officer (the primary problem)
+    archetype: Contrarian
+    stub: makes political gambles with operational resources; trusts his instincts over process; has been right enough times that the institution has accommodated his style
+    dynamic: Mori's decisions in the live exercise were reckless by any standard Yuki can apply; she documented everything; she does not know what to do with the documentation because the chain of command above Mori either does not know or does not want to know
+  - name: Lt. Hiroshi Yamamoto
+    relation: peer and operational colleague (friend)
+    archetype: Legalist
+    stub: procedurally meticulous; follows the chain of command precisely; believes the chain exists to protect people at every level
+    dynamic: Yamamoto shares Yuki's concern about Mori; would support escalation but only through proper channels in the proper sequence; his caution is actually helping Yuki think through her options rather than react
+  - name: Fumiko Tanaka
+    relation: mother (age 64, Matsuyama)
+    archetype: Operator
+    stub: retired primary school teacher; organised classroom logistics for 35 years; methodical, detail-oriented, focused on what the children actually need
+    dynamic: Yuki is recognisably her mother's daughter; they don't talk about military specifics (Fumiko doesn't ask and Yuki doesn't say); Fumiko senses the stress and sends food parcels; Yuki finds this more comforting than she expected
+  - name: Kenji Tanaka
+    relation: father (age 66, Matsuyama)
+    archetype: Legalist
+    stub: retired municipal civil servant; spent 30 years processing planning applications correctly; believes in institutions and in doing your specific job well
+    dynamic: proud of Yuki's career; does not understand the dilemma she's in; if she told him, he would say: follow the rules in order; she knows he is right and that the rules in order may not be sufficient
+  - name: Lt. Cmdr. Akiko Fuji
+    relation: JMSDF colleague at a different posting (friend, formerly same ship)
+    archetype: Holy Warrior
+    stub: committed to reforming JMSDF's gender culture; has filed two formal complaints; is known for this; considers it worth the career cost
+    dynamic: the colleague whose path Yuki is watching carefully; Akiko's willingness to formally escalate is both inspiring and cautionary; Yuki is trying to figure out if Akiko's approach is brave or costly or both

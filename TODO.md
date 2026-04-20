@@ -30,6 +30,19 @@ Create `docs/data/quadrantology-model-v1.json` — the CC BY 4.0 published model
 
 ---
 
+### Synperson panel — bring to first logged run
+
+1. **Write event histories** — 15 seed events per synperson in `synpersons/{id}/events.md`. Follow `_events_schema.md`: exponential date distribution, first-person past tense, intensity 1–10. Events should be populated up to April 2026.
+2. **Update `worker/schema.sql`** — Add the three synperson tables from `DATAMODEL.md` and apply:
+   ```bash
+   wrangler d1 execute quadrantology --file=worker/schema.sql --remote
+   ```
+3. **Build `scripts/synperson/` suite** — Start with `memory.py` + `scoring.py` (shared modules), then `run-test.py` (both `--logged` and `--qa` modes), then `evolve-events.py` and `sync-to-d1.py`.
+4. **Seed synperson profiles to D1** — Run `sync-to-d1.py` to populate `synpersons` and `synperson_events` from the local YAML/markdown files.
+5. **First logged run pass** — `run-panel.py --logged` across all 30; inspect archetype distribution.
+
+---
+
 ## Go-Live Checklist (when ready)
 
 - [ ] DNS cutover: point `quadrantology.com` to Cloudflare Pages, disable GitHub Pages

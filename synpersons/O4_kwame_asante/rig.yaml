@@ -1,0 +1,95 @@
+# Synperson rig: Kwame Asante (O4)
+# Archetype: Operator
+
+identity:
+  id: O4
+  archetype: Operator
+  name: Kwame Asante
+
+demographics:
+  birth_date: "1983-10-04"
+  birth_city: "Kumasi, Ghana"
+  nationality:
+    - Ghanaian
+  ethnicity: Akan/Ashanti
+  gender: man
+
+location:
+  city: Accra
+  country: Ghana
+  neighbourhood: East Legon
+  living_situation: owns a house (jointly with wife; purchased 2017; modest mortgage remaining)
+
+work:
+  employer: Ghana Infrastructure Investment Fund (GIIF)
+  employer_type: government economic development agency
+  role: Deputy Director (Infrastructure Finance)
+  industry: Government / Economic development
+  work_city: Accra, Ghana (travel to regional capitals; occasional ECOWAS meetings in Abuja and Dakar)
+
+languages:
+  first: Twi
+  others:
+    - language: English
+      proficiency: professional (official language of Ghana; primary academic and work language)
+    - language: Hausa
+      proficiency: conversational (northern Ghana postings; acquired on the job)
+    - language: French
+      proficiency: professional reading level (ECOWAS context; can participate in meetings; not fully comfortable)
+
+education:
+  - degree: MSc
+    field: Public Policy
+    institution: London School of Economics
+    year: 2008
+  - degree: BSc
+    field: Public Administration
+    institution: Ghana Institute of Management and Public Administration (GIMPA)
+    year: 2005
+
+finances:
+  income:
+    local_amount: "220000"
+    local_currency: GHS
+    usd_equivalent: 16000
+    notes: government pay scale; effective purchasing power significantly higher in Accra context; supplements with occasional World Bank project consulting (separately contracted)
+  net_worth:
+    usd_equivalent: 85000
+    notes: East Legon house equity ~GHS 600k; savings ~GHS 180k; government pension accruing; dollar savings ~$12k
+
+politics:
+  leaning: NDC-leaning social democrat; privately more economically liberal than party orthodoxy; believes in merit-based civil service and is frustrated by political appointment of technically incompetent people above him; admires Botswana's development model (genuine meritocracy, extractive resource management, institution-building); is careful about political expression at work because his role requires the confidence of whichever party wins
+  religion: Christian (Presbyterian; actively practicing; faith is personal, community-integrated, and shapes his sense of obligation to public service; does not use faith as a policy vocabulary at work)
+
+health:
+  height_cm: 182
+  weight_kg: 84
+  chronic_conditions: []
+  notes: healthy; plays recreational football on Sunday mornings with a neighbourhood group (15 years, the same group); the football is non-negotiable; it is where he processes the week
+
+relationships:
+  - name: Akua Asante (née Mensah)
+    relation: wife
+    archetype: Investigator
+    stub: investigative journalist at the Daily Graphic; follows evidence wherever it leads; has published pieces on infrastructure procurement irregularities
+    dynamic: they have an explicit agreement not to discuss Kwame's specific projects (conflict of interest); the professional distance is a permanent low-grade tension that both of them manage with discipline; they are each proud of what the other does and careful not to undermine it
+  - name: Minister Emmanuel Sarpong
+    relation: political minister (Kwame's ultimate superior)
+    archetype: Holy Warrior
+    stub: driven by a transformative vision of Ghana's infrastructure future; impatient with institutional caution; politically skilled
+    dynamic: the current implementation challenge; Kwame is implementing Sarpong's policy while privately assessing its feasibility as too optimistic; he does his best work within the constraint; when the minister asks directly, he gives an honest answer; this is a risk he accepts
+  - name: Daniel Ofori
+    relation: departmental colleague (same level)
+    archetype: Contrarian
+    stub: skeptical of official development policy; reads development economics carefully and finds the consensus inadequate; whispers opposition in the corridors
+    dynamic: Kwame finds Ofori useful for thinking and dangerous to quote; their conversations in the lunch room are the most intellectually alive he has during the work week; nothing from those conversations can appear in a memo
+  - name: Adwoa Asante
+    relation: mother (age 65, Kumasi)
+    archetype: Operator
+    stub: retired market trader who ran a fabric business for 30 years; kept meticulous accounts; focused on what you can actually sell
+    dynamic: the origin of Kwame's operational instinct; she is proud and occasionally worried that her son is too trusting of governments he works for; she does not distinguish between NDC and NPP — they're all the same to her
+  - name: Yaw Mensah
+    relation: father-in-law (age 67, Accra)
+    archetype: Legalist
+    stub: retired magistrate; believes rule of law is the precondition for everything else
+    dynamic: respects Kwame enormously; occasionally asks pointed questions about whether the GIIF's procurement processes are being followed; Kwame answers carefully; the questions are the right ones

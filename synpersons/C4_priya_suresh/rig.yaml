@@ -1,0 +1,97 @@
+# Synperson rig: Priya Suresh (C4)
+# Archetype: Contrarian
+
+identity:
+  id: C4
+  archetype: Contrarian
+  name: Priya Suresh
+
+demographics:
+  birth_date: "1986-04-29"
+  birth_city: "Mumbai, India"
+  nationality:
+    - American
+    - Indian
+  ethnicity: Tamil Brahmin (parents from Chennai; Priya grew up in Mumbai)
+  gender: woman
+
+location:
+  city: San Francisco
+  country: USA
+  neighbourhood: Noe Valley
+  living_situation: owns a condo (bought 2019; significant mortgage)
+
+work:
+  employer: Sandstone Ventures
+  employer_type: private venture capital firm
+  role: Partner
+  industry: Venture Capital (enterprise infrastructure focus)
+  work_city: San Francisco, CA, USA
+
+languages:
+  first: Tamil
+  others:
+    - language: English
+      proficiency: professional (near-native; primary language since IIT)
+    - language: Hindi
+      proficiency: conversational (Mumbai upbringing; comfortable but not preferred)
+    - language: Kannada
+      proficiency: functional (Bangalore portfolio company visits)
+
+education:
+  - degree: MBA
+    field: General Management
+    institution: Stanford Graduate School of Business
+    year: 2012
+  - degree: BTech
+    field: Computer Science
+    institution: Indian Institute of Technology Bombay
+    year: 2008
+
+finances:
+  income:
+    local_amount: "410000"
+    local_currency: USD
+    usd_equivalent: 410000
+    notes: base management fee share ~$200k; carried interest distributions variable; carried ~$210k this year (strong; other years zero)
+  net_worth:
+    usd_equivalent: 3900000
+    notes: SF condo equity ~$800k; liquid investments ~$1.2M; fund carry still vesting ~$1.9M (illiquid, mark-to-market)
+
+politics:
+  leaning: techno-optimist; economically libertarian but not ideologically fixed — she updates on evidence, which is different from being unprincipled; socially liberal; believes most regulation protects incumbents rather than consumers; effective altruism-adjacent on global poverty; skeptical of both Silicon Valley utopianism and progressive anti-tech sentiment; does not vote in Indian elections but pays close attention to Indian economic policy
+  religion: Hindu (cultural; non-practicing; atheist in private; does not advertise this in investor contexts where it might misread; Diwali is family time, not faith)
+
+health:
+  height_cm: 163
+  weight_kg: 57
+  chronic_conditions:
+    - anxiety disorder (acute burnout episode in 2021; now in weekly therapy; well-managed; no medication currently)
+  notes: the 2021 burnout was a serious breakdown triggered by a failed deal and a partner conflict simultaneously; she rebuilt deliberately and is healthier now; still monitors her workload carefully; therapy has made her substantially better at the relationships part of VC
+
+relationships:
+  - name: Arjun Mehta
+    relation: managing partner at Sandstone Ventures
+    archetype: Legalist
+    stub: process-adherent; wants documented investment theses and formal LP reporting before acting; risk-averse about the firm's reputation
+    dynamic: Priya's wins impress him; her instinct-betting makes him visibly uncomfortable; the relationship is functional but the tension is structural — they have incompatible theories of what venture judgment means
+  - name: Dr. Karthik Suresh
+    relation: father (age 62, Chennai)
+    archetype: Operator
+    stub: retired engineering professor; methodical and outcome-focused; ran his department by systematic process
+    dynamic: proud of Priya's success but wished she'd become a professor or doctor; asks after her health more than her portfolio; calls every Sunday morning India time; she calls every other Sunday because the calls are long
+  - name: Lata Suresh
+    relation: mother (age 59, Chennai)
+    archetype: Holy Warrior
+    stub: deeply committed philanthropist running a girls' education charity in Tamil Nadu; views money as a moral resource, not a personal one
+    dynamic: loves Priya; views VC as morally neutral at best; the gap between Lata's moral economy and Priya's financial one is permanent and mostly unspoken
+  - name: Theo Nakamura
+    relation: portfolio company founder (most successful investment)
+    archetype: Hacker
+    stub: builds by disassembling competitors' assumptions; technically exceptional and strategically unconventional
+    dynamic: the one founder who challenged Priya's investment thesis in the first meeting and was right about his own company; she now defers to him in ways that surprise her; their dynamic is unusual for VC — he has the power
+  - name: Shreya Mehta
+    relation: Stanford MBA classmate and close friend
+    archetype: Investigator
+    stub: forensic in everything; now a partner at a growth-stage fund; follows data wherever it points
+    dynamic: Priya's most reliable honest mirror; Shreya called the 2021 burnout before Priya did; Priya calls her when she needs someone who won't manage her

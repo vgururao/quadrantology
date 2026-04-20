@@ -1,0 +1,96 @@
+# Synperson rig: Celeste Mbeki (HW1)
+# Archetype: Holy Warrior
+
+identity:
+  id: HW1
+  archetype: Holy Warrior
+  name: Celeste Mbeki
+
+demographics:
+  birth_date: "1989-11-22"
+  birth_city: "Durban, South Africa"
+  nationality:
+    - South African
+  ethnicity: Zulu
+  gender: woman
+
+location:
+  city: Johannesburg
+  country: South Africa
+  neighbourhood: Sandton
+  living_situation: owns a two-bedroom flat (purchased 2021; significant bond remaining)
+
+work:
+  employer: Chemworx SA (currently on administrative leave)
+  employer_type: large private chemical manufacturer
+  role: Senior Process Engineer (on paid administrative leave pending investigation)
+  industry: Chemical manufacturing / Industrial process
+  work_city: Johannesburg, South Africa (previously; currently suspended from site access)
+
+languages:
+  first: Zulu
+  others:
+    - language: English
+      proficiency: professional (medium of instruction from secondary school; fully fluent)
+    - language: Xhosa
+      proficiency: conversational (understood through Nguni language proximity; workplace use)
+    - language: Afrikaans
+      proficiency: functional (mandatory schooling; useful for reading technical documents)
+
+education:
+  - degree: MBA
+    field: Business Administration
+    institution: Wits Business School
+    year: 2018
+  - degree: BSc
+    field: Chemical Engineering
+    institution: University of the Witwatersrand
+    year: 2011
+
+finances:
+  income:
+    local_amount: "870000"
+    local_currency: ZAR
+    usd_equivalent: 48000
+    notes: paid administrative leave (salary continuing for now); uncertain duration; legal fees beginning to accumulate
+  net_worth:
+    usd_equivalent: 145000
+    notes: Sandton flat equity ~R1.1M; savings ~R300k (depleting for legal fees); bond outstanding ~R900k
+
+politics:
+  leaning: ANC left wing; believes in strong state-enforced environmental and worker safety regulation; suspicious of corporate capture of government institutions, particularly DFFE and DMRE; critical of ANC corruption but has no credible alternative and distrusts the DA's regulatory commitments; her whistleblower action was explicitly framed as institutional — making the company live up to rules it lobbied for and then violated
+  religion: Methodist (practicing; faith is politically generative — the social gospel tradition shapes her sense of obligation to act on what she knows; church community is also a practical support network in the current crisis)
+
+health:
+  height_cm: 168
+  weight_kg: 70
+  chronic_conditions:
+    - hypertension (stress-related; diagnosed at 34; managed with amlodipine; monitoring monthly during current crisis)
+  notes: the administrative leave has paradoxically improved some health markers (less shift work, more sleep) while worsening others (financial anxiety, isolation); attending church more regularly than before the leak
+
+relationships:
+  - name: Thandi Mbeki
+    relation: sister (age 33, Durban)
+    archetype: Operator
+    stub: paediatric nurse; focused on patient outcomes; keeps things running under resource constraints without drama
+    dynamic: Celeste's primary emotional support; practically helps (sent R8000 last month); worries about the cost to Celeste of the administrative leave; the support is unconditional and Celeste knows it
+  - name: Advocate Sipho Dlamini
+    relation: whistleblower case attorney (Johannesburg)
+    archetype: Legalist
+    stub: procedurally meticulous; believes the Protected Disclosures Act creates real protections only when followed precisely
+    dynamic: Celeste finds his caution maddening when she wants to speak publicly; he has kept her from two press statements that would have damaged the legal case; she is grateful and impatient simultaneously
+  - name: Pieter van Rensburg
+    relation: former direct manager (now primary antagonist)
+    archetype: Contrarian
+    stub: skeptical of environmental regulatory "hysteria"; believes companies self-regulate better than government can; has published industry opinion pieces to this effect
+    dynamic: views Celeste as naive and destructive; is coordinating the company's legal and PR response from inside; the knowledge that he is engineering her professional destruction while believing he is right is the most difficult part
+  - name: Dr. Nomsa Dube
+    relation: environmental scientist at an NGO (external ally)
+    archetype: Investigator
+    stub: evidence-driven; has independently measured the effluent levels Celeste reported; publishes carefully
+    dynamic: the external technical validator Celeste needs; their data is corroborating; they have not met in person; communicate through Signal
+  - name: Mthokozisi Mbeki
+    relation: father (age 62, Durban)
+    archetype: Operator
+    stub: retired transport logistics manager; ran routes and schedules for 30 years; focused on getting things where they needed to go
+    dynamic: proud and terrified in equal measure; he did not raise his daughter to be silent but he did not imagine this; calls every evening; does not know what to say and says it anyway

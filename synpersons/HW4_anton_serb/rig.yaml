@@ -1,0 +1,99 @@
+# Synperson rig: Anton Serb (HW4)
+# Archetype: Holy Warrior
+
+identity:
+  id: HW4
+  archetype: Holy Warrior
+  name: Anton Serb
+
+demographics:
+  birth_date: "1968-08-15"
+  birth_city: "Novi Sad, Yugoslavia (now Serbia)"
+  nationality:
+    - American
+  ethnicity: Serbian
+  gender: man
+
+location:
+  city: Philadelphia
+  country: USA
+  neighbourhood: Fishtown
+  living_situation: owns a townhouse (purchased 1998; fully paid off)
+
+work:
+  employer: Serb & Kowalski LLP
+  employer_type: private law firm (co-owner)
+  role: Partner
+  industry: Law (civil rights and religious liberty)
+  work_city: Philadelphia, Pennsylvania, USA
+
+languages:
+  first: Serbian
+  others:
+    - language: English
+      proficiency: professional (arrived age 19; near-native; slight accent he has kept intentionally)
+    - language: Croatian
+      proficiency: native-intelligible (same language family; can read and speak)
+    - language: Latin
+      proficiency: reading (academic and liturgical; the language he thinks in for legal argument)
+    - language: Church Slavonic
+      proficiency: liturgical (Orthodox service language; not conversational)
+
+education:
+  - degree: JD
+    field: Law
+    institution: Notre Dame Law School
+    year: 1993
+  - degree: BA
+    field: Philosophy (minor: Political Theory)
+    institution: Fordham University
+    year: 1990
+
+finances:
+  income:
+    local_amount: "151000"
+    local_currency: USD
+    usd_equivalent: 151000
+    notes: partner draw from small firm; no bonus; income lower than peers at larger firms by design — he takes too many pro bono and low-fee cases
+  net_worth:
+    usd_equivalent: 740000
+    notes: Fishtown townhouse ~$550k (bought cheap, appreciated dramatically); pension ~$120k; liquid savings ~$70k
+
+politics:
+  leaning: traditionalist conservative; Eastern Orthodox values frame his legal work; socially conservative on marriage, life, and educational freedom; procedurally principled in a way that cuts across partisan lines — will defend unpopular speakers, religious minorities of all faiths, and dissident voices regardless of their political valence; finds the current Republican Party's relationship with procedure appalling; does not publicly criticise it because his client base would not survive the clarity; this is his private compromise
+  religion: Eastern Orthodox (Serbian; deeply practicing; parish council member at Holy Trinity Serbian Orthodox Church in Philadelphia; faith is the load-bearing structure of his worldview and his legal philosophy; the distinction between earthly law and divine law is real and hierarchical to him)
+
+health:
+  height_cm: 190
+  weight_kg: 99
+  chronic_conditions:
+    - cardiovascular risk profile (borderline LDL, mildly elevated blood pressure; cardiologist monitoring; no events; told to exercise more and sit less)
+    - chronic lower back pain (occupational; 20 years of desk work; managed with ibuprofen and occasional physiotherapy)
+  notes: sedentary professional life is the main health risk; he knows this and addresses it sporadically; the parish community involves more physical movement (iconography, liturgical preparation) than the office does
+
+relationships:
+  - name: Sonja Serb (née Vasić)
+    relation: wife (married 1995)
+    archetype: Legalist
+    stub: high school history teacher; rule-follower; believes institutions embody accumulated social wisdom that individuals underestimate at their peril
+    dynamic: 30-year partnership of deep mutual respect; she thinks he is fighting the right battles and too many of them; he knows she is right and cannot stop; the disagreement is habitual and affectionate
+  - name: Natalija Serb
+    relation: adult daughter (age 28, Seattle)
+    archetype: Investigator
+    stub: public health researcher; secular; evidence-driven; has published critiques of religious liberty jurisprudence that target arguments her father has made in court
+    dynamic: loving and philosophically distant; they avoid the specific papers at Christmas and manage it mostly; the gap is real and neither of them is inclined to close it at the cost of the other's intellectual integrity; they are proud of each other's stubbornness
+  - name: Daniel Kowalski
+    relation: law partner (co-owner of the firm)
+    archetype: Legalist
+    stub: process-adherent; manages the business of the firm with careful attention to financial sustainability
+    dynamic: keeps Anton from taking so many pro bono cases that the firm folds; the firm would not exist without Kowalski's management; Anton knows this and is grateful and occasionally resentful
+  - name: Father Nikolaj
+    relation: parish priest and spiritual director at Holy Trinity
+    archetype: Holy Warrior
+    stub: holds the prophetic tradition of Orthodoxy — the church must witness to truth regardless of social consequence; uncompromising; historically literate
+    dynamic: the one person who can slow Anton down by asking a question; "Is this case the hill?" has stopped two decisions; "Is this how we want to be remembered?" has stopped one more; Father Nikolaj does not always succeed but his questions always land
+  - name: Prof. Elena Mirković
+    relation: former law school colleague (now Georgetown faculty)
+    archetype: Contrarian
+    stub: skeptical of religious liberty doctrine as currently practiced; argues it is being used to carve out minority majoritarian exemptions
+    dynamic: the sharpest external intellectual challenge to Anton's legal worldview; they debate in print; they have dinner when she's in Philadelphia; the friendship survives the disagreement because they both prefer a real opponent to a comfortable echo

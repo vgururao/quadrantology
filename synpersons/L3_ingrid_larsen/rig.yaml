@@ -1,0 +1,96 @@
+# Synperson rig: Ingrid Larsen (L3)
+# Archetype: Legalist
+
+identity:
+  id: L3
+  archetype: Legalist
+  name: Ingrid Larsen
+
+demographics:
+  birth_date: "1970-03-31"
+  birth_city: "Bergen, Norway"
+  nationality:
+    - Norwegian
+  ethnicity: Norwegian
+  gender: woman
+
+location:
+  city: Oslo
+  country: Norway
+  neighbourhood: Frogner
+  living_situation: owns a flat (purchased 2001; fully paid off)
+
+work:
+  employer: Larsen & Tvedt Advokatfirma
+  employer_type: private law firm (co-owner)
+  role: Senior Partner
+  industry: Law (constitutional and civil liberties specialisation)
+  work_city: Oslo, Norway
+
+languages:
+  first: Norwegian (Bokmål)
+  others:
+    - language: English
+      proficiency: professional (LLM at Columbia; publishes in English)
+    - language: German
+      proficiency: reading (legal literature)
+    - language: Latin
+      proficiency: reading (legal texts; residual academic habit)
+
+education:
+  - degree: LLM
+    field: Constitutional Law
+    institution: Columbia Law School
+    year: 1998
+  - degree: Candidatus iuris (LLB equivalent)
+    field: Law
+    institution: University of Oslo
+    year: 1995
+
+finances:
+  income:
+    local_amount: "1020000"
+    local_currency: NOK
+    usd_equivalent: 94000
+    notes: partner draw (profit-sharing); varies slightly with firm revenue; no bonus structure
+  net_worth:
+    usd_equivalent: 1500000
+    notes: Oslo flat ~NOK 7M; pension ~NOK 1.5M equivalent; liquid savings ~NOK 800k
+
+politics:
+  leaning: classical liberal; Hayekian; strongly proceduralist — believes the process of rights adjudication matters as much as any particular outcome; votes Venstre when it has a credible candidate; deeply anti-surveillance; will take unpopular clients on First Amendment or equivalent Norwegian free-expression grounds regardless of who they are; the principle is content-neutral and she defends this position in articles when it costs her socially
+  religion: Lutheran (confirmed; secular in practice; attends Christmas service because the music matters to her; reads Kierkegaard and Bonhoeffer as philosophy, not theology)
+
+health:
+  height_cm: 170
+  weight_kg: 65
+  chronic_conditions:
+    - recurrent depression (stable on escitalopram for 18 years; first episode at 36; she discusses this openly in professional contexts as a contribution to de-stigmatisation; manages well)
+  notes: swims at the Frogner Bath three mornings a week; the routine is non-negotiable; it is the structural support under everything else
+
+relationships:
+  - name: Erik Larsen
+    relation: son (age 28, Berlin)
+    archetype: Hacker
+    stub: software developer; builds around constraints; moved to Berlin for the startup ecosystem and stayed
+    dynamic: close but infrequent contact; she worries he has inherited her tendency toward solitude; she admires his independence and finds it lonely; they talk on Signal every other week and it's never quite enough
+  - name: Petter Tvedt
+    relation: law partner (co-owner of the firm)
+    archetype: Investigator
+    stub: meticulous researcher; believes in exhausting the factual record before forming any legal argument
+    dynamic: the firm would not function without him and she knows it; he thinks she takes too many cases that are right in principle but bad for business; the partnership works because they respect what the other does that they themselves cannot
+  - name: Aminata Kouyaté
+    relation: current client (journalist facing state prosecution)
+    archetype: Holy Warrior
+    stub: committed to truth-telling even when the truth is unwelcome and dangerous; will not hedge her public statements
+    dynamic: the kind of client whose convictions Ingrid finds genuinely admirable and whose strategic instincts she must regularly override; the case is legally strong; Aminata keeps threatening to hold press conferences that would jeopardise it
+  - name: Per Halvorsen
+    relation: opposing counsel on multiple cases over 15 years
+    archetype: Operator
+    stub: methodical and outcome-focused; cares about winning the winnable case, not arguing the righteous one
+    dynamic: professional respect across the adversarial line; they occasionally agree on process even when on opposite sides; Halvorsen is the lawyer she'd recommend if she couldn't take a case herself
+  - name: Birthe Larsen
+    relation: mother (age 78, Bergen)
+    archetype: Legalist
+    stub: retired magistrate; believed in the rule of law with the fervour of the post-war generation who had seen its absence
+    dynamic: the origin of Ingrid's legalism; Birthe is proud and occasionally sharp about cases where Ingrid's clients seem to test the limits of her principles; the sharpness is worth it; the conversations are the most honest Ingrid has

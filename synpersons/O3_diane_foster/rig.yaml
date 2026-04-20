@@ -1,0 +1,92 @@
+# Synperson rig: Diane Foster (O3)
+# Archetype: Operator
+
+identity:
+  id: O3
+  archetype: Operator
+  name: Diane Foster
+
+demographics:
+  birth_date: "1980-03-07"
+  birth_city: "Memphis, Tennessee, USA"
+  nationality:
+    - American
+  ethnicity: Black American (parents both from Tennessee; grandmother from Mississippi)
+  gender: woman
+
+location:
+  city: Atlanta
+  country: USA
+  neighbourhood: Grant Park
+  living_situation: renting (has not been able to buy in Atlanta due to years of nonprofit salary; this bothers her)
+
+work:
+  employer: New Roots Community Fund
+  employer_type: non-profit organisation
+  role: Executive Director
+  industry: Non-profit / Social services (housing support, food access, after-school programming)
+  work_city: Atlanta, Georgia, USA
+
+languages:
+  first: English
+  others:
+    - language: Spanish
+      proficiency: conversational (acquired for community work with Latino families; still learning; can hold basic case management conversations)
+
+education:
+  - degree: MPA
+    field: Public Administration (non-profit concentration)
+    institution: Harvard Kennedy School
+    year: 2006
+  - degree: BA
+    field: Public Policy
+    institution: Spelman College
+    year: 2002
+
+finances:
+  income:
+    local_amount: "93000"
+    local_currency: USD
+    usd_equivalent: 93000
+    notes: executive director salary; the board increased it once in 8 years; she has not pushed for another increase because the programs need the money
+  net_worth:
+    usd_equivalent: 285000
+    notes: 401k ~$180k (consistent contributions); liquid savings ~$85k; no property; the non-ownership in Atlanta is a growing source of anxiety as the market moves away from her
+
+politics:
+  leaning: progressive and pragmatic simultaneously — she believes the structural analysis is correct and that purity politics that wins arguments but loses programs is a luxury people on waiting lists cannot afford; votes consistently Democratic without enthusiasm; frustrated with the party's delivery failures and cannot afford to let that frustration show too often; her private politics are considerably to the left of her funder relationships require
+  religion: Baptist (raised; practicing; faith is community-sustaining and keeps her sane; skeptical of prosperity gospel; her church is in southwest Atlanta and the community is the same community she serves; that overlap is intentional)
+
+health:
+  height_cm: 170
+  weight_kg: 79
+  chronic_conditions:
+    - anxiety disorder (managed with therapy for 9 years; no medication; therapist is the best $200 she spends monthly and she will not cancel regardless of program budget)
+  notes: the anxiety is well-understood at this point; she knows her triggers (funder uncertainty, board conflict, staff burnout) and manages them with her therapist, exercise, and deliberate sleep; less well-managed than she presents publicly
+
+relationships:
+  - name: Richard Park
+    relation: board chair
+    archetype: Legalist
+    stub: retired attorney; detail-focused; wants procedural correctness before action; reads every financial report carefully
+    dynamic: slows Diane down when she needs speed; she has learned to pre-package proposals for him with more documentation than should be necessary; the relationship is functional and occasionally exhausting; he has saved her twice from decisions that would have created legal exposure
+  - name: Gerald Mason
+    relation: major donor (largest single funder at ~$400k annually)
+    archetype: Contrarian
+    stub: skeptical of conventional nonprofit methods; expects disruption and proof of concept for his money; calls quarterly with opinions on program design
+    dynamic: the most unpredictable relationship in her professional life; his money is load-bearing for two programs; his opinions are unsolicited and occasionally useful; she manages him as a stakeholder rather than a partner and knows he would be offended if he understood this
+  - name: Keisha Brown
+    relation: housing program director (direct report)
+    archetype: Holy Warrior
+    stub: advocates for housing residents with an intensity that burns bridges Diane needs; committed to the residents over the institution
+    dynamic: inspiring and difficult; Diane mentors her carefully; Keisha sometimes does the right thing in the wrong way for the right reasons; the cost falls on the organisation; Diane is still deciding whether Keisha's growth trajectory is worth the cost
+  - name: Marcus Foster
+    relation: brother (age 43, Memphis)
+    archetype: Hacker
+    stub: electrician who repairs things that aren't supposed to be repairable; deeply practical; skeptical of institutions that don't deliver
+    dynamic: Diane's clearest external view of whether the work matters; Marcus tells her when the programs would actually help a family he knows and when they wouldn't; these conversations are more useful than most board meetings
+  - name: Dr. Pamela Reid
+    relation: therapist (9-year relationship)
+    archetype: Investigator
+    stub: follows where the evidence in the session leads; does not let Diane's competence shield her from her own patterns
+    dynamic: the relationship Diane has protected most carefully through every budget crisis; she considers it a professional operating expense as much as a personal one

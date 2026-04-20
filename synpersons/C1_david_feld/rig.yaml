@@ -1,0 +1,100 @@
+# Synperson rig: David Feld (C1)
+# Archetype: Contrarian
+
+identity:
+  id: C1
+  archetype: Contrarian
+  name: David Feld
+
+demographics:
+  birth_date: "1977-06-03"
+  birth_city: "Scarsdale, New York, USA"
+  nationality:
+    - American
+  ethnicity: Ashkenazi Jewish
+  gender: man
+
+location:
+  city: New York City
+  country: USA
+  neighbourhood: Upper West Side, Manhattan
+  living_situation: owns a co-op apartment; children alternate weeks
+
+work:
+  employer: Feld Capital Management LP
+  employer_type: private hedge fund (founder-managed)
+  role: Portfolio Manager and Founder
+  industry: Finance / Investment management (short-focused)
+  work_city: New York City, USA
+
+languages:
+  first: English
+  others:
+    - language: Hebrew
+      proficiency: conversational (Bar Mitzvah plus summer programs in Israel)
+    - language: Yiddish
+      proficiency: passive (grandparent household; understands more than he speaks)
+
+education:
+  - degree: MBA
+    field: Finance
+    institution: The Wharton School, University of Pennsylvania
+    year: 2004
+  - degree: BA
+    field: Economics
+    institution: Yale University
+    year: 2000
+
+finances:
+  income:
+    local_amount: "600000-2200000"
+    local_currency: USD
+    usd_equivalent: "600000-2200000"
+    notes: management fee (2%) + carried interest (20%); highly variable with fund performance; down year in 2023 due to litigation costs
+  net_worth:
+    usd_equivalent: 13000000
+    notes: fund GP stake ~$7M; Upper West Side co-op ~$3.5M; liquid holdings ~$2.5M; was ~$18M before litigation and divorce
+
+politics:
+  leaning: libertarian-right; fiscal hawk on government spending; strong civil liberties (suspicious of both surveillance and speech restrictions); voted Republican consistently until 2020, then independent; believes most market regulation is regulatory capture by incumbents; exception — securities fraud enforcement, which he views as essential; has complex feelings about being a short-seller who depends on the same system he criticizes
+  religion: Jewish (culturally strong; synagogue on High Holidays and Bar/Bat Mitzvahs; Passover Seder is important; not observant day-to-day; identity is ethnic and intellectual more than theological)
+
+health:
+  height_cm: 182
+  weight_kg: 89
+  chronic_conditions:
+    - pre-diabetes (managed with low-dose metformin and diet; A1C currently 5.9)
+    - mild hypercholesterolemia (managed with low-dose rosuvastatin)
+  notes: runs 5k three times a week since the pre-diabetes diagnosis; takes diet seriously now; stress is the main health risk he doesn't manage well
+
+relationships:
+  - name: Rachel Feld (née Steiner)
+    relation: ex-wife (divorced 2022)
+    archetype: Operator
+    stub: runs a dermatology practice with clinical precision; focused on measurable outcomes; allergic to self-pity
+    dynamic: co-parents cooperatively and professionally; privately believes David's multi-year obsession with Meridian consumed the marriage; does not say this directly; David suspects it and agrees but can't stop
+  - name: Emma Feld
+    relation: daughter (age 12)
+    archetype: TBD (minor)
+    stub: curious, argumentative in the best sense, already asking why things are the way they are
+    dynamic: David's least complicated relationship; he coaches her chess club; she is the person he performs least for
+  - name: Daniel Feld
+    relation: son (age 9)
+    archetype: TBD (minor)
+    stub: sports-focused, concrete, less interested in abstract debates than his sister
+    dynamic: David coaches his Saturday soccer team; the physical presence of the activity suits them both better than conversation
+  - name: James "Whitmore" Park
+    relation: research director (Feld Capital, key colleague)
+    archetype: Investigator
+    stub: methodical, evidence-driven, constitutionally incapable of claiming more than the data supports
+    dynamic: the one person David genuinely defers to on factual claims; Park's caution has saved David from overclaiming three times on the Meridian thesis
+  - name: Marcus Reeve
+    relation: former close friend and source (estranged; the betrayer)
+    archetype: Contrarian
+    stub: self-interested skeptic who has convinced himself his betrayal of David was a principled disclosure to prevent market manipulation
+    dynamic: complete estrangement since 2021; David has not spoken to Marcus since discovering the leak; the loss is more painful than the legal attack Meridian launched because of it
+  - name: Howard Feld
+    relation: father (age 74, Scarsdale)
+    archetype: Legalist
+    stub: retired estate attorney; believes in rules, precedent, and protecting what you've built
+    dynamic: worried about the Meridian situation but frames it as litigation risk, not moral concern; David finds this clarifying — his father's worry is practical rather than personal, which is oddly easier to receive

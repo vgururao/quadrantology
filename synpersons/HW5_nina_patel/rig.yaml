@@ -1,0 +1,96 @@
+# Synperson rig: Nina Patel (HW5)
+# Archetype: Holy Warrior
+
+identity:
+  id: HW5
+  archetype: Holy Warrior
+  name: Nina Patel
+
+demographics:
+  birth_date: "1992-12-17"
+  birth_city: "Surat, Gujarat, India"
+  nationality:
+    - Indian
+  ethnicity: Gujarati Vaishnava Hindu
+  gender: woman
+
+location:
+  city: Mumbai
+  country: India
+  neighbourhood: Bandra West
+  living_situation: renting a flat shared with one flatmate; Mumbai rents consume 40% of income
+
+work:
+  employer: Reliance Industries Limited
+  employer_type: large private corporation
+  role: Environmental Sustainability Analyst
+  industry: Energy / Manufacturing (corporate sustainability function)
+  work_city: Mumbai, India (Navi Mumbai campus; Bandra-Kurla Complex office)
+
+languages:
+  first: Gujarati
+  others:
+    - language: Hindi
+      proficiency: professional (national language; fully fluent; daily workplace language)
+    - language: English
+      proficiency: professional (medium of instruction at IIT Bombay and Imperial College; academic and corporate language)
+    - language: Marathi
+      proficiency: functional (Mumbai daily life; neighbours, markets, auto-rickshaw drivers)
+
+education:
+  - degree: MSc
+    field: Environmental Technology
+    institution: Imperial College London
+    year: 2016
+  - degree: BTech
+    field: Environmental Engineering
+    institution: IIT Bombay
+    year: 2014
+
+finances:
+  income:
+    local_amount: "3400000"
+    local_currency: INR
+    usd_equivalent: 41000
+    notes: Reliance salary scale for analyst; previous NGO role paid 40% less; the corporate move was financially rational and politically uncomfortable
+  net_worth:
+    usd_equivalent: 22000
+    notes: savings ~₹1.8M; no property (Mumbai); student loan (Imperial College) nearly repaid; small gold jewellery (family tradition; liquid if needed)
+
+politics:
+  leaning: left-green; frustrated with both INC and BJP's climate records; admires the global climate justice movement and its analysis of who bears the cost of emissions; believes working inside a corporation is the only way to access the levers that matter, while also believing that corporations will not self-regulate unless forced; is trying to force her employer from the inside; does not fully resolve the contradiction and has stopped trying to
+  religion: Vaishnava Hindu (practicing; daily puja; vegetarian for religious and ethical reasons; observes Ekadashi fasts; reads Bhagavad Gita; the Gandhian tradition — particularly satyagraha and trusteeship — is her political theology, not just her cultural background)
+
+health:
+  height_cm: 162
+  weight_kg: 55
+  chronic_conditions:
+    - seasonal asthma (well-managed with salbutamol inhaler; worsens during Mumbai's October–November pollution peak and post-Diwali firecracker season; personally ironic given her work)
+  notes: vegetarian diet is both religious and health-conscious; the asthma is the most direct physical consequence of the pollution she's trying to reduce; she notes this in her reports without editorial comment
+
+relationships:
+  - name: Vikram Shah
+    relation: Corporate Sustainability Director (direct reporting line above her)
+    archetype: Legalist
+    stub: procedurally correct; follows the sustainability reporting standards to the letter; risk-averse about commitments that exceed what the company has approved
+    dynamic: blocks Nina's initiatives not from ideological disagreement but from institutional risk-aversion; he thinks she is right about most things and two to three years premature; she thinks his caution is structural cowardice; they are both partially right
+  - name: Arjun Kapoor
+    relation: direct line manager (Environmental team lead)
+    archetype: Operator
+    stub: focused on delivering what the team has committed to; protective of his people within what the institution allows
+    dynamic: genuinely likes Nina; shields her from the immediate consequences of her internal dissent to the extent he can; has told her clearly what he can and cannot protect her from; she trusts this information
+  - name: Kiran Shah
+    relation: flatmate (not a colleague)
+    archetype: Contrarian
+    stub: works in equity research; skeptical of ESG as investment category; has prepared to argue the other side of Nina's every position at dinner
+    dynamic: the most productive intellectual friction in Nina's life; Kiran challenges her to prove the causal links she assumes; Nina challenges Kiran to explain why financial returns are the appropriate metric for planetary systems; neither has convinced the other; neither has stopped trying
+  - name: Rajan Patel
+    relation: father (age 62, Surat)
+    archetype: Operator
+    stub: retired textile mill manager; ran production scheduling for 25 years; focused on delivery and not antagonising the owners
+    dynamic: proud of Nina's education; skeptical of her activism; worked for large industry his whole life without agitating; views her inside-corporate approach as more sensible than NGO work but still worries about the consequences
+  - name: Meena Patel
+    relation: mother (age 57, Surat)
+    archetype: Holy Warrior
+    stub: fierce community organiser on local issues (water access, a road safety campaign she ran for three years); does not see herself as an activist but does see herself as someone who does what the situation requires
+    dynamic: Nina's first model for moral commitment; Meena is delighted by her daughter and slightly concerned that Mumbai has made her too strategic; tells her to pray more and be less clever about it; Nina finds this irritating and correct

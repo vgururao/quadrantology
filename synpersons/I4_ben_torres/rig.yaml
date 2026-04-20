@@ -1,0 +1,95 @@
+# Synperson rig: Ben Torres (I4)
+# Archetype: Investigator
+
+identity:
+  id: I4
+  archetype: Investigator
+  name: Ben Torres
+
+demographics:
+  birth_date: "1985-02-28"
+  birth_city: "Bogotá, Colombia"
+  nationality:
+    - American
+    - Colombian
+  ethnicity: Colombian (mixed European, Indigenous, and African heritage; his family would say mestizo)
+  gender: man
+
+location:
+  city: Miami
+  country: USA
+  neighbourhood: Coral Gables
+  living_situation: owns a condo (jointly with wife; purchased 2018)
+
+work:
+  employer: Consumer Product Safety Commission (CPSC)
+  employer_type: federal government (independent regulatory agency)
+  role: Senior Investigator
+  industry: Federal government / Consumer safety regulation
+  work_city: Bethesda, Maryland (CPSC headquarters; remote-capable; based in Miami)
+
+languages:
+  first: Spanish
+  others:
+    - language: English
+      proficiency: professional (arrived age 15; near-native; primary professional language)
+    - language: Portuguese
+      proficiency: reading level (Brazilian trade cases and safety standards literature)
+
+education:
+  - degree: MS
+    field: Product Safety and Liability
+    institution: Stanford University
+    year: 2011
+  - degree: BS
+    field: Mechanical Engineering
+    institution: Universidad de los Andes, Bogotá
+    year: 2007
+
+finances:
+  income:
+    local_amount: "131000"
+    local_currency: USD
+    usd_equivalent: 131000
+    notes: GS-14 federal salary; locality pay for Miami area; no bonus
+  net_worth:
+    usd_equivalent: 450000
+    notes: Coral Gables condo equity ~$230k; retirement accounts ~$160k; liquid savings ~$60k
+
+politics:
+  leaning: centre-left; regulatory hawk; believes consumer protection is the proper function of government and that the CPSC's enforcement record is chronically under-resourced; frustrated by industry capture of safety standards processes; votes Democrat but not enthusiastically; thinks the party does not take consumer and worker safety seriously as a political identity
+  religion: Catholic (nominally practicing; attends Christmas and Easter Mass; more cultural than devotional; grew up with strong Colombian Catholic family culture; the faith has faded in practice but not in ethical vocabulary)
+
+health:
+  height_cm: 177
+  weight_kg: 80
+  chronic_conditions:
+    - right knee ligament damage (2019 injury from a defective piece of sports equipment — a deeply ironic professional reinforcement; ligament repair surgery; full recovery; occasional ache in cold weather or after long runs)
+  notes: the knee injury sharpened his personal investment in product safety work; the product was a recreational sports device he cannot name publicly because it's adjacent to an active investigation; he runs still, carefully
+
+relationships:
+  - name: Carolina Torres (née Restrepo)
+    relation: wife
+    archetype: Investigator
+    stub: NHTSA (National Highway Traffic Safety Administration) investigator; same professional DNA but different domain; equally evidence-driven and constitutionally unwilling to overstate findings
+    dynamic: the marriage of two investigators is sometimes the most functional and sometimes the most exhausting possible combination; they get competitive about whose cases matter more in a way both of them find embarrassing when they notice it; the shared worldview is the foundation
+  - name: Director Patricia Huang
+    relation: agency director (CPSC)
+    archetype: Legalist
+    stub: procedurally cautious; manages risk to the agency's authority and budget; believes the CPSC's power depends on never being wrong in public
+    dynamic: tells Ben to document more and speculate less; he finds her risk-averse; she finds his analysis pattern-reaching before the evidence is complete; both are partially right; the relationship is functional and requires careful management
+  - name: Marcus Webb
+    relation: lead engineer at the implicated manufacturer
+    archetype: Operator
+    stub: focused on making things that work; not primarily a commercial animal; genuinely troubled by his company's quality control failures
+    dynamic: an unusual professional relationship; Webb privately agrees with much of Ben's analysis and is informally helpful without being a formal source; they are doing a careful dance around his formal access to internal documents; Ben has not asked for what Webb cannot give
+  - name: Sofia Torres
+    relation: mother (age 62, Bogotá)
+    archetype: Holy Warrior
+    stub: retired secondary school teacher who led the teachers' union chapter; fierce about education access and teacher rights; has never been afraid of a fight
+    dynamic: Ben's model of commitment to something larger than individual interest; she visits Miami twice a year; she is not sure what consumer product safety is but she understands that Ben is trying to protect people who can't protect themselves, which is enough for her
+  - name: Dr. Andrés Torres
+    relation: father (age 65, Bogotá)
+    archetype: Contrarian
+    stub: retired economist; skeptical of both government intervention and market self-regulation as default answers; argues that the evidence should decide
+    dynamic: Ben's most useful intellectual sparring partner on regulation philosophy; his father thinks the CPSC's current approach is too reactive and has told him so in careful detail; Ben has not changed his mind but thinks about the criticism

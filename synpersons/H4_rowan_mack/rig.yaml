@@ -1,0 +1,94 @@
+# Synperson rig: Rowan Mack (H4)
+# Archetype: Hacker
+
+identity:
+  id: H4
+  archetype: Hacker
+  name: Rowan Mack
+
+demographics:
+  birth_date: "1988-11-30"
+  birth_city: "Melbourne, Australia"
+  nationality:
+    - Australian
+  ethnicity: Anglo-Australian (Irish and Scottish descent)
+  gender: non-binary (they/them)
+
+location:
+  city: Melbourne
+  country: Australia
+  neighbourhood: Fitzroy
+  living_situation: renting a share house with two other academics
+
+work:
+  employer: University of Melbourne
+  employer_type: public university
+  role: Postdoctoral Research Fellow, School of Computing and Information Systems
+  industry: Academia / Computational linguistics
+  work_city: Melbourne, Australia
+
+languages:
+  first: English
+  others:
+    - language: French
+      proficiency: reading (academic literature only)
+    - language: Japanese
+      proficiency: conversational (learning; Duolingo + classes; partner's language)
+
+education:
+  - degree: PhD
+    field: Computational Linguistics
+    institution: University of Melbourne
+    year: 2016
+  - degree: BA
+    field: Linguistics
+    institution: University of Melbourne
+    year: 2011
+
+finances:
+  income:
+    local_amount: "97000"
+    local_currency: AUD
+    usd_equivalent: 62000
+    notes: postdoc fellowship salary; fixed-term contract (up for renewal in 18 months)
+  net_worth:
+    usd_equivalent: 185000
+    notes: AUD 200k in index funds (grandparent trust inheritance); no property; no debt
+
+politics:
+  leaning: left-wing; Greens voter; strong on climate, academic reform, and degrowth; skeptical of both major parties as captured by incumbent interests; the citation manipulation project is explicitly political — framed as exposing how academic metrics manufacture prestige and disadvantage the global south and non-traditional career paths
+  religion: secular humanist; no religious practice; finds meaning in scientific inquiry and the social function of language
+
+health:
+  height_cm: 180
+  weight_kg: 79
+  chronic_conditions:
+    - ADHD (diagnosed at 30; managed well with methylphenidate; the diagnosis explained a lot of the previous decade)
+  notes: ADHD diagnosis was a significant life event — reframed past struggles as structural rather than personal failures; exercises sporadically; better when deadline pressure is low
+
+relationships:
+  - name: Prof. Roberta Clancy
+    relation: academic supervisor
+    archetype: Legalist
+    stub: citation-precedent as first principle; believes academic metrics, whatever their flaws, are the only fair basis for advancement
+    dynamic: the relationship is fracturing; Clancy helped design the h-index systems Rowan is now exposing; she views the manipulation project as a betrayal of the academic compact, not an exposé of it
+  - name: Dr. Sanjiv Mehta
+    relation: research collaborator (co-conspirator on citation project)
+    archetype: Contrarian
+    stub: loves puncturing comfortable assumptions; more comfortable with reputational risk than Rowan is
+    dynamic: pushes the project further and faster than Rowan is comfortable with; they disagree on what counts as responsible disclosure; the partnership is productive and destabilizing
+  - name: Morgan Mack
+    relation: parent (age 62, Perth)
+    archetype: Operator
+    stub: retired logistics manager; pragmatic and process-oriented; never quite understood Rowan's academic path
+    dynamic: estranged but not hostile; they speak three or four times a year; Morgan uses the wrong pronouns consistently without apparent malice and without correcting after reminders; this is the quiet centre of their distance
+  - name: Yuki Hashimoto
+    relation: long-distance partner (age 33, Tokyo)
+    archetype: Holy Warrior
+    stub: experimental musician; passionate about art's social and political function; unwilling to compromise work for commercial viability
+    dynamic: emotionally central; the long-distance is a persistent strain; Yuki worries Rowan is courting professional self-destruction with the citation project and says so directly
+  - name: Dr. Anika Pham
+    relation: postdoc colleague and friend (not collaborator on the project)
+    archetype: Investigator
+    stub: careful empiricist; follows data wherever it leads; has no interest in the political implications of findings
+    dynamic: the most grounded professional relationship Rowan has; Anika thinks the citation project is messy and risks contaminating legitimate findings; Rowan respects this even when it's inconvenient

@@ -1,0 +1,96 @@
+# Synperson rig: Mira Voss (H1)
+# Archetype: Hacker
+
+identity:
+  id: H1
+  archetype: Hacker
+  name: Mira Voss
+
+demographics:
+  birth_date: "1991-09-14"
+  birth_city: "Hannover, Germany"
+  nationality:
+    - German
+  ethnicity: German/Vietnamese (father German, mother Vietnamese; grew up primarily German-cultural)
+  gender: woman
+
+location:
+  city: Berlin
+  country: Germany
+  neighbourhood: Prenzlauer Berg
+  living_situation: renting a flat with partner
+
+work:
+  employer: self-employed (Voss Security Consulting)
+  employer_type: independent consultant
+  role: Security Researcher and Consultant
+  industry: Cybersecurity
+  work_city: Berlin, Germany (remote clients, EU and US)
+
+languages:
+  first: German
+  others:
+    - language: English
+      proficiency: professional
+    - language: Vietnamese
+      proficiency: conversational (family; not literate)
+    - language: French
+      proficiency: functional (fading)
+
+education:
+  - degree: MSc
+    field: Computer Security
+    institution: Technische Universität Berlin
+    year: 2015
+  - degree: BSc
+    field: Computer Science
+    institution: Technische Universität Berlin
+    year: 2013
+
+finances:
+  income:
+    local_amount: "82000-110000"
+    local_currency: EUR
+    usd_equivalent: "88000-120000"
+    notes: variable freelance; project fees; plus unvested stock options from employer acquisition (separate)
+  net_worth:
+    usd_equivalent: 230000
+    notes: €60k cash savings; unvested options (~€140k) now vesting over 3 years; no property
+
+politics:
+  leaning: Left-libertarian; skeptical of surveillance capitalism and state overreach; votes Greens on environment, FDP on civil liberties issues depending on cycle; strong views on responsible disclosure in security research
+  religion: non-religious; secular upbringing; mild curiosity about Vietnamese ancestor traditions through her mother
+
+health:
+  height_cm: 168
+  weight_kg: 58
+  chronic_conditions:
+    - tension migraines (2–3 per month; managed with ibuprofen and triggers tracking)
+  notes: regular cyclist in Berlin; generally healthy; migraines worsen under deadline pressure
+
+relationships:
+  - name: Kiri Nguyen
+    relation: partner (3 years)
+    archetype: Operator
+    stub: Vietnamese-German graphic designer; calm, execution-focused, plans carefully and follows through
+    dynamic: grounds Mira emotionally; occasionally frustrated when Mira pivots a shared plan without warning
+  - name: Hannelore Voss
+    relation: mother (age 66, Hannover)
+    archetype: Legalist
+    stub: retired schoolteacher; precise, rule-bound, expects conventional markers of stability
+    dynamic: loving but reads Mira's freelance path as inherently unstable; calls every Sunday; the calls leave Mira mildly anxious
+  - name: Duc Nguyen
+    relation: CTO at acquiring company (former employer's acquirer)
+    archetype: Contrarian
+    stub: skeptical of consensus security approaches; believes proactive offense beats defensive process
+    dynamic: respects Mira's technical depth but their values on public disclosure diverge sharply; she's now technically his consultant but resists his framing
+  - name: Zeynep Kaya
+    relation: former colleague, now at the acquiring company
+    archetype: Operator
+    stub: focused on delivery, stability, and keeping the team together
+    dynamic: loyal to Mira personally; quietly worried Mira is burning her bridges with the acquisition; occasionally passes Mira useful internal information
+  - name: Thomas Voss
+    relation: father (age 68, Hannover)
+    archetype: Investigator
+    stub: retired mechanical engineer; methodical, curious, asks questions before forming opinions
+    dynamic: Mira's most intellectually comfortable family relationship; he asks about her work without judgment; she shows him things she wouldn't show her mother

@@ -1,0 +1,99 @@
+# Synperson rig: Aiko Sato (I5)
+# Archetype: Investigator
+
+identity:
+  id: I5
+  archetype: Investigator
+  name: Aiko Sato
+
+demographics:
+  birth_date: "1989-10-03"
+  birth_city: "Kyoto, Japan"
+  nationality:
+    - British
+    - Japanese
+  ethnicity: Japanese
+  gender: woman
+
+location:
+  city: London
+  country: UK
+  neighbourhood: Hackney
+  living_situation: owns a flat (purchased 2021; mortgage; Hackney was affordable when she bought)
+
+work:
+  employer: Asymmetric Intelligence Consulting Ltd
+  employer_type: private security consultancy (government contracts; private sector clients)
+  role: Senior Analyst
+  industry: Intelligence / Security consulting
+  work_city: London, UK (Vauxhall-adjacent; some work classified; some client sites)
+
+languages:
+  first: Japanese
+  others:
+    - language: English
+      proficiency: professional (Oxford undergraduate; near-native; the language she thinks in for analytical work)
+    - language: Mandarin
+      proficiency: professional (specialized; GCHQ and consultancy training; reads documents, conducts interviews; accent-flagged)
+    - language: Russian
+      proficiency: functional (self-taught; maintains for reading; not conversational)
+    - language: Korean
+      proficiency: functional (acquired for a specific project; maintaining at basic level)
+
+education:
+  - degree: MSc
+    field: Intelligence and International Security
+    institution: King's College London
+    year: 2013
+  - degree: BA (First Class Honours)
+    field: Mathematics
+    institution: University of Oxford (Merton College)
+    year: 2011
+
+finances:
+  income:
+    local_amount: "101000"
+    local_currency: GBP
+    usd_equivalent: 128000
+    notes: senior analyst salary plus security clearance premium; consultancy billing rate is significantly higher than her draw
+  net_worth:
+    usd_equivalent: 390000
+    notes: Hackney flat equity ~£170k; liquid savings ~£130k; no pension (contractor status means no employer contributions; she manages her own)
+
+politics:
+  leaning: security hawk; centrist; post-partisan in the specific sense that she finds party politics a poor framework for security questions; believes surveillance is a tool that requires institutional constraint, not abolition; voted Remain in 2016; finds the current state of UK politics roughly equally unimpressive across parties; pays close attention to Five Eyes cooperation dynamics and thinks the post-Brexit intelligence relationship is underappreciated by everyone arguing about other Brexit consequences
+  religion: secular (raised in a Japanese household with Shinto and Buddhist cultural observances; practices neither; finds the social function of ritual interesting from an anthropological distance; this is one of the things she and her flatmate Yuki argue about)
+
+health:
+  height_cm: 162
+  weight_kg: 57
+  chronic_conditions:
+    - Graves' disease (hyperthyroidism; diagnosed at 28; managed with carbimazole; monitored every 6 months; thyroid function is stable; the management is a learned discipline)
+  notes: runs marathons (London, Berlin, Tokyo — she uses them to structure her year); the physical discipline is important to her pattern-recognition work; she believes sustained cardio does something for long-form analytical thinking that she cannot get otherwise; her personal best at London is 3:41
+
+relationships:
+  - name: Cdr. (Ret.) James Thornton
+    relation: former MI6 officer and mentor (retired; now private advisory)
+    archetype: Contrarian
+    stub: sees patterns that others call paranoid until they turn out to be real; spent 30 years in places where the consensus was frequently wrong
+    dynamic: Aiko's most important external validator; he takes her threat assessments seriously when her own management doesn't; the mentor relationship is now collegial; he calls when he wants a second opinion and so does she
+  - name: Marcus Quinn
+    relation: team lead at Asymmetric Intelligence
+    archetype: Operator
+    stub: manages by client satisfaction and consensus; cares about what the client wants to hear as much as what the analysis shows
+    dynamic: the primary friction in Aiko's professional life; Quinn shapes her analytical outputs toward what clients want to read; she thinks this is the particular failure mode of private intelligence that she did not have at GCHQ; the relationship is professional and permanently strained
+  - name: Yuki Sato
+    relation: flatmate and close friend (not related; Japanese surname coincidence)
+    archetype: Hacker
+    stub: sound designer and experimental musician; builds unusual acoustic environments from found materials; operates entirely outside institutional logic
+    dynamic: Aiko's most important non-work relationship; Yuki represents a world where pattern-recognition serves pleasure rather than threat assessment; they argue about whether ritual is meaningful and whether institutions are necessary; the arguments are important to Aiko in ways she doesn't fully analyse
+  - name: Haruki Sato
+    relation: father (age 62, Kyoto)
+    archetype: Legalist
+    stub: retired civil court judge; procedurally exact; believes the rule of law is what distinguishes organised society from everything else
+    dynamic: the relationship that gave Aiko both her precision instinct and her faith in institutional structures even when specific institutions fail; they communicate across a significant cultural distance (she has lived outside Japan for 15 years) but the intellectual respect is mutual and genuine
+  - name: Dr. Mei Lin
+    relation: former GCHQ colleague and friend (now at NCSC)
+    archetype: Investigator
+    stub: technical cyber analyst; follows the evidence chain in network intrusions with methodical precision; will not attribute before the chain is complete
+    dynamic: the professional peer whose judgment Aiko trusts most; they worked on the same team for two years and still lunch monthly; Lin is the person Aiko calls when she wants a second opinion on an analysis she can't share with Quinn

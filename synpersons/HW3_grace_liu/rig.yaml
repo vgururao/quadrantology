@@ -1,0 +1,96 @@
+# Synperson rig: Grace Liu (HW3)
+# Archetype: Holy Warrior
+
+identity:
+  id: HW3
+  archetype: Holy Warrior
+  name: Grace Liu
+
+demographics:
+  birth_date: "1994-09-08"
+  birth_city: "Flushing, Queens, New York, USA"
+  nationality:
+    - American
+  ethnicity: Chinese-American (parents from Fujian province; arrived 1988)
+  gender: woman
+
+location:
+  city: Los Angeles
+  country: USA
+  neighbourhood: Koreatown
+  living_situation: renting a one-bedroom flat with minimal furniture; moved to LA for the job
+
+work:
+  employer: Workers Alliance of Southern California
+  employer_type: non-profit / labour advocacy organization
+  role: Campaigns Director
+  industry: Labour organizing / Non-profit
+  work_city: Los Angeles, California, USA
+
+languages:
+  first: English
+  others:
+    - language: Mandarin
+      proficiency: professional reading level (home language growing up; speaks with parents; strong reading; accent when speaking)
+    - language: Cantonese
+      proficiency: functional (Flushing community; weaker than Mandarin)
+    - language: Spanish
+      proficiency: conversational (acquired for organising work with Latino workers; improving)
+
+education:
+  - degree: JD
+    field: Law (in progress, part-time)
+    institution: UCLA School of Law
+    year: 2027 (expected)
+  - degree: BA
+    field: Sociology
+    institution: UCLA
+    year: 2016
+
+finances:
+  income:
+    local_amount: "65000"
+    local_currency: USD
+    usd_equivalent: 65000
+    notes: non-profit salary; no bonus; law school adds ~$22k in student loan debt per year
+  net_worth:
+    usd_equivalent: -28000
+    notes: ~$8k savings; ~$36k student loan debt and growing; renting; no assets
+
+politics:
+  leaning: progressive left; democratic socialist; believes collective action and structural change are the only levers that matter; skeptical of individual moral consumption as political action; supports BDS, Medicare for All, and debt cancellation without reservation; defines herself against what she calls "charity models" — approaches to social problems that serve the giver's conscience rather than the recipient's power; the union lawsuit against her campaign has given her a more complicated view of legal tools
+  religion: secular; parents observed some Taoist and Buddhist practices culturally; Grace finds organised religion suspicious as an institutional structure; retains an appreciation for communal ritual and what it does that individual belief cannot
+
+health:
+  height_cm: 160
+  weight_kg: 53
+  chronic_conditions:
+    - chronic insomnia (stress-related; refuses medication; managing with sleep hygiene practices with partial success)
+  notes: the insomnia is her primary health burden; campaign periods are the worst; she runs in the morning partly as the only reliable thing that makes sleep more likely that night; the lawsuit period is the worst insomnia she has had
+
+relationships:
+  - name: Ray Chen
+    relation: boyfriend (2 years)
+    archetype: Hacker
+    stub: software engineer at a mid-size tech company; builds tools; skeptical of his own employer's labour practices without being willing to confront them
+    dynamic: loves Grace and is increasingly uncertain he can match her level of commitment to the work; their philosophical gap is widening; he is starting to understand that this is a compatibility question, not just a lifestyle difference; she has not fully acknowledged this yet
+  - name: Martha Fuentes
+    relation: organizing director and mentor
+    archetype: Holy Warrior
+    stub: veteran movement builder who has organised three successful campaigns over 20 years; has won and knows what winning costs
+    dynamic: the mentor who most shaped Grace's strategic instincts; pushes Grace when she is losing nerve; is sometimes too much the absolutist to teach effective compromise; Grace is starting to notice the difference between Martha's principles and Martha's tactics
+  - name: Brian Walsh
+    relation: VP Communications at the targeted company
+    archetype: Operator
+    stub: focused on managing the narrative and protecting institutional reputation; not personally cruel; professionally ruthless
+    dynamic: the professional adversary; Walsh is trying to neutralise Grace's campaign without engaging its substance; she finds this clarifying rather than demoralising; she has started watching his public statements carefully because they tell her what the company is most afraid of
+  - name: Mei-Ling Liu
+    relation: mother (age 54, Flushing)
+    archetype: Operator
+    stub: runs a dry-cleaning business she built from nothing over 20 years; focused on results, stability, and not antagonising the people you depend on
+    dynamic: Grace's deepest source of love and friction; her mother built a life by working within the system; Grace's entire politics is a rejection of that strategy; they do not discuss this directly but it is present in every conversation; the business is what Grace is theoretically trying to help people like her mother escape from
+  - name: Daniel Park
+    relation: fellow law student and friend (UCLA JD programme)
+    archetype: Legalist
+    stub: meticulous legal reasoner; believes procedural tools are the only durable social change mechanism
+    dynamic: the sharpest internal challenge to Grace's politics; he argues that her campaign tactics will lose in court; she argues that the legal tools he trusts were designed by people who didn't want her to win; they are probably both right

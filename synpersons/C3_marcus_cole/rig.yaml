@@ -1,0 +1,88 @@
+# Synperson rig: Marcus Cole (C3)
+# Archetype: Contrarian
+
+identity:
+  id: C3
+  archetype: Contrarian
+  name: Marcus Cole
+
+demographics:
+  birth_date: "1982-10-11"
+  birth_city: "Atlanta, Georgia, USA"
+  nationality:
+    - American
+  ethnicity: Black American (parents both from Georgia; maternal grandmother from Alabama)
+  gender: man
+
+location:
+  city: Washington DC
+  country: USA
+  neighbourhood: Logan Circle
+  living_situation: owns a condo; bought before the DC market peaked
+
+work:
+  employer: The Atlantic
+  employer_type: private media company
+  role: Columnist and Contributing Editor
+  industry: Journalism / Media
+  work_city: Washington DC, USA (remote-first; occasional travel)
+
+languages:
+  first: English
+  others:
+    - language: Spanish
+      proficiency: conversational (acquired during a Colombia posting 2009–2011; fading)
+
+education:
+  - degree: BA
+    field: Journalism
+    institution: Howard University
+    year: 2004
+
+finances:
+  income:
+    local_amount: "178000"
+    local_currency: USD
+    usd_equivalent: 178000
+    notes: base retainer plus per-piece fees; speaking engagements add ~$30k some years
+  net_worth:
+    usd_equivalent: 355000
+    notes: DC condo equity ~$210k; index fund savings ~$100k; sporadic 401k contributions; no pension
+
+politics:
+  leaning: heterodox and drifting; started as a progressive Democrat, now occupies a complicated space — contrarian on some progressive pieties (crime policy, DEI implementation, campus speech) while remaining left on economics and racial justice broadly; accused by former allies of "turning"; responds that he's following evidence where it leads; the accusation stings partly because he's not sure they're entirely wrong; the drift has been profitable and that makes him distrust his own motives
+  religion: Baptist (raised; grandmother's faith was the serious kind; Marcus is spiritual rather than churchgoing; faith surfaces in his writing as a moral vocabulary he never quite shed)
+
+health:
+  height_cm: 185
+  weight_kg: 96
+  chronic_conditions:
+    - chronic lower back pain (post 2019 car accident; L4-L5 herniation; physiotherapy ongoing; manages with prescription naproxen and exercises)
+  notes: the back pain is constant and affects sleep; he has good weeks and bad weeks; when the pain is bad his writing gets sharper and his patience shrinks
+
+relationships:
+  - name: Janelle Washington
+    relation: wife (second marriage, married 2023)
+    archetype: Holy Warrior
+    stub: civil rights attorney; committed to systemic change; does not believe individual virtue substitutes for structural reform
+    dynamic: new marriage with real warmth; she worries his heterodox drift is cynicism dressed as intellectual courage and has said so; he has not fully answered the charge; they are still working it out
+  - name: Maya Cole
+    relation: daughter from first marriage (age 14, lives with mother in Atlanta)
+    archetype: TBD (minor)
+    stub: sharp-tongued, already politically aware, follows his work and occasionally sends him corrections
+    dynamic: every-other-weekend father; Maya is his mirror — she will eventually have opinions about his drift that he will not be able to dismiss
+  - name: Tatiana Reeves
+    relation: editor at The Atlantic
+    archetype: Operator
+    stub: shapes copy to be publishable and defensible without killing the edge; thinks about legal, institutional, and reputational exposure simultaneously
+    dynamic: saves Marcus from himself regularly; he acknowledges this in private and argues with her in the moment; the working relationship is the most functional one in his professional life
+  - name: Derek Okafor
+    relation: former colleague and professional nemesis
+    archetype: Investigator
+    stub: methodical, evidence-driven, unsparing with corrections; published a long documented critique of Marcus's most celebrated piece
+    dynamic: professional enmity that Marcus sustains through contempt and Derek sustains through indifference; Marcus says Derek cherry-picked; Derek says Marcus never corrects; both are partly right
+  - name: Rev. Calvin Cole
+    relation: father (age 68, Atlanta)
+    archetype: Holy Warrior
+    stub: retired Baptist minister; preached a social gospel; moral clarity was the family currency
+    dynamic: Marcus's deepest source of discomfort about his own drift; his father reads everything he publishes; never says explicitly that he's disappointed; the silence is worse

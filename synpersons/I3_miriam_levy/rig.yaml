@@ -1,0 +1,98 @@
+# Synperson rig: Miriam Levy (I3)
+# Archetype: Investigator
+
+identity:
+  id: I3
+  archetype: Investigator
+  name: Miriam Levy
+
+demographics:
+  birth_date: "1967-05-11"
+  birth_city: "Haifa, Israel"
+  nationality:
+    - Israeli
+  ethnicity: Ashkenazi Jewish (parents were Polish survivors who came to Israel in 1950; this history is load-bearing)
+  gender: woman
+
+location:
+  city: Tel Aviv
+  country: Israel
+  neighbourhood: North Tel Aviv (Ramat Aviv)
+  living_situation: owns a flat (purchased 2001; paid off; significant appreciated value she has mixed feelings about)
+
+work:
+  employer: Bar-Ilan University
+  employer_type: public university
+  role: Professor of Social Psychology; Associate Editor, Journal of Personality and Social Psychology
+  industry: Academia / Psychology
+  work_city: Ramat Gan, Israel (Bar-Ilan campus; Tel Aviv research institute also)
+
+languages:
+  first: Hebrew
+  others:
+    - language: English
+      proficiency: professional (primary academic language; publishes exclusively in English)
+    - language: Polish
+      proficiency: conversational (learned from parents; not literate; emotional register language)
+    - language: Arabic
+      proficiency: functional (learned deliberately for political and personal reasons; enough for basic conversation; not professional)
+    - language: Yiddish
+      proficiency: passive (grandparent household; understands considerably more than she speaks)
+
+education:
+  - degree: PhD
+    field: Social Psychology
+    institution: The Hebrew University of Jerusalem
+    year: 1996
+  - degree: BA
+    field: Psychology (summa cum laude)
+    institution: The Hebrew University of Jerusalem
+    year: 1990
+
+finances:
+  income:
+    local_amount: "335000"
+    local_currency: ILS
+    usd_equivalent: 91000
+    notes: full professor salary plus associate editor stipend; no grant-dependent income currently
+  net_worth:
+    usd_equivalent: 950000
+    notes: Tel Aviv flat ~₪2.8M (significant appreciation; mixed feelings about this); liquid savings ~₪300k; pension ~₪400k equivalent
+
+politics:
+  leaning: centre-left; two-state proponent who has become skeptical of its near-term achievability without abandoning the belief that it is the only just solution; secular; deeply worried about judicial reform and what it implies for academic freedom; opposes the current coalition's direction on most issues while being too empirically oriented to adopt any fixed ideological posture; has voted Labour, Meretz, and Yesh Atid at different elections; the post-October 7 landscape has complicated everything
+  religion: Jewish (secular; culturally strong; Shabbat dinner is a weekly family institution; attends synagogue only on Yom Kippur; the faith is ethnic and historical rather than theological; her parents' survival is the fact that shapes everything she thinks about human behaviour)
+
+health:
+  height_cm: 163
+  weight_kg: 67
+  chronic_conditions:
+    - rheumatoid arthritis (diagnosed at 52; managed with methotrexate; joint inflammation in hands and wrists is the primary constraint; affects fine motor work and changes her handwriting; otherwise functional and well-managed)
+  notes: the RA diagnosis at 52 was a significant adjustment; she has adapted research methods slightly (voice dictation more, handwriting less); swims twice a week which helps the joints; remains highly productive
+
+relationships:
+  - name: Prof. Avi Goldberg
+    relation: head of Psychology department
+    archetype: Operator
+    stub: focused on departmental harmony, grant acquisition, and institutional reputation; manages the department by keeping people productive and not antagonising funders
+    dynamic: wants Miriam to be less confrontational in her peer reviews and less publicly critical of sloppy research; she thinks he values peace over truth; he thinks she does not understand what the department would look like without the relationships she is burning
+  - name: Dr. Yoav Ben-David
+    relation: researcher she repeatedly reviews (adversarial colleague)
+    archetype: Contrarian
+    stub: prolific and self-confident; publishes unconventional hypotheses faster than most researchers can evaluate them; believes he has the right to be wrong in public
+    dynamic: professional enmity that is now a field-level drama; he has started routing submissions away from journals where Miriam sits on the editorial board; she finds this cowardly; he finds her reviews disproportionate; both are partly right
+  - name: Naomi Levy
+    relation: adult daughter (age 29, currently in South Sudan with MSF)
+    archetype: Holy Warrior
+    stub: humanitarian medicine; committed to going where the need is regardless of the personal cost; did not inherit her mother's instinct for caution
+    dynamic: Miriam's most important relationship; she is prouder of Naomi than of anything she has published; she is also more frightened for Naomi than she lets on; Naomi knows this and does not let it stop her
+  - name: Dr. Daniel Levy
+    relation: ex-husband (divorced 2014; amicable; in Jerusalem)
+    archetype: Legalist
+    stub: constitutional law scholar; believes in procedural justice as the foundation of everything else; methodical to a fault
+    dynamic: co-parented Naomi without significant conflict after the divorce; respect without warmth; Naomi's success is their shared success and that is enough for both of them
+  - name: Prof. Rachel Cohen
+    relation: closest colleague and friend (Tel Aviv University; different institution)
+    archetype: Investigator
+    stub: experimental psychologist; meticulous; will not publish before the replication is clean
+    dynamic: the professional friendship that sustains Miriam; they have lunch every other week and argue about methodology the entire time; Rachel is one of the few people who can tell Miriam she's wrong in a way she can hear

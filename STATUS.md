@@ -66,6 +66,17 @@ _Last updated: 2026-04-19 (Session 8)_
 - **Product portfolio UI** — paywall presents three tiers: single assessment sequence, annual subscription, Coach Mode. Requires subscription state design above + Stripe subscription Price IDs.
 - **Offline-verifiable bundle** — signed zip of `docs/` with SHA256 manifest. Users can verify and run locally with `python3 -m http.server`. Stepping stone toward ZK client.
 
+## Next Up (Tier 1.9 — synperson research panel)
+
+The synperson system is a 30-person synthetic focus group for longitudinal test research, QA, and eventual public access. All design specs and demographic profiles are complete. Outstanding work before first logged runs:
+
+- [ ] **Write 30 `events.md` files** — 15 seed events per synperson, exponential-decay date distribution, up to April 2026. See `synpersons/_events_schema.md` for format and distribution rules.
+- [ ] **Apply D1 schema migration** — Add `synpersons`, `synperson_events`, `synperson_runs` tables (SQL in `DATAMODEL.md`; not yet in `worker/schema.sql`).
+- [ ] **Build `scripts/synperson/` suite** — `run-test.py` (logged + QA modes), `evolve-events.py`, `sync-to-d1.py`, `run-panel.py`, `memory.py`, `scoring.py`. See roadmap spec for full interface.
+- [ ] **First logged run pass** — Run all 30 synpersons once; inspect archetype distribution against expected archetypes; tune memory model parameters if needed.
+
+Files already complete: `synpersons/_rig_schema.yaml`, `_events_schema.md`, `_research_protocol.md`, and all 30 `rig.yaml` demographic profiles.
+
 ## Later (Tier 2 — enrichment)
 
 - **Analytics page** — `history.html` serves as a stub for now (log of results, no chart). The full analytics page (trendline chart + commentary, unlocked at `min_runs`, richer at 5 and 10 runs) is deferred until the question bank, sampling logic, and subscription gating are solid. This is a critical launch feature but self-contained — building it well requires a stable data foundation first.
@@ -83,6 +94,8 @@ _Last updated: 2026-04-19 (Session 8)_
 - **Google Drive sync** — OAuth, save/sync logbook JSON to personal Drive.
 
 ## Someday / Maybe
+
+- **Multilingual / i18n** — Full internationalisation of the product: UI copy, test question text translated and culturally adapted, results and archetype descriptions localised, scoring model validated against non-Anglophone organisational cultures. Requires a translation layer for all static copy, D1 question versioning by locale, and careful consideration of whether the six archetypes map cleanly outside Anglo-American institutional contexts. Synperson profiles will be evolved to take tests and generate events natively in their first language when this ships (e.g. Tomas Osei in Twi/English, Fatima Hasan in Urdu, Carlos Rivera in Spanish). Do not start until the English product is mature and there is demonstrated demand from a specific second-language market. The synperson panel provides a built-in cross-cultural test harness for localisation validation.
 
 - **Verifiable local client for privacy-sovereign test-taking.** Distribute the test as a content-addressed, signed static bundle (IPFS CID or signed tarball with published SHA256) that users can verify before running. The test runs entirely from the local bundle; research submission and logbook export are explicit user actions with no ambient server access. Research data would use a ZK-friendly scheme: the client generates a cryptographic commitment to its answers, computes the archetype locally, and selectively opens only the parts of the commitment it chooses to share — proving correct computation without revealing anything withheld. Requires a ZK-executable scoring function (RISC Zero / zkWASM) and a commitment scheme for the Q/A vector. The offline-verifiable bundle (Tier 1.5) is the near-term stepping stone.
 

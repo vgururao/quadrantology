@@ -1,0 +1,95 @@
+# Synperson rig: Jin-soo Park (H3)
+# Archetype: Hacker
+
+identity:
+  id: H3
+  archetype: Hacker
+  name: Jin-soo Park
+
+demographics:
+  birth_date: "1984-07-08"
+  birth_city: "Daejeon, South Korea"
+  nationality:
+    - South Korean
+  ethnicity: Korean
+  gender: man
+
+location:
+  city: Seoul
+  country: South Korea
+  neighbourhood: Mapo-gu
+  living_situation: owns apartment jointly with wife (partial mortgage outstanding)
+
+work:
+  employer: LG Electronics
+  employer_type: large private corporation
+  role: Senior Hardware Engineer (Consumer Electronics Division)
+  industry: Consumer electronics
+  work_city: Seoul, South Korea
+
+languages:
+  first: Korean
+  others:
+    - language: English
+      proficiency: professional
+    - language: Mandarin
+      proficiency: functional (limited; used in supply chain meetings)
+
+education:
+  - degree: MS
+    field: Electrical Engineering
+    institution: Korea Advanced Institute of Science and Technology (KAIST)
+    year: 2009
+  - degree: BS
+    field: Electrical Engineering
+    institution: KAIST
+    year: 2007
+
+finances:
+  income:
+    local_amount: "86000000"
+    local_currency: KRW
+    usd_equivalent: 63000
+    notes: base salary + annual bonus; LG Electronics pay scale for senior engineer
+  net_worth:
+    usd_equivalent: 315000
+    notes: apartment equity ~₩280M (Mapo-gu); savings ₩80M; no other assets
+
+politics:
+  leaning: center; cynical about chaebol dominance and regulatory capture; favors reform of IP law and medical device approval timelines; voted for Yoon in 2022 out of anti-incumbency sentiment and has mostly regretted it; not ideologically consistent across issues
+  religion: lapsed Buddhist (family tradition; attends Chuseok ancestral rites; otherwise secular)
+
+health:
+  height_cm: 175
+  weight_kg: 72
+  chronic_conditions:
+    - mild hypertension (diagnosed at 38; managed with amlodipine; monitors BP weekly)
+    - insomnia (intermittent; stress-linked; no medication; manages with exercise)
+  notes: cycles to work 3 days a week; hypertension diagnosis came as a shock; he's more health-conscious since
+
+relationships:
+  - name: Kim Ji-young
+    relation: wife (age 39)
+    archetype: Operator
+    stub: elementary school teacher; organized, steady, runs the household with quiet efficiency
+    dynamic: fully supports Jin-soo's work but increasingly anxious about the legal exposure of the medical device project; has asked him twice to stop; he has not stopped
+  - name: Park Yeong-su
+    relation: father (age 71, Daejeon)
+    archetype: Legalist
+    stub: retired civil servant; believes institutional rules exist for good reason and that breaking them is never justified by good intentions
+    dynamic: the most vocal disapprover of Jin-soo's medical device work; frames it as embarrassing the family; Jin-soo loves him and can't explain why this matters to him more than his father's approval
+  - name: Han Soo-jin
+    relation: colleague at LG and collaborator on the medical device project
+    archetype: Investigator
+    stub: methodical and evidence-driven; more comfortable with public disclosure than Jin-soo is
+    dynamic: technical collaborator and closest professional confidant; pushes Jin-soo toward disclosure when Jin-soo hesitates; they've disagreed twice about timing
+  - name: Lim Hyun-woo
+    relation: MFDS (Korean FDA) regulatory officer (professional contact)
+    archetype: Legalist
+    stub: procedurally fastidious; believes medical device approval exists to protect patients, not obstruct engineers
+    dynamic: watching Jin-soo's reverse-engineering from a distance; has not formally moved against it; made informal contact once to express concern; the sword hanging over the project
+  - name: Park Min-ji
+    relation: younger sister (age 38, Busan)
+    archetype: Holy Warrior
+    stub: pediatric nurse practitioner; fierce about patient rights and healthcare access
+    dynamic: the family member who privately understands why Jin-soo is doing this even if she worries about the method; the only person in his family he's told the full story

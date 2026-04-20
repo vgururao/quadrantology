@@ -1,0 +1,83 @@
+# Synperson Rig Schema
+# =====================
+# Documents every field in synperson rig.yaml files.
+# This file is the authoritative format reference — not a template to copy.
+#
+# Rules:
+#   - Monetary values: always include local_amount + local_currency + usd_equivalent.
+#   - archetype values: Hacker | Contrarian | Legalist | Holy Warrior | Operator | Investigator
+#   - birth_date and dates: quoted strings in YYYY-MM-DD format.
+#   - TBD archetype for minors or unnamed stubs is acceptable.
+#   - net_worth.usd_equivalent is a snapshot; update when events change it materially.
+#   - political leaning: free text describing the actual position, not a L/R score.
+#   - health.chronic_conditions: empty list [] if none.
+#   - relationships: 4-7 entries per synperson; mix of family and work/professional.
+#   - relationship.stub: one sentence on personality. relationship.dynamic: one sentence on
+#     how this person relates to the synperson (not a general description).
+
+identity:
+  id: "XX#"                          # e.g. C1, HW3, I5
+  archetype: "Archetype Name"        # one of the six canonical archetypes
+  name: "Full Name"
+
+demographics:
+  birth_date: "YYYY-MM-DD"
+  birth_city: "City, Country"
+  nationality:                       # list; dual/triple nationality allowed
+    - "Country"
+  ethnicity: "free text"             # self-description style
+  gender: "free text"                # no constraint; use as character requires
+
+location:
+  city: "City"
+  country: "Country"
+  neighbourhood: "optional"         # district/neighbourhood if relevant to character
+  living_situation: "free text"     # renting | owns | military housing | with family | etc.
+
+work:
+  employer: "Name"
+  employer_type: "free text"        # e.g. private firm | NGO | government | self-employed | military
+  role: "Job title"
+  industry: "Industry"
+  work_city: "City, Country"        # if different from location.city (remote workers etc.)
+
+languages:
+  first: "Language"
+  others:                           # list; omit if none
+    - language: "Language"
+      proficiency: "conversational | professional | native | reading | functional | passive"
+
+education:                          # list; highest first; include all degrees that shaped character
+  - degree: "BA | BS | LLB | MD | MSc | PhD | etc."
+    field: "Field of Study"
+    institution: "Institution Name"
+    year: YYYY
+
+finances:
+  income:
+    local_amount: "number or range"  # in local_currency; use string for ranges
+    local_currency: "ISO 4217 code"  # USD | GBP | EUR | INR | NGN | etc.
+    usd_equivalent: "number or range"
+    notes: "salary | variable | fee | consulting | etc."
+  net_worth:
+    usd_equivalent: number           # rough order of magnitude is fine
+    notes: "composition hint: property X, liquid Y, equity Z, pension"
+
+politics:
+  leaning: "free text"              # describe the actual position and tensions within it
+  religion: "free text"             # tradition + practice level; note if faith shapes worldview
+
+health:
+  height_cm: number
+  weight_kg: number
+  chronic_conditions:               # list of strings; [] if none
+    - "condition (management note)"
+  notes: "any health context relevant to character behaviour"
+
+relationships:
+  - name: "Full Name"
+    relation: "role descriptor"     # spouse | parent | sibling | child | colleague | mentor |
+                                    # antagonist | partner | friend | client | etc.
+    archetype: "Archetype Name"     # or TBD for minors / unclear
+    stub: "one sentence personality note — who this person is"
+    dynamic: "one sentence — how this person specifically relates to the synperson"

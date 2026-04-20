@@ -1,0 +1,99 @@
+# Synperson rig: Petra Novak (I1)
+# Archetype: Investigator
+
+identity:
+  id: I1
+  archetype: Investigator
+  name: Petra Novak
+
+demographics:
+  birth_date: "1981-08-23"
+  birth_city: "Brno, Czech Republic"
+  nationality:
+    - Czech
+  ethnicity: Czech (Moravian regional identity is meaningful to her; she notes the distinction)
+  gender: woman
+
+location:
+  city: Prague
+  country: Czech Republic
+  neighbourhood: Vinohrady
+  living_situation: owns a flat (purchased 2009; paid off 2023; the pride of that moment was significant)
+
+work:
+  employer: Novak & Horák Forensic Advisory s.r.o.
+  employer_type: private boutique firm (co-owner; 8 staff)
+  role: Partner and Lead Forensic Accountant
+  industry: Forensic accounting / Financial advisory
+  work_city: Prague, Czech Republic (occasional engagements in Bratislava and Warsaw)
+
+languages:
+  first: Czech
+  others:
+    - language: Slovak
+      proficiency: native-intelligible (mutual intelligibility; she reads Slovak contracts without translation)
+    - language: English
+      proficiency: professional (international client work; CFE certification study materials)
+    - language: German
+      proficiency: professional (Austrian and German client engagements; fully fluent)
+    - language: Russian
+      proficiency: functional (fading; Soviet-era education in Czechoslovakia; still useful for reading documents)
+
+education:
+  - degree: CFE (Certified Fraud Examiner)
+    field: Fraud Examination
+    institution: Association of Certified Fraud Examiners (ACFE)
+    year: 2009
+  - degree: MSc
+    field: Finance and Accounting
+    institution: Prague University of Economics and Business (VŠE)
+    year: 2005
+
+finances:
+  income:
+    local_amount: "2300000"
+    local_currency: CZK
+    usd_equivalent: 104000
+    notes: partner draw from firm profits; varies with engagement pipeline; this year above average due to the Dvořák engagement (which may not generate further billings if he terminates early)
+  net_worth:
+    usd_equivalent: 435000
+    notes: Vinohrady flat ~CZK 7.5M; firm equity (estimated ~CZK 2.5M on a good valuation); liquid savings ~CZK 900k
+
+politics:
+  leaning: centre-right; fiscally hawkish; pro-rule-of-law; skeptical of both EU regulatory overreach and the local patronage networks that forensic work keeps exposing; votes ODS when it is not embarrassing itself; believes the most important political indicator in any country is whether commercial fraud is prosecuted consistently, and the Czech Republic's record is mixed
+  religion: secular (raised Catholic in Brno; lapsed at university; atheist in private; still attends weddings and funerals in church because the ritual is socially functional and she sees no contradiction)
+
+health:
+  height_cm: 167
+  weight_kg: 66
+  chronic_conditions:
+    - migraines with aura (2–3 per month; managed with sumatriptan; triggers include prolonged spreadsheet focus and dehydration)
+    - borderline hypertension (monitoring; no medication yet; prescribed to check quarterly)
+  notes: the migraines are the occupational hazard of forensic accounting; she tracks triggers carefully; has started wearing glasses for screen work instead of contacts to reduce eye strain; the hypertension is likely stress-related and she knows it
+
+relationships:
+  - name: Tomáš Horák
+    relation: business partner (co-founder of Novak & Horák)
+    archetype: Legalist
+    stub: process-first; documents every client engagement for legal defensibility; thinks about exposure before acting
+    dynamic: manages client acquisition and retention; thinks Petra goes too deep when it stops being billable; she relies on him to keep the firm's finances healthy; they have had the same argument about scope and billing eight times; they will have it again
+  - name: Pavel Novak
+    relation: husband
+    archetype: Operator
+    stub: architect; focused on building things that work for the people who use them; methodical about process
+    dynamic: stable 14-year marriage; he finds her work opaque and genuinely interesting; asks good questions without needing to understand the accounting details; is the person at home who reminds her that not everything is suspicious
+  - name: Miroslav Dvořák
+    relation: current client and central professional crisis
+    archetype: Contrarian
+    stub: hired Petra expecting technical validation of his position, not an investigation that produces findings he didn't anticipate
+    dynamic: the engagement that defines this period; Dvořák hired her to support his position in a dispute and she found a discrepancy that complicates his position significantly; he is now trying to terminate the engagement before she completes her report; she is determining her legal and professional obligations
+  - name: Jana Horáková
+    relation: senior associate at the firm (not Horák's relative; coincidence of name)
+    archetype: Investigator
+    stub: methodical; follows document trails with unusual patience; does not speculate before the evidence is complete
+    dynamic: Petra's most reliable technical colleague; Jana is the one doing the detailed document review on the Dvořák engagement; their professional relationship is the most productive one in the firm
+  - name: Dr. Martin Novak
+    relation: father (age 71, Brno)
+    archetype: Contrarian
+    stub: retired chemistry professor; skeptical of received wisdom in any field; reads widely and argues about most of what he reads
+    dynamic: the origin of Petra's investigative instinct; he taught her to ask "how do we know this?" before "what does this mean?"; they discuss her cases in general terms when she visits Brno; the conversations are among the most useful she has

@@ -1,0 +1,93 @@
+# Synperson rig: Sam Obi (I2)
+# Archetype: Investigator
+
+identity:
+  id: I2
+  archetype: Investigator
+  name: Sam Obi
+
+demographics:
+  birth_date: "1993-04-17"
+  birth_city: "Enugu, Enugu State, Nigeria"
+  nationality:
+    - Nigerian
+  ethnicity: Igbo
+  gender: man
+
+location:
+  city: Lagos
+  country: Nigeria
+  neighbourhood: Yaba
+  living_situation: renting a one-bedroom flat in Yaba; moved from Enugu for the job at 22; considers Lagos home now
+
+work:
+  employer: Premium Times Nigeria
+  employer_type: independent digital news organisation
+  role: Investigative Reporter
+  industry: Journalism / Media
+  work_city: Lagos, Nigeria (field reporting across Nigeria; occasional international travel for document-chasing)
+
+languages:
+  first: Igbo
+  others:
+    - language: English
+      proficiency: professional (medium of education from primary; fully fluent; writes in English)
+    - language: Nigerian Pidgin
+      proficiency: native-fluent (essential Lagos language; for street reporting this is more useful than English)
+    - language: Yoruba
+      proficiency: functional (Lagos necessity; enough for interviews and daily life; improving)
+    - language: Hausa
+      proficiency: functional (learned for northern Nigeria reporting trips)
+
+education:
+  - degree: BA
+    field: Mass Communication
+    institution: University of Lagos (UNILAG)
+    year: 2015
+
+finances:
+  income:
+    local_amount: "22000000"
+    local_currency: NGN
+    usd_equivalent: 14000
+    notes: senior reporter salary; below market for his experience level; Premium Times pays in values not naira; he knows this and stays anyway
+  net_worth:
+    usd_equivalent: 6000
+    notes: naira savings ~₦6M (real value eroding with inflation); USD savings ~$4k (protected from naira volatility); no property; remits some money to Enugu quarterly
+
+politics:
+  leaning: pan-African; committed to accountability journalism as the specific form his politics takes; not party-affiliated and deliberately so (his editors and his instincts both require this); deeply skeptical of Nigerian political class across all parties; believes kleptocracy is the defining structural issue and that individual bad actors are less important than the systems that enable them; reads Chinua Achebe, Wole Soyinka, and Remi Adekoya for the political economy framing
+  religion: Catholic (practicing; attends Mass at Our Lady of Fatima in Yaba most Sundays; faith is genuine and community-anchoring; the church is also practically useful in Yaba in ways he is honest about)
+
+health:
+  height_cm: 185
+  weight_kg: 82
+  chronic_conditions: []
+  notes: healthy; has had malaria twice as an adult (treated fully both times); keeps a supply of artemisinin combination therapy at home as a precaution; plays recreational football on Saturday mornings with the Yaba Press FC informal group; the football is important
+
+relationships:
+  - name: Chief Emeka Eze
+    relation: primary source (the person who gave him the story)
+    archetype: Holy Warrior
+    stub: former government contractor who has risked everything — his business, his safety, and his family's security — to give Sam what he found; driven by a sense of obligation he cannot fully explain even to himself
+    dynamic: the ethical weight at the centre of everything; Sam must protect Eze; Eze's willingness to be protected is limited; their relationship is the most consequential and most fragile thing in Sam's professional life right now
+  - name: Ngozi Obi
+    relation: editor at Premium Times (not a family relation; coincidence of surname)
+    archetype: Operator
+    stub: focused on what is publishable, defensible, and survivable for the organisation; manages publication risk with the precision of someone who has seen stories destroy outlets
+    dynamic: the person who decides when the story runs; her criteria and Sam's criteria are different; he thinks the story is ready; she thinks it's provable but not yet publishable; they are both right about different things
+  - name: Chidi Okoye
+    relation: family lawyer and long-standing friend (based in Enugu)
+    archetype: Legalist
+    stub: procedurally cautious; thinks about legal exposure, professional liability, and what the rules actually say before advising
+    dynamic: warned Sam to drop the story; gave him a precise legal analysis of the risks that Sam has read three times and will not act on; Sam values Chidi's honesty and has not told him why he's not following the advice
+  - name: Ada Obi
+    relation: mother (age 58, Enugu)
+    archetype: Operator
+    stub: retired nurse; methodical, practical, kept the family running through decades of instability; focused on what can actually be done
+    dynamic: Sam's primary emotional anchor; she does not know the details of the current story; she knows he is stressed and sends prayers and food parcels; when she asks directly how dangerous it is, he says "not very" and changes the subject
+  - name: Kelechi Obi
+    relation: older sister (age 31, Abuja)
+    archetype: Investigator
+    stub: works in financial forensics for a consultancy; methodical and precise; reads his published pieces and occasionally sends him a note about a line he could have proven better
+    dynamic: the sibling who understands his work instinctively; she has said once, carefully, that the current story sounds like it could go badly; he said he knows; they have not discussed it again

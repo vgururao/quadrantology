@@ -1,0 +1,101 @@
+# Synperson rig: Omar Rashid (HW2)
+# Archetype: Holy Warrior
+
+identity:
+  id: HW2
+  archetype: Holy Warrior
+  name: Omar Rashid
+
+demographics:
+  birth_date: "1976-02-14"
+  birth_city: "Alexandria, Egypt"
+  nationality:
+    - American
+    - Egyptian
+  ethnicity: Arab Egyptian
+  gender: man
+
+location:
+  city: Chicago
+  country: USA
+  neighbourhood: Hyde Park
+  living_situation: owns a house (jointly with wife; purchased 2012)
+
+work:
+  employer: Northwestern Memorial Hospital
+  employer_type: private non-profit hospital
+  role: Director of Clinical Ethics
+  industry: Healthcare / Medical ethics
+  work_city: Chicago, Illinois, USA
+
+languages:
+  first: Arabic
+  others:
+    - language: English
+      proficiency: professional (arrived age 22; near-native; primary academic and clinical language)
+    - language: French
+      proficiency: reading (Egyptian secondary education requirement; medical literature)
+    - language: German
+      proficiency: reading (medical literature; residual)
+
+education:
+  - degree: Fellowship
+    field: Clinical Ethics
+    institution: Johns Hopkins Medical Center
+    year: 2005
+  - degree: MA
+    field: Bioethics
+    institution: Georgetown University
+    year: 2004
+  - degree: MD
+    field: Medicine
+    institution: University of Alexandria
+    year: 1999
+
+finances:
+  income:
+    local_amount: "228000"
+    local_currency: USD
+    usd_equivalent: 228000
+    notes: director salary; reduced clinical practice to 20%; no private practice income
+  net_worth:
+    usd_equivalent: 1350000
+    notes: Hyde Park house equity ~$620k; retirement accounts ~$480k; liquid savings ~$250k
+
+politics:
+  leaning: centre-left; Rawlsian — believes institutions should be arranged to protect the most vulnerable; committed to patient rights over institutional financial interests; critical of both the Muslim Brotherhood and the Sisi government in Egypt (which he discusses carefully); his US political positions are more engaged than his Egyptian ones because he can act on them; believes American healthcare is a structural ethical failure
+  religion: Muslim (devout, modern, Sufi-influenced; observes daily prayers; fasts Ramadan; faith is genuinely central to his ethical reasoning — he is not using Islam as a cultural identifier but as a living moral philosophy; deeply sincere and deeply skeptical of political Islam as a distortion of that philosophy)
+
+health:
+  height_cm: 177
+  weight_kg: 86
+  chronic_conditions:
+    - chronic lower back pain (L4-L5 disc herniation; two surgeries in 2019 and 2022; managed with physiotherapy and occasional epidural injections; limits his clinical hours)
+  notes: the back surgeries have changed his practice fundamentally; he can no longer stand for long procedures; the pain is a constant background presence; he has found it strangely clarifying about what matters
+
+relationships:
+  - name: Dr. Yasmin Rashid (née Karimi)
+    relation: wife
+    archetype: Operator
+    stub: hospital administrator at Rush University Medical Center; focused on institutional execution, budget reality, and keeping complex systems running
+    dynamic: loves Omar and supports his ethics work; their professional worlds collide — she thinks his principled stands make both hospitals harder to manage; they rarely discuss it directly at home because the conversation has nowhere productive to go
+  - name: CEO Malcolm Hendricks
+    relation: hospital CEO (primary institutional antagonist)
+    archetype: Contrarian
+    stub: skeptical of conventional medical ethics constraints when they interfere with competitive positioning; believes profitable procedures fund the charitable mission
+    dynamic: the central professional conflict; Hendricks views Omar's ethics blocks as business interference dressed up as principle; Omar views Hendricks as a person who has convinced himself that revenue generation and patient welfare align more than they do
+  - name: Dr. Elena Vasquez
+    relation: bioethicist and ethics board colleague
+    archetype: Investigator
+    stub: evidence-based; brings outcome data to ethical debates; believes empirical evidence should constrain moral reasoning, not confirm it
+    dynamic: Omar's most reliable institutional ally; she brings numbers when he brings principles; they disagree about the relative weight of evidence and argument and this makes their collaboration stronger than either would be alone
+  - name: Dr. Samir Rashid
+    relation: younger brother (age 43, Cairo)
+    archetype: Operator
+    stub: practising cardiologist; runs an efficient private practice; focused on delivering high-quality care within the Egyptian system as it is, not as it should be
+    dynamic: they speak monthly; Samir finds Omar's ethical stands admirable but impractical; Omar finds Samir's pragmatism a form of complicity; neither has fully said this aloud; they prefer to talk about their mother and their sons
+  - name: Father Ibrahim
+    relation: imam at his Chicago mosque and spiritual director
+    archetype: Holy Warrior
+    stub: rigorous scholar and community leader; believes Islam demands active witness to justice, not just private virtue
+    dynamic: the person whose opinion Omar respects most in the world; Father Ibrahim told him the procedure block was the right thing to do; that was enough; he also told him to be more patient with Hendricks; Omar is working on that

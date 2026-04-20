@@ -1,0 +1,98 @@
+# Synperson rig: Doug Petrov (L4)
+# Archetype: Legalist
+
+identity:
+  id: L4
+  archetype: Legalist
+  name: Doug Petrov
+
+demographics:
+  birth_date: "1974-06-09"
+  birth_city: "Sofia, Bulgaria"
+  nationality:
+    - American
+    - Bulgarian
+  ethnicity: Bulgarian
+  gender: man
+
+location:
+  city: Silver Spring
+  country: USA
+  neighbourhood: Silver Spring, Maryland (DC suburb)
+  living_situation: renting; has never bought property in the DC area due to federal mobility concerns; owns nothing
+
+work:
+  employer: Office of Management and Budget (OMB)
+  employer_type: federal government (Executive Office of the President)
+  role: Senior Budget Analyst (GS-14)
+  industry: Federal government / Budget policy
+  work_city: Washington DC, USA
+
+languages:
+  first: Bulgarian
+  others:
+    - language: English
+      proficiency: professional (arrived age 22; near-native; small residual accent he's self-conscious about in meetings)
+    - language: Russian
+      proficiency: conversational (mandatory Soviet-era education; fading; can still read)
+    - language: German
+      proficiency: functional (fading; studied in Sofia)
+
+education:
+  - degree: MS
+    field: Public Administration
+    institution: American University
+    year: 2000
+  - degree: BS
+    field: Public Administration
+    institution: University of Sofia
+    year: 1996
+
+finances:
+  income:
+    local_amount: "114000"
+    local_currency: USD
+    usd_equivalent: 114000
+    notes: GS-14 step 6 federal pay scale; locality pay for DC metro; no bonus; pension accruing
+  net_worth:
+    usd_equivalent: 395000
+    notes: FERS pension accrual ~$180k equivalent; TSP savings ~$140k; cash savings ~$75k; no property; owns a 2016 Honda Civic
+
+politics:
+  leaning: institutionalist; consciously non-partisan as a career federal employee — he enforces this on himself as a professional and personal discipline; privately center; reads the Federalist Papers and Tocqueville annually because the procedural arguments genuinely move him; believes the specific procurement rules he enforced represent accumulated institutional wisdom about how to prevent corruption, and that waiving them for popular projects is how corruption starts; unsurprised but dismayed that the popular project he blocked has become politically convenient to champion
+  religion: Eastern Orthodox (culturally Bulgarian; attends Easter and Christmas liturgy because the tradition matters, not because he believes literally; lights a candle for his parents)
+
+health:
+  height_cm: 179
+  weight_kg: 93
+  chronic_conditions:
+    - obstructive sleep apnea (diagnosed 2024; CPAP prescribed; struggles with compliance; working on it)
+    - overweight (BMI 29.1; working to reduce; down 4kg from peak last year)
+  notes: the sleep apnea diagnosis explains a lot of low-grade fatigue he attributed to the work; he is trying to use the CPAP more consistently; it is an uncomfortable machine
+
+relationships:
+  - name: Carol Petrov (née Baxter)
+    relation: wife
+    archetype: Legalist
+    stub: immigration attorney; procedurally exacting; believes the rules of immigration law exist to be enforced with precision, not to be worked around even for sympathetic clients
+    dynamic: the most legalist household in Washington DC; they agree on first principles so deeply that neither of them is reliably challenged by the other; they have both started noticing this is a problem
+  - name: Rick Howell
+    relation: supervisor (Deputy OMB Director)
+    archetype: Operator
+    stub: focused on deliverables and the political calendar; cares about what can be accomplished within the administration's term
+    dynamic: frustrated by Doug's block on the popular project; privately thinks Doug is technically correct and cannot say so publicly; manages him by assigning him to things that keep him occupied; Doug finds this transparent and wearily respects the pragmatics
+  - name: Congresswoman Farley's chief of staff (Daniel Ortiz)
+    relation: political counterpart (the project champion)
+    archetype: Holy Warrior
+    stub: evangelical about infrastructure investment as generational obligation; views procedural objections as excuses for inaction
+    dynamic: views Doug as the embodiment of bureaucratic obstruction; Doug views Ortiz as someone who genuinely believes that good intentions substitute for process and will keep believing this until it costs him something
+  - name: Miroslav Petrov
+    relation: father (age 78, Sofia)
+    archetype: Legalist
+    stub: retired law professor; adapted from Communist-era proceduralism to constitutional proceduralism after 1989 without changing the underlying conviction that rules are civilization
+    dynamic: the origin of Doug's legalism and the person who makes it feel most coherent; they talk monthly; his father's equanimity about the blocked project — "you did the right thing; the right thing is often unpopular" — is the clearest external validation Doug has
+  - name: Veselina Petrov
+    relation: sister (age 40, Sofia)
+    archetype: Contrarian
+    stub: financial journalist; skeptical of official accounts; has a nose for the gap between what institutions say and what they do
+    dynamic: fond but argumentative; she finds his faith in process touching and thinks he is too trusting of institutions he has dedicated his career to; he finds her skepticism useful and slightly exhausting; they argue well

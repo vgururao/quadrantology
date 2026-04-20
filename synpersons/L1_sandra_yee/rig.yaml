@@ -1,0 +1,96 @@
+# Synperson rig: Sandra Yee (L1)
+# Archetype: Legalist
+
+identity:
+  id: L1
+  archetype: Legalist
+  name: Sandra Yee
+
+demographics:
+  birth_date: "1979-11-14"
+  birth_city: "Hong Kong"
+  nationality:
+    - Canadian
+  ethnicity: Cantonese Chinese
+  gender: woman
+
+location:
+  city: Toronto
+  country: Canada
+  neighbourhood: North York
+  living_situation: owns a detached house (jointly with husband; 12 years mortgage remaining)
+
+work:
+  employer: Meridian Financial Group Canada
+  employer_type: private wealth management firm
+  role: Chief Compliance Officer
+  industry: Financial services / Wealth management
+  work_city: Toronto, Canada
+
+languages:
+  first: Cantonese
+  others:
+    - language: English
+      proficiency: professional (arrived age 18; near-native after 26 years in Canada)
+    - language: Mandarin
+      proficiency: professional (mandatory for national role; learned post-immigration)
+    - language: French
+      proficiency: functional (required for national regulatory filings; exam-level, not conversational)
+
+education:
+  - degree: MBA
+    field: Finance and Strategy
+    institution: Rotman School of Management, University of Toronto
+    year: 2007
+  - degree: LLB
+    field: Law
+    institution: Osgoode Hall Law School, York University
+    year: 2003
+
+finances:
+  income:
+    local_amount: "188000"
+    local_currency: CAD
+    usd_equivalent: 138000
+    notes: base salary plus modest annual performance bonus; total compensation stable
+  net_worth:
+    usd_equivalent: 1100000
+    notes: North York house equity ~CAD 750k; pension ~CAD 180k equivalent; liquid savings ~CAD 150k
+
+politics:
+  leaning: centre-right; rule-of-law conservative; believes the regulatory framework exists to protect the system's legitimacy, not to be cleverly navigated; has voted both Liberal and Conservative depending on which party's civil liberties record is less embarrassing; skeptical of regulatory capture in both directions — the industry trying to gut rules and advocacy groups trying to exceed their mandate; above all believes procedure is not bureaucracy but the accumulated wisdom of how to prevent abuse
+  religion: Buddhist (Mahayana; practicing; attends temple for major occasions; has a small altar at home; the Buddhist emphasis on right action and non-harm maps cleanly onto her compliance worldview in ways she has thought about explicitly)
+
+health:
+  height_cm: 163
+  weight_kg: 61
+  chronic_conditions:
+    - chronic migraines (2–3 per month; managed with rizatriptan; triggers include screen time and stress; compliance work has both)
+  notes: manages migraines carefully; keeps a triggers journal; has declined two promotions partly because the role change would have increased screen time and stress
+
+relationships:
+  - name: Michael Chang
+    relation: husband
+    archetype: Operator
+    stub: general contractor; runs complex construction projects through systematic process; allergic to ambiguity
+    dynamic: steady and mutually respectful; he understands her precision instinct by analogy to construction tolerances; is occasionally intimidated by the legal register she slips into at home when something bothers her
+  - name: Grace Yee
+    relation: mother (age 74, North York)
+    archetype: Legalist
+    stub: retired accountant; raised Sandra on the proposition that rules are how fairness gets implemented; meticulous in everything
+    dynamic: the origin of Sandra's legalism; they agree on almost everything, which occasionally means neither of them is challenged; Sandra has started noticing this
+  - name: Tom Carver
+    relation: COO of Meridian (the executive she's fighting)
+    archetype: Contrarian
+    stub: believes rules are the competitive landscape to be navigated cleverly, not the floor to stand on
+    dynamic: the primary antagonist; he is using her own compliance procedures as a procedural shield against her investigation; she finds this predictable and infuriating in equal measure
+  - name: Lena Oduya
+    relation: direct report and deputy CCO
+    archetype: Investigator
+    stub: follows the paper trail wherever it leads; will not stop when the finding becomes inconvenient
+    dynamic: loyal and capable; doing much of the primary investigative groundwork Sandra depends on; Sandra is protective of her and worried about what will happen to Lena's career if this goes badly
+  - name: James Yee
+    relation: younger brother (age 35, Vancouver)
+    archetype: Hacker
+    stub: software engineer who builds workarounds when the official system is too slow; proud of his sister and slightly alarmed by her situation
+    dynamic: supportive; doesn't fully understand the compliance world but understands that Sandra is in something serious; calls weekly; sends links to whistleblower protection articles she has already read

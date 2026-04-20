@@ -1,0 +1,95 @@
+# Synperson rig: Carlos Rivera (O1)
+# Archetype: Operator
+
+identity:
+  id: O1
+  archetype: Operator
+  name: Carlos Rivera
+
+demographics:
+  birth_date: "1975-08-31"
+  birth_city: "Monterrey, Nuevo León, Mexico"
+  nationality:
+    - Mexican
+  ethnicity: Mexican (mestizo; northern Mexico; father from Jalisco, mother from Nuevo León)
+  gender: man
+
+location:
+  city: Mexico City
+  country: Mexico
+  neighbourhood: Polanco
+  living_situation: owns an apartment (significant mortgage; wife co-owns)
+
+work:
+  employer: Grupo Meridian Logística
+  employer_type: private company (mid-size; family-controlled at board level)
+  role: Chief Operating Officer
+  industry: Logistics / Supply chain
+  work_city: Mexico City, Mexico (operations across Mexico; monthly travel to Guadalajara and Monterrey)
+
+languages:
+  first: Spanish
+  others:
+    - language: English
+      proficiency: professional (IPADE; US client relationships; fully fluent in business context)
+    - language: Portuguese
+      proficiency: conversational (Latin American trade; Brazilian partnerships; improving)
+
+education:
+  - degree: MBA
+    field: General Management
+    institution: IPADE Business School (Universidad Panamericana)
+    year: 2002
+  - degree: BS
+    field: Industrial Engineering
+    institution: UNAM
+    year: 1997
+
+finances:
+  income:
+    local_amount: "3500000"
+    local_currency: MXN
+    usd_equivalent: 175000
+    notes: COO salary plus annual bonus (performance-tied); the bonus that should have been his after the org rebuild was redirected to the CEO's compensation
+  net_worth:
+    usd_equivalent: 1150000
+    notes: Polanco apartment equity ~MXN 12M; liquid savings ~MXN 3.5M; pension and equity ~MXN 6M; all USD conversions approximate given peso volatility
+
+politics:
+  leaning: centre; PAN-leaning pragmatist; believes in strong institutional governance and rule of law; frustrated by AMLO-era institutional erosion but also by the PAN's failure to address corruption when it had the chance; thinks Mexico's problem is impunity, not ideology; not vocal about politics at work; the board has PRI connections he is careful about
+  religion: Catholic (practicing; Mass on Sundays; faith is genuine and personal; is not politically Catholic — does not translate religious positions into policy advocacy; the faith is about integrity and family, not institutional power)
+
+health:
+  height_cm: 178
+  weight_kg: 91
+  chronic_conditions:
+    - Type 2 diabetes (diagnosed at 45; managed with metformin and diet change; monthly monitoring; A1C currently 6.8 — improving)
+    - mild hypertension (managed with ACE inhibitor; diagnosed same year as diabetes)
+  notes: the diabetes diagnosis was a significant wake-up call; he changed diet substantially; reduced alcohol; the health improvement has improved his clarity; he attributes part of the org rebuild's success to being less foggy than before
+
+relationships:
+  - name: Alejandro Torres
+    relation: CEO
+    archetype: Contrarian
+    stub: makes bold bets against conventional logistics wisdom; skeptical of industry consensus; takes credit fluidly
+    dynamic: Carlos has made peace with the credit-taking, mostly; Torres is effective in the external and political dimensions of the CEO role where Carlos is not interested in operating; they need each other and both know it; the peace is real and slightly brittle
+  - name: Isabella Rivera (née Morales)
+    relation: wife (married 1999)
+    archetype: Holy Warrior
+    stub: runs an education NGO focused on early childhood in underserved Mexico City neighbourhoods; refuses to let impact measurement compromise mission integrity
+    dynamic: 25-year partnership; she grounds him morally in a way he needs; he funds the NGO through his salary; they occasionally disagree about what's achievable; she thinks he gives too much to institutions that don't deserve it; he thinks she asks too much of institutions that can't give it
+  - name: Diego Rivera
+    relation: son (age 22, studying business)
+    archetype: Operator
+    stub: methodical, wants to join the family business, studies logistics
+    dynamic: Carlos is quietly proud and quietly anxious; Diego has his instincts but not yet his judgment; Carlos is thinking about when to bring him in and at what level
+  - name: Elena Rivera
+    relation: daughter (age 19, art student)
+    archetype: Hacker
+    stub: disassembles visual conventions; builds installations from things that aren't supposed to be art materials
+    dynamic: Carlos's most surprising relationship; he doesn't understand her work and finds himself moved by it; she has started asking him about his work with more curiosity than she used to show
+  - name: Rodrigo Campos
+    relation: VP Operations (direct report)
+    archetype: Legalist
+    stub: process-adherent; documents everything; believes operational discipline is the foundation of competitive advantage
+    dynamic: Carlos's right hand in the org rebuild; the implementation layer for every system change Carlos designed; their relationship is the most functional professional relationship Carlos has had

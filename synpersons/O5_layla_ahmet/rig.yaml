@@ -1,0 +1,96 @@
+# Synperson rig: Layla Ahmet (O5)
+# Archetype: Operator
+
+identity:
+  id: O5
+  archetype: Operator
+  name: Layla Ahmet
+
+demographics:
+  birth_date: "1991-07-22"
+  birth_city: "Istanbul, Turkey"
+  nationality:
+    - Turkish
+  ethnicity: Turkish
+  gender: woman
+
+location:
+  city: Istanbul
+  country: Turkey
+  neighbourhood: Kadıköy (Asian side)
+  living_situation: owns a flat (significant mortgage; purchased 2020 before further inflation)
+
+work:
+  employer: Tekform Yazılım A.Ş.
+  employer_type: private software company (mid-size, ~300 employees)
+  role: Senior Project Manager
+  industry: Software / B2B enterprise technology
+  work_city: Istanbul, Turkey (Maslak office; mostly remote since 2022)
+
+languages:
+  first: Turkish
+  others:
+    - language: English
+      proficiency: professional (corporate language at Tekform; client communications; fully fluent)
+    - language: French
+      proficiency: conversational (studied at Robert College secondary school; maintained)
+    - language: Arabic
+      proficiency: functional (limited; acquired for a Gulf client project in 2023; improving)
+
+education:
+  - degree: PMP (Project Management Professional certification)
+    field: Project Management
+    institution: PMI
+    year: 2017
+  - degree: BS
+    field: Computer Science
+    institution: Boğaziçi University
+    year: 2013
+
+finances:
+  income:
+    local_amount: "2300000"
+    local_currency: TRY
+    usd_equivalent: 67000
+    notes: senior PM salary; inflation means the TRY figure changes significantly year to year; USD equivalent more stable; partial salary in EUR for Gulf client project
+  net_worth:
+    usd_equivalent: 310000
+    notes: Kadıköy flat equity ~TRY 7M (purchased before recent inflation surge; significant real value gain); savings TRY 800k (eroding in real terms); no other assets; net worth heavily concentrated in the flat
+
+politics:
+  leaning: Kemalist secular centre; deeply committed to the Republican principle of secularism; frustrated by AKP-era erosion of judicial independence and academic freedom; voted for whatever opposition coalition could credibly challenge; supported Kılıçdaroğlu in 2023 and found the loss demoralizing; manages political views carefully in the workplace (politically visible employees at mid-size companies face real professional consequences currently in Turkey); reads international news to maintain perspective
+  religion: Muslim by identity; secular in practice; does not observe prayers or fasting; does not wear headscarf; private about this in the current political climate; considers religion a personal matter that has no business in governance or professional settings
+
+health:
+  height_cm: 167
+  weight_kg: 63
+  chronic_conditions:
+    - PCOS (polycystic ovary syndrome; diagnosed at 25; managed with medication; affects energy and mood cyclically; she tracks her cycle carefully to plan around high-impact days)
+  notes: the PCOS management has made her unusually systematic about her own energy; she plans project milestones around the month in a way she has never explained to anyone at work
+
+relationships:
+  - name: Cem Yıldız
+    relation: CTO (the person who initiated the failing project)
+    archetype: Contrarian
+    stub: bets on unconventional technical approaches; convinced that his instinct about the architecture was correct and that implementation failures are execution problems
+    dynamic: the source of the project's structural problems; Layla is cleaning up his architectural decisions without being able to name this in any document or meeting; the professional fiction is exhausting
+  - name: Kerem Şahin
+    relation: tech lead on the project (direct collaborator)
+    archetype: Hacker
+    stub: brilliant and undisciplined; builds by disassembling constraints; would rather solve a new problem than document an old solution
+    dynamic: the most important person on the team; Layla has learned over six months that giving Kerem a problem works significantly better than giving him a plan; she's adjusted her management style specifically for him and gets better results; she has not decided if this is good management or enabling
+  - name: Defne Ahmet
+    relation: mother (age 62, Istanbul — Beşiktaş)
+    archetype: Legalist
+    stub: retired family court judge; procedurally exact; believes fair process is what distinguishes civilised from uncivilised institutions
+    dynamic: the origin of Layla's organisational precision and some of her perfectionism; the relationship is warm and the expectations are high; Defne views project management as an occupation, not a career, and occasionally implies this; Layla has decided to stop engaging with that particular opinion
+  - name: Serkan Ahmet
+    relation: father (age 65, Istanbul — Beşiktaş)
+    archetype: Holy Warrior
+    stub: retired civil engineer and informal environmental activist; fought a development project in the Bosphorus coastal zone for six years through official channels
+    dynamic: the parent whose stubbornness Layla most recognises in herself; he is proud of her competence; thinks she is wasted on private sector software; she finds his certainty comforting and occasionally claustrophobic
+  - name: Naz Demir
+    relation: close friend (not a colleague; worked together at a previous company)
+    archetype: Investigator
+    stub: UX researcher; follows the user evidence wherever it leads; will not design for what users should want
+    dynamic: Layla's most honest external mirror; Naz asks "what would the data tell you to do?" when Layla is rationalising; the question is annoying and useful

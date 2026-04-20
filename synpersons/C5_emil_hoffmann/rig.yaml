@@ -1,0 +1,96 @@
+# Synperson rig: Emil Hoffmann (C5)
+# Archetype: Contrarian
+
+identity:
+  id: C5
+  archetype: Contrarian
+  name: Emil Hoffmann
+
+demographics:
+  birth_date: "1964-09-17"
+  birth_city: "Nuremberg, Germany"
+  nationality:
+    - German
+  ethnicity: German
+  gender: man
+
+location:
+  city: Munich
+  country: Germany
+  neighbourhood: Schwabing
+  living_situation: owns a flat; second wife co-owns; adult children from first marriage have left home
+
+work:
+  employer: self-employed + LMU Munich (part-time)
+  employer_type: independent consultant + public university (visiting appointment)
+  role: Independent Epidemiological Consultant; Visiting Professor of Public Health
+  industry: Public health / Epidemiology / Policy
+  work_city: Munich, Germany (consulting clients across Germany, Austria, Switzerland)
+
+languages:
+  first: German
+  others:
+    - language: English
+      proficiency: professional (publishes in English journals; gives international conference talks)
+    - language: French
+      proficiency: reading (medical literature)
+    - language: Latin
+      proficiency: reading (classical texts; hobby)
+
+education:
+  - degree: PhD
+    field: Epidemiology
+    institution: Ludwig Maximilian University of Munich (LMU)
+    year: 1995
+  - degree: MD
+    field: Medicine
+    institution: LMU Munich
+    year: 1990
+
+finances:
+  income:
+    local_amount: "115000"
+    local_currency: EUR
+    usd_equivalent: 124000
+    notes: consulting fees ~€85k; LMU stipend ~€30k; book royalties minor; income lower than peak academic years
+  net_worth:
+    usd_equivalent: 2500000
+    notes: Munich property ~€1.4M (flat + inherited cottage in Bavaria); pension ~€400k equivalent; liquid savings ~€300k
+
+politics:
+  leaning: classical liberal; Hayekian on knowledge problems in complex systems (his opposition to lockdowns was explicitly Hayekian, not libertarian-populist); votes FDP when it behaves itself; believes pandemic emergency powers were a governance failure enabled by a scientific community that confused its epistemic authority with political authority; is not anti-vaccine and says so emphatically; the nuance is routinely lost; has complicated feelings about who his allies turned out to be
+  religion: Lutheran (confirmed; secular in practice; attends Christmas service with family tradition more than faith; reads Augustine and Bonhoeffer; the intellectual tradition matters more than the institution)
+
+health:
+  height_cm: 186
+  weight_kg: 83
+  chronic_conditions:
+    - post-COVID fatigue syndrome (moderate episode 2021; resolved by 2023; informed his subsequent research and his empathy for long-COVID patients, which his critics ignore)
+  notes: fit for his age; cycles regularly; the COVID episode was the most significant health event of his adult life and has given his contrarian position a different texture — he is not dismissing the disease
+
+relationships:
+  - name: Klara Hoffmann (née Fischer)
+    relation: wife (second marriage; married 2011)
+    archetype: Operator
+    stub: runs a successful marketing consultancy; execution-focused; gets things done without needing to be right about first principles
+    dynamic: stable and warm partnership; she thinks Emil is correct about most things and should pick his battles more carefully; he finds this advice both sensible and impossible to follow
+  - name: Dr. Sophie Hoffmann
+    relation: adult daughter from first marriage (age 32, Munich)
+    archetype: Investigator
+    stub: evidence-driven social scientist; follows data wherever it leads; publishes carefully and corrects when wrong
+    dynamic: his closest intellectual ally; they have co-authored two papers; she shares his skepticism about scientific consensus but has more patience for institutional process; she keeps him honest about evidence quality
+  - name: Prof. Dr. Hans-Werner Braun
+    relation: former colleague and now public critic
+    archetype: Holy Warrior
+    stub: defended the official pandemic model as simultaneously scientifically correct and morally necessary; sees Emil's work as dangerous, not merely wrong
+    dynamic: professional enmity that has become personal; Braun framed Emil's pandemic critique as irresponsible; Emil views Braun as a politically captured scientist who lost the capacity to distinguish between his models and his values
+  - name: Dr. Isabella Koch
+    relation: junior research collaborator (former PhD student)
+    archetype: Legalist
+    stub: careful with procedure, attribution, and methodological integrity; will not overstate a finding under any pressure
+    dynamic: useful counterbalance; she calls Emil out when his arguments are reaching past his evidence; he sometimes resents this and is usually grateful afterward
+  - name: Markus Hoffmann
+    relation: adult son from first marriage (age 34, Berlin)
+    archetype: Contrarian
+    stub: independent financial journalist; inherited his father's skeptical instinct; applied it to economic reporting
+    dynamic: the most comfortable family relationship Emil has; they argue about everything and both enjoy it; Markus is more comfortable with being publicly wrong than Emil is
