@@ -1,6 +1,6 @@
 # Quadrantology — Project Status
 
-_Last updated: 2026-04-19 (Session 8)_
+_Last updated: 2026-04-20 (Session 10)_
 
 ## Live
 
@@ -68,14 +68,15 @@ _Last updated: 2026-04-19 (Session 8)_
 
 ## Next Up (Tier 1.9 — synperson research panel)
 
-The synperson system is a 30-person synthetic focus group for longitudinal test research, QA, and eventual public access. All design specs and demographic profiles are complete. Outstanding work before first logged runs:
+The synperson system is a 30-person synthetic focus group for longitudinal test research, QA, and eventual public access. All design specs, demographic profiles, and event diaries are complete. Outstanding work before first logged runs:
 
-- [ ] **Write 30 `events.md` files** — 15 seed events per synperson, exponential-decay date distribution, up to April 2026. See `synpersons/_events_schema.md` for format and distribution rules.
+- [x] **Write 30 `events.md` files** — ✅ Done (Session 10): all 30 files written, 15 seed events each, up to April 2026.
+- [ ] **Public synperson page** (`docs/synpersons.html`) — present the panel publicly so visitors can watch the simulation research evolve in real time. Contents: panel overview, per-synperson card (bio stub, archetype, nationality/role), results history that populates as runs accumulate. Static HTML for now; can be pre-rendered from the YAML + events data before D1 is wired.
 - [ ] **Apply D1 schema migration** — Add `synpersons`, `synperson_events`, `synperson_runs` tables (SQL in `DATAMODEL.md`; not yet in `worker/schema.sql`).
 - [ ] **Build `scripts/synperson/` suite** — `run-test.py` (logged + QA modes), `evolve-events.py`, `sync-to-d1.py`, `run-panel.py`, `memory.py`, `scoring.py`. See roadmap spec for full interface.
 - [ ] **First logged run pass** — Run all 30 synpersons once; inspect archetype distribution against expected archetypes; tune memory model parameters if needed.
 
-Files already complete: `synpersons/_rig_schema.yaml`, `_events_schema.md`, `_research_protocol.md`, and all 30 `rig.yaml` demographic profiles.
+Files complete: `synpersons/_rig_schema.yaml`, `_events_schema.md`, `_research_protocol.md`, all 30 `rig.yaml` demographic profiles, all 30 `events.md` event diaries.
 
 ## Later (Tier 2 — enrichment)
 

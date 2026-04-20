@@ -18,7 +18,7 @@ _Archetype: [Archetype] · Born: [YYYY-MM-DD] · Narrative life begins: [YYYY]_
 ## Event Block Format
 
 ```markdown
-## E001 · 2019-03 · intensity: 7
+## E001 · 2019-03 → 2019-05 · intensity: 7
 **The Big Short Pitch**
 
 First-person past tense, 2–4 sentences. Written as the synperson would recall it: the
@@ -30,11 +30,18 @@ they concluded that may or may not be accurate.
 
 **Field rules:**
 - `E{NNN}`: zero-padded, three digits. Chronological order.
-- `YYYY-MM`: narrative date in the synperson's internal timeline (not wall-clock/creation date). Use the month the event *occurred*. Use `YYYY-Q{N}` only when month is genuinely uncertain.
+- **Date field** — events are durations, not instants. Use a start → end format:
+  - `YYYY-MM → YYYY-MM` for precise ranges
+  - `YYYY → YYYY` for multi-year chronic events
+  - Fuzzy labels are allowed and often better for older events: `Fall 2008 → Spring 2009`, `Christmas week 2001`, `sometime in 2014`
+  - A single `YYYY-MM` is only acceptable for genuinely instantaneous reference events (e.g., anchoring a public event)
+  - The start and end boundaries should be narratively meaningful, not arbitrary
 - `intensity: {1-10}`: emotional loading at time of occurrence (not current significance). 1 = background/mundane, 5 = notable but not life-changing, 8 = defining or traumatic, 10 = reserved for genuinely catastrophic events. Most events are 3–6.
 - **Title**: bold, 2–5 words, present tense (newspaper headline style).
-- **Body**: first person, past tense. 2–4 sentences. No retrospective wisdom the synperson didn't have at the time — unless this is a retcon event (see below).
+- **Body**: first person, past tense. 2–4 sentences. No retrospective wisdom the synperson didn't have at the time — unless this is a retcon event (see below). For long-duration events (months or years), the body should reflect emotional evolution over that span — not a single sustained acute feeling.
 - Separator: `---` after every event block.
+
+See `_storytelling_rules.md` for full narrative principles governing event selection, public/personal ratio, duration-to-emotion mapping, and boundary fuzziness.
 
 ---
 
