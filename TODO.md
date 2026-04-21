@@ -14,7 +14,11 @@ Have a dedicated session to map out the full theoretical grounding of the three 
 - **Deontological** = behavioral ethics: morality is embodied in how you act, not in outcomes or models. Hackers and Investigators define themselves by their behaviors — the right way to do things is intrinsically important, independent of goals or idol-proximity.
 - **Consequentialist** = goal ethics: the moral weight is in outcomes. Contrarians and Operators evaluate actions by what they achieve.
 
-Questions to explore: how does the mimetic/behavioral/goal split interact with the Exit/Voice axis? Are there canonical thinkers or traditions that map cleanly to each cell? Does the Hirschman Exit/Voice framing have a natural ethics theory complement? What does this imply about how each archetype talks about *failure* — idol-betrayal (virtue), wrong-method (deont), or missed-target (conseq)?
+Further refinement on virtue: there are two modes within virtue ethics that align with the E/V split.
+- **Holy Warrior (Voice + Virtue)** = mimetic virtue: emulate specific exemplars; reform the institution back toward those models. Points at people.
+- **Legalist (Exit + Virtue)** = codifying virtue: extract principles from (possibly implicit) models and crystallize them into abstract frameworks that define good/bad. Think constitution-drafters, bill-of-rights scholars — they may draw on Locke or Montesquieu but the output is a normative code, not "be like Jefferson." The Legalist completes the exit cycle: Hacker subverts a rule → Contrarian philosophizes the subversion → Legalist codifies it into the new canonical definition of "good."
+
+Questions to explore: how does the mimetic/behavioral/goal split interact with the Exit/Voice axis? Are there canonical thinkers or traditions that map cleanly to each cell? Does the Hirschman Exit/Voice framing have a natural ethics theory complement? What does this imply about how each archetype talks about *failure* — idol-betrayal (virtue), wrong-method (deont), or missed-target (conseq)? How does the codifying/mimetic virtue split show up in test answers — is it detectable, or is the E/V axis doing all the work there?
 
 ### Activate research + admin features (CF Pages dashboard)
 After the session 3 deploy, two manual steps are needed before the admin UI and research scaffolding work on staging:
