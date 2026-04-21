@@ -9,3 +9,6 @@ history/
 
 # Claude Code working files
 .claude/
+
+# Local secrets — never commit
+.env

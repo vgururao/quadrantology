@@ -30,17 +30,22 @@ Create `docs/data/quadrantology-model-v1.json` — the CC BY 4.0 published model
 
 ---
 
-### Synperson panel — bring to first logged run
+### Synperson panel — improve archetype hit rate, then first logged run
 
-1. ~~**Write event histories**~~ — ✅ Done (Session 10): all 30 `events.md` files written, 15 events each, up to April 2026.
-2. **Public synperson page** — `docs/synpersons.html`: public-facing page presenting the 30 synperson profiles and their evolving test histories. Goal: let visitors watch the simulation research evolve in real time. Contents: panel overview, per-synperson card (bio stub, archetype, nationality/role, link to full profile), results history when runs exist. Design: static HTML rendered from synperson data; profiles expand over time as runs accumulate. See STATUS.md Tier 1.9 for full spec.
-3. **Update `worker/schema.sql`** — Add the three synperson tables from `DATAMODEL.md` and apply:
+1. ~~**Write event histories**~~ — ✅ Done (Session 10).
+2. ~~**Build `scripts/synperson/` suite**~~ — ✅ Done (Session 11): all 6 scripts written and syntax-verified.
+3. ~~**First QA run pass**~~ — ✅ Done (Session 11): 6/30 matched (20%). Pipeline functional; hit rate needs work.
+4. **Track D — Write behavioral anchor text** — For each archetype, write a `behavioral_stance` block derived from the question-weight analysis (see Session 11 devlog). This is the foundation for Tracks B and C. Key signatures: Exit = restless/bored-driven, leaves toxic situations, principles over friends, mission-first, first-principles thinking. Voice = anger/outrage-driven, stays and cleans up toxic situations, loyalty over principles, community-first, narrative thinking. Virtue = exemplar-following, reflective, apolitical. Consequentialist = ends-justify-means, politically engaged, analytical, present-focused. Deontological = principled hands-on action, self-reliant, concrete first steps, self-challenging.
+5. **Track B — Add `behavioral_stance` to rig.yaml** — Update `_rig_schema.yaml` schema, then add the appropriate anchor text to all 30 `rig.yaml` files. Redesign `run-test.py` prompt to surface `behavioral_stance` before event summary.
+6. **Track A — Memory model tuning** — Change defaults in `run-test.py`/`run-panel.py`: `intensity_floor` 8→6, `alpha` 0.5→0.2, `max_events` 10→12. Remove 4-relationship cap.
+7. **Track C — Events response beats** — Audit all 30 `events.md` files. Fix events that show the wrong archetype's behavioral response. Add reaction beats: Exit personas should disengage/leave in response to toxic situations; Voice personas should stay and push back.
+8. **Apply D1 schema migration** — Run after synperson tables confirmed in `worker/schema.sql`:
    ```bash
    wrangler d1 execute quadrantology --file=worker/schema.sql --remote
    ```
-4. **Build `scripts/synperson/` suite** — Start with `memory.py` + `scoring.py` (shared modules), then `run-test.py` (both `--logged` and `--qa` modes), then `evolve-events.py` and `sync-to-d1.py`.
-5. **Seed synperson profiles to D1** — Run `sync-to-d1.py` to populate `synpersons` and `synperson_events` from the local YAML/markdown files.
-6. **First logged run pass** — `run-panel.py --logged` across all 30; inspect archetype distribution.
+9. **Seed synperson profiles to D1** — `python3 scripts/synperson/sync-to-d1.py`
+10. **First logged run pass** — `python3 scripts/synperson/run-panel.py --logged`; target ≥50% archetype match.
+11. **Public synperson page** — `docs/synpersons.html`: panel overview + per-synperson cards.
 
 ---
 

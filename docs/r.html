@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shared Arc | Quadrantology</title>
+  <meta name="theme-color" content="#ffffff">
+  <link rel="stylesheet" href="quadrantology.css">
+  <style>
+    .arc-page { max-width: 560px; }
+
+    .arc-tagline {
+      font-size: 0.85rem;
+      color: var(--secondary-text);
+      margin: 0 0 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+    .arc-person-name {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 0 2rem;
+      line-height: 1.2;
+    }
+
+    .arc-run-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .arc-run-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+    }
+    .arc-run-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.5rem;
+      margin-bottom: 0.1rem;
+    }
+    .arc-run-archetype {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .arc-run-archetype.exit  { color: var(--exit-color); }
+    .arc-run-archetype.voice { color: var(--voice-color); }
+    .arc-run-date {
+      font-size: 0.78rem;
+      color: var(--secondary-text);
+      white-space: nowrap;
+    }
+    .arc-run-label {
+      font-size: 0.72rem;
+      color: var(--secondary-text);
+      margin-bottom: 0.75rem;
+    }
+
+    /* E↔V position bar */
+    .arc-ev-wrap { margin-bottom: 0.75rem; }
+    .arc-ev-track {
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      position: relative;
+      margin-bottom: 4px;
+    }
+    .arc-ev-marker {
+      position: absolute;
+      top: -3px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      transform: translateX(-50%);
+      border: 2px solid var(--card-bg);
+    }
+    .arc-ev-marker.exit  { background: var(--exit-color); }
+    .arc-ev-marker.voice { background: var(--voice-color); }
+    .arc-ev-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: var(--secondary-text);
+    }
+
+    /* Ethics bar */
+    .arc-ethics-bar {
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      margin-bottom: 5px;
+      background: var(--border);
+    }
+    .arc-ethics-bar .seg-virtue { background: #5a8a6a; }
+    .arc-ethics-bar .seg-conseq { background: #8a6a3a; }
+    .arc-ethics-bar .seg-deont  { background: #3a6a8a; }
+    .arc-ethics-legend {
+      font-size: 0.72rem;
+      color: var(--secondary-text);
+      display: flex;
+      gap: 0.9rem;
+      flex-wrap: wrap;
+    }
+
+    /* Actions */
+    .arc-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .arc-success-bar {
+      background: #e8f5e8;
+      border: 1px solid #b8d8b8;
+      border-radius: 6px;
+      padding: 0.7rem 1rem;
+      font-size: 0.88rem;
+      color: #2d6a2d;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .arc-success-bar a { color: #2d6a2d; font-weight: 600; }
+
+    .arc-cta {
+      margin-top: 2rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.25rem;
+      font-size: 0.85rem;
+      color: var(--secondary-text);
+      line-height: 1.6;
+    }
+
+    /* Error state */
+    .arc-error {
+      padding: 3rem 0;
+    }
+    .arc-error h2 { margin-bottom: 0.75rem; }
+    .arc-error p { color: var(--secondary-text); margin-bottom: 1.5rem; }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">Quadrantology</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+    <ul class="nav-links">
+      <li><a href="test.html">The Test</a></li>
+      <li><a href="theory.html">The Theory</a></li>
+      <li><a href="logbook.html">Logbook</a></li>
+      <li><a href="circle.html">Circle</a></li>
+      <li><a href="analysis.html">Analysis</a></li>
+      <li class="nav-dropdown">
+        <a href="#archetypes">Archetypes &#9662;</a>
+        <div class="nav-dropdown-content">
+          <div class="dropdown-exit">Exit</div>
+          <a href="hacker.html">Hacker</a>
+          <a href="contrarian.html">Contrarian</a>
+          <a href="legalist.html">Legalist</a>
+          <div class="dropdown-voice">Voice</div>
+          <a href="investigator.html">Investigator</a>
+          <a href="holywarrior.html">Holy Warrior</a>
+          <a href="operator.html">Operator</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main class="content">
+  <div class="arc-page">
+
+    <div id="arc-loading">Loading&hellip;</div>
+
+    <div id="arc-error" class="arc-error" style="display:none;">
+      <h2>Nothing to show</h2>
+      <p id="arc-error-msg">This share URL is missing or corrupted.</p>
+      <a href="index.html" class="btn btn-secondary">Go home</a>
+    </div>
+
+    <div id="arc-view" style="display:none;">
+      <p class="arc-tagline">Personality arc &mdash; shared snapshot</p>
+      <h1 class="arc-person-name" id="arc-name"></h1>
+
+      <div class="arc-run-list" id="arc-run-list"></div>
+
+      <div class="arc-actions">
+        <button class="btn btn-primary" id="add-circle-btn" onclick="addToCircle()">Add to my Circle</button>
+        <a href="test.html" class="btn btn-secondary">Take the test yourself</a>
+      </div>
+
+      <div class="arc-success-bar" id="arc-success">
+        Added to your circle. <a href="circle.html">View circle &rarr;</a>
+      </div>
+
+      <div class="arc-cta">
+        Quadrantology tracks your personality arc over time &mdash; not a one-shot label.
+        Shared URLs are point-in-time snapshots; ask for a new link to see an updated arc.
+        <br>
+        <a href="index.html">Learn more</a> &middot; <a href="test.html">Take the test</a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer">&copy; Quadrantology &middot; <a href="design_principles.html">Design Principles</a></footer>
+
+<script>
+'use strict';
+
+var parsedPayload = null;
+var EXIT_SET = new Set(['Hacker', 'Contrarian', 'Legalist']);
+
+function arcClass(archetype) { return EXIT_SET.has(archetype) ? 'exit' : 'voice'; }
+function evClass(ev)         { return (typeof ev === 'number' && ev < 0) ? 'voice' : 'exit'; }
+
+function formatDate(iso) {
+  try {
+    return new Date(iso).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+  } catch(e) { return iso || ''; }
+}
+
+function esc(s) {
+  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Parse share URL fragment ───────────────────────────────────────────────
+// Fragment format: v1:<base64url(deflate-raw(json))>
+// Falls back to plain base64url JSON if decompression fails.
+async function parseFragment(fragment) {
+  if (!fragment || !fragment.startsWith('v1:')) {
+    throw new Error('Not a Quadrantology share URL (expected #v1:…).');
+  }
+  var encoded = fragment.slice(3);
+
+  // base64url → binary
+  var b64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+  var padded = b64.padEnd(b64.length + (4 - b64.length % 4) % 4, '=');
+  var bytes;
+  try {
+    bytes = Uint8Array.from(atob(padded), function(c) { return c.charCodeAt(0); });
+  } catch(e) {
+    throw new Error('Could not decode share URL — it may be corrupted.');
+  }
+
+  // Try deflate-raw decompression, fall back to plain JSON
+  var json;
+  try {
+    var ds = new DecompressionStream('deflate-raw');
+    var writer = ds.writable.getWriter();
+    var reader  = ds.readable.getReader();
+    writer.write(bytes);
+    writer.close();
+    var chunks = [], total = 0;
+    while (true) {
+      var res = await reader.read();
+      if (res.done) break;
+      chunks.push(res.value);
+      total += res.value.length;
+    }
+    var merged = new Uint8Array(total);
+    var off = 0;
+    chunks.forEach(function(c) { merged.set(c, off); off += c.length; });
+    json = JSON.parse(new TextDecoder().decode(merged));
+  } catch(e) {
+    try { json = JSON.parse(new TextDecoder().decode(bytes)); }
+    catch(e2) { throw new Error('Share URL data could not be read.'); }
+  }
+
+  if (!json || typeof json.name !== 'string' || !Array.isArray(json.results)) {
+    throw new Error('Share URL has unexpected format.');
+  }
+  return json;
+}
+
+// ── Render received arc ────────────────────────────────────────────────────
+function renderRun(run, idx, total) {
+  var archetype = run.archetype || '—';
+  var ev        = typeof run.ev === 'number' ? run.ev : 0;
+  var ethics    = Array.isArray(run.ethics) && run.ethics.length === 3
+                    ? run.ethics : [0.34, 0.33, 0.33];
+  var cls       = arcClass(archetype);
+  var markerPct = Math.max(0, Math.min(100, Math.round((ev + 1) / 2 * 100)));
+  var evCls     = evClass(ev);
+
+  var runLabel = total > 1
+    ? (idx === 0 ? 'Most recent' : idx === 1 ? 'Previous run' : 'Earlier run')
+    : 'Single run shared';
+
+  return '<div class="arc-run-card">' +
+    '<div class="arc-run-header">' +
+      '<span class="arc-run-archetype ' + cls + '">' + esc(archetype) + '</span>' +
+      '<span class="arc-run-date">' + esc(formatDate(run.ts)) + '</span>' +
+    '</div>' +
+    '<div class="arc-run-label">' + runLabel + '</div>' +
+    '<div class="arc-ev-wrap">' +
+      '<div class="arc-ev-track">' +
+        '<div class="arc-ev-marker ' + evCls + '" style="left:' + markerPct + '%"></div>' +
+      '</div>' +
+      '<div class="arc-ev-labels"><span>Voice</span><span>Exit</span></div>' +
+    '</div>' +
+    '<div class="arc-ethics-bar">' +
+      '<div class="seg-virtue" style="width:' + (ethics[0] * 100).toFixed(1) + '%"></div>' +
+      '<div class="seg-conseq" style="width:' + (ethics[1] * 100).toFixed(1) + '%"></div>' +
+      '<div class="seg-deont"  style="width:' + (ethics[2] * 100).toFixed(1) + '%"></div>' +
+    '</div>' +
+    '<div class="arc-ethics-legend">' +
+      '<span><span class="ethics-virtue-dot">&#9632;</span> Virtue '       + (ethics[0]*100).toFixed(0) + '%</span>' +
+      '<span><span class="ethics-conseq-dot">&#9632;</span> Conseq. '      + (ethics[1]*100).toFixed(0) + '%</span>' +
+      '<span><span class="ethics-deont-dot">&#9632;</span> Deont. '        + (ethics[2]*100).toFixed(0) + '%</span>' +
+    '</div>' +
+  '</div>';
+}
+
+function showView() {
+  document.getElementById('arc-loading').style.display = 'none';
+  document.getElementById('arc-view').style.display = '';
+  document.getElementById('arc-name').textContent = parsedPayload.name;
+
+  var runs = parsedPayload.results || [];
+  var html = '';
+  for (var i = 0; i < runs.length; i++) html += renderRun(runs[i], i, runs.length);
+  document.getElementById('arc-run-list').innerHTML = html;
+}
+
+function showError(msg) {
+  document.getElementById('arc-loading').style.display = 'none';
+  document.getElementById('arc-error').style.display = '';
+  document.getElementById('arc-error-msg').textContent = msg;
+}
+
+// ── Add to Circle ──────────────────────────────────────────────────────────
+window.addToCircle = function() {
+  if (!parsedPayload) return;
+  var CIRCLE_KEY = 'quadrantology_circle';
+  var MAX_SLOTS = 8;
+  var circle;
+  try { circle = JSON.parse(localStorage.getItem(CIRCLE_KEY) || '[]'); }
+  catch(e) { circle = []; }
+
+  if (circle.length >= MAX_SLOTS) {
+    alert('Your circle is full (8 slots). Visit circle.html to drop a contact first.');
+    return;
+  }
+
+  circle.push({
+    version: 'circle-v1',
+    added:   new Date().toISOString(),
+    name:    parsedPayload.name || 'Unknown',
+    results: parsedPayload.results || []
+  });
+  localStorage.setItem(CIRCLE_KEY, JSON.stringify(circle));
+
+  var btn = document.getElementById('add-circle-btn');
+  btn.disabled = true;
+  btn.textContent = 'Added';
+  document.getElementById('arc-success').style.display = '';
+};
+
+// ── Init ───────────────────────────────────────────────────────────────────
+(async function() {
+  var fragment = window.location.hash.slice(1); // strip leading '#'
+  if (!fragment) {
+    showError('No share data found in this URL. Ask the person to share their arc again.');
+    return;
+  }
+  try {
+    parsedPayload = await parseFragment(fragment);
+    showView();
+  } catch(e) {
+    showError(e.message || 'Could not parse this share URL.');
+  }
+})();
+</script>
+<script src="v.js"></script>
+</body>
+</html>

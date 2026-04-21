@@ -75,7 +75,7 @@ history/           — Archived materials
 
 scripts/           — Developer utilities (not deployed)
   test-sampler.sh  — Smoke-test /api/sample-questions: N sequential runs, compact summary output
-  synperson/       — Synperson panel scripts (planned; not yet built)
+  synperson/       — Synperson panel scripts (complete; first QA pass done Session 11)
     run-test.py    — Take a logged or QA test run for one synperson
     evolve-events.py — Generate next diary events via Claude API
     sync-to-d1.py  — Push local profile + events to D1
@@ -89,7 +89,7 @@ synpersons/        — Synthetic focus group: 30 persona profiles for longitudin
   _research_protocol.md — Run types (logged vs QA), no-rescoring rule, editorial logging
   {id}_{name}/       — One directory per synperson (e.g. C1_david_feld/)
     rig.yaml         — Demographic + relationship data (all 30 complete)
-    events.md        — Narrative event diary (to be populated)
+    events.md        — Narrative event diary (all 30 seeded, 15 events each, up to April 2026)
     research_log.md  — Editorial change log (created on first logged run)
 
 devlog/            — Session-by-session development log (eventually published)

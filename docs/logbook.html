@@ -6,6 +6,113 @@
   <title>Quadrantology: Your Logbook</title>
   <meta name="theme-color" content="#ffffff">
   <link rel="stylesheet" href="quadrantology.css">
+  <style>
+    /* ── Share modal extras ── */
+    .share-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(44,44,44,0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 1.5rem;
+    }
+    .share-modal-card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 1.75rem;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .share-modal-card h3 { font-size: 1.1rem; margin: 0 0 0.25rem; }
+    .share-modal-card .share-hint {
+      font-size: 0.83rem;
+      color: var(--secondary-text);
+      margin: 0 0 1.25rem;
+      line-height: 1.5;
+    }
+    .share-field-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      color: var(--text);
+    }
+    .share-name-input {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      margin-bottom: 1rem;
+      box-sizing: border-box;
+    }
+    .share-name-input:focus { outline: none; border-color: var(--accent); }
+    .share-preview {
+      font-size: 0.82rem;
+      color: var(--secondary-text);
+      margin-bottom: 1.25rem;
+    }
+    .share-preview-chips {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-top: 0.35rem;
+    }
+    .share-chip {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 3px;
+      letter-spacing: 0.2px;
+    }
+    .share-chip.exit  { background: #d4ecf0; color: var(--exit-color); }
+    .share-chip.voice { background: #f0d4d4; color: var(--voice-color); }
+    .share-chip-arrow { color: var(--secondary-text); font-size: 0.7rem; }
+    .share-url-wrap {
+      display: none;
+      margin-bottom: 1.25rem;
+    }
+    .share-url-box {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .share-url-input {
+      flex: 1;
+      padding: 0.4rem 0.6rem;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      font-size: 0.78rem;
+      font-family: monospace;
+      background: var(--bg);
+      color: var(--text);
+      min-width: 0;
+    }
+    .share-copy-btn {
+      padding: 0.4rem 0.75rem;
+      font-size: 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      background: var(--card-bg);
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .share-copy-btn:hover { background: var(--border); }
+    .share-url-note {
+      font-size: 0.75rem;
+      color: var(--secondary-text);
+      margin-top: 0.4rem;
+    }
+    .share-modal-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+    }
+  </style>
 </head>
 <body>
 
@@ -57,6 +164,24 @@
   var STORAGE_KEY = 'quadrantology_history';
   var SCORE_LABELS = ['Exit', 'Voice', 'Virtue', 'Consequentialist', 'Deontological'];
   var SCORE_CLASSES = ['exit-bar', 'voice-bar', 'ethics-bar', 'ethics-bar', 'ethics-bar'];
+  var EXIT_SET = new Set(['Hacker', 'Contrarian', 'Legalist']);
+  var ARCHETYPE_ABBR = {
+    'Hacker':'H', 'Contrarian':'Cn', 'Legalist':'Lg',
+    'Investigator':'In', 'Holy Warrior':'HW', 'Operator':'Op'
+  };
+
+  var minRunsToShare = 3; // default; overridden from protocol.json on load
+
+  // Fetch protocol.json to get min_runs_to_share, then re-render
+  fetch('data/protocol.json')
+    .then(function(r) { return r.json(); })
+    .then(function(p) {
+      if (p && p.sharing && p.sharing.min_runs_to_share) {
+        minRunsToShare = p.sharing.min_runs_to_share;
+        render();
+      }
+    })
+    .catch(function() {});
 
   function loadHistory() {
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
@@ -71,10 +196,21 @@
     } catch(e) { return iso; }
   }
 
+  function arcClass(archetype) { return EXIT_SET.has(archetype) ? 'exit' : 'voice'; }
+
+  // v2 runs with position data are shareable
+  function getShareableRuns(h) {
+    return h.filter(function(r) {
+      return r.version === 2 && r.position && typeof r.position.ev === 'number';
+    });
+  }
+
   function render() {
     var name = localStorage.getItem('quadrantology_name') || '';
     var h = loadHistory();
     var count = h.length;
+    var shareableRuns = getShareableRuns(h);
+    var canShare = shareableRuns.length >= minRunsToShare;
 
     document.getElementById('history-title').textContent = name ? name + '\u2019s Logbook' : 'Your Logbook';
     document.getElementById('history-subtitle').textContent =
@@ -84,6 +220,7 @@
     var actionsEl = document.getElementById('history-page-actions');
     if (count > 0) {
       actionsEl.innerHTML =
+        (canShare ? '<button class="btn btn-primary btn-sm" onclick="shareArc()">Share my arc</button> ' : '') +
         '<button class="btn btn-secondary btn-sm" onclick="downloadHistory()">Download logbook</button> ' +
         '<button class="btn btn-secondary btn-sm" onclick="clearHistory()">Clear logbook</button>';
     } else {
@@ -102,8 +239,7 @@
 
     listEl.innerHTML = '';
     for (var i = 0; i < h.length; i++) {
-      var entry = h[i];
-      listEl.appendChild(renderEntry(entry, i + 1, h.length));
+      listEl.appendChild(renderEntry(h[i], i + 1, h.length));
     }
   }
 
@@ -242,6 +378,144 @@
       localStorage.removeItem('quadrantology_name');
       render();
     };
+  };
+
+  // ── Share my arc ──────────────────────────────────────────────────────────
+
+  async function buildShareUrl(name) {
+    var h = loadHistory();
+    var runs = getShareableRuns(h).slice(0, 3); // most recent 3, already newest-first
+
+    var payload = {
+      v: 1,
+      name: name,
+      results: runs.map(function(r) {
+        var e = r.position.ethics;
+        return {
+          ts:        r.timestamp,
+          archetype: r.archetype,
+          ev:        r.position.ev,
+          ethics:    [e.virtue, e.consequentialist, e.deontological]
+        };
+      })
+    };
+
+    var bytes = new TextEncoder().encode(JSON.stringify(payload));
+
+    // Compress with deflate-raw
+    var cs = new CompressionStream('deflate-raw');
+    var writer = cs.writable.getWriter();
+    var reader  = cs.readable.getReader();
+    writer.write(bytes);
+    writer.close();
+    var chunks = [], total = 0;
+    while (true) {
+      var res = await reader.read();
+      if (res.done) break;
+      chunks.push(res.value);
+      total += res.value.length;
+    }
+    var merged = new Uint8Array(total);
+    var off = 0;
+    chunks.forEach(function(c) { merged.set(c, off); off += c.length; });
+
+    // base64url encode
+    var b64 = btoa(String.fromCharCode.apply(null, merged));
+    var b64url = b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+
+    var base = window.location.origin +
+               window.location.pathname.replace(/\/[^\/]*$/, '/');
+    return base + 'r.html#v1:' + b64url;
+  }
+
+  window.shareArc = function() {
+    var h = loadHistory();
+    var shareableRuns = getShareableRuns(h);
+    var defaultName = localStorage.getItem('quadrantology_name') || '';
+
+    // Build preview chips (oldest → newest)
+    var previewRuns = shareableRuns.slice(0, 3).slice().reverse();
+    var chipsHtml = previewRuns.map(function(r, i) {
+      var cls = EXIT_SET.has(r.archetype) ? 'exit' : 'voice';
+      var abbr = ARCHETYPE_ABBR[r.archetype] || r.archetype;
+      return (i > 0 ? '<span class="share-chip-arrow">›</span>' : '') +
+             '<span class="share-chip ' + cls + '">' + abbr + '</span>';
+    }).join('');
+
+    var overlay = document.createElement('div');
+    overlay.className = 'share-modal-overlay';
+    overlay.innerHTML =
+      '<div class="share-modal-card">' +
+        '<h3>Share my arc</h3>' +
+        '<p class="share-hint">Choose a name for this link — it appears on the recipient\'s screen and may differ from your display name. The URL encodes your last ' + Math.min(shareableRuns.length, 3) + ' results with no Q&amp;A data or journal notes.</p>' +
+        '<div class="share-field-label">Name on share link</div>' +
+        '<input class="share-name-input" id="share-name-input" type="text" value="' + defaultName.replace(/"/g, '&quot;') + '" placeholder="Your name" maxlength="60">' +
+        '<div class="share-preview">' +
+          'Arc preview (oldest → newest): ' +
+          '<div class="share-preview-chips">' + chipsHtml + '</div>' +
+        '</div>' +
+        '<div class="share-url-wrap" id="share-url-wrap">' +
+          '<div class="share-field-label">Share link</div>' +
+          '<div class="share-url-box">' +
+            '<input class="share-url-input" id="share-url-output" type="text" readonly>' +
+            '<button class="share-copy-btn" onclick="copyShareUrl()">Copy</button>' +
+          '</div>' +
+          '<div class="share-url-note">Point-in-time snapshot. To share an updated arc, generate a new link.</div>' +
+        '</div>' +
+        '<div class="share-modal-actions">' +
+          '<button class="btn btn-secondary btn-sm" onclick="closeShareModal()">Close</button>' +
+          '<button class="btn btn-primary btn-sm" id="share-generate-btn" onclick="generateShareUrl()">Generate link</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) closeShareModal(); });
+    setTimeout(function() {
+      var inp = document.getElementById('share-name-input');
+      if (inp) { inp.focus(); inp.select(); }
+    }, 50);
+  };
+
+  window.generateShareUrl = async function() {
+    var btn = document.getElementById('share-generate-btn');
+    var nameInput = document.getElementById('share-name-input');
+    if (!nameInput) return;
+    var name = nameInput.value.trim() || 'Anonymous';
+
+    btn.disabled = true;
+    btn.textContent = 'Generating…';
+    try {
+      var url = await buildShareUrl(name);
+      var outputEl = document.getElementById('share-url-output');
+      if (outputEl) {
+        outputEl.value = url;
+        document.getElementById('share-url-wrap').style.display = '';
+        outputEl.select();
+      }
+      btn.textContent = 'Regenerate';
+    } catch(err) {
+      btn.textContent = 'Error — try again';
+      console.error('Share URL generation failed:', err);
+    }
+    btn.disabled = false;
+  };
+
+  window.copyShareUrl = function() {
+    var inp = document.getElementById('share-url-output');
+    if (!inp || !inp.value) return;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(inp.value).then(function() {
+        var btn = inp.parentNode.querySelector('.share-copy-btn');
+        if (btn) { btn.textContent = 'Copied!'; setTimeout(function() { btn.textContent = 'Copy'; }, 1800); }
+      });
+    } else {
+      inp.select();
+      document.execCommand('copy');
+    }
+  };
+
+  window.closeShareModal = function() {
+    var overlay = document.querySelector('.share-modal-overlay');
+    if (overlay) document.body.removeChild(overlay);
   };
 
   render();

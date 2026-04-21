@@ -111,7 +111,57 @@ CREATE TABLE IF NOT EXISTS question_sequences (
 );
 CREATE INDEX IF NOT EXISTS idx_sequences_sampled_at ON question_sequences(sampled_at);
 
--- Canonical scoring model snapshots (one row per model version).
+-- ── Synperson research panel ─────────────────────────────────────────────────
+-- 30 synthetic persona profiles used for longitudinal test research and QA.
+-- Source of truth is synpersons/{id}_{name}/rig.yaml + events.md; D1 is the
+-- working copy. Apply changes to markdown first, then sync-to-d1.py pushes here.
+
+CREATE TABLE IF NOT EXISTS synpersons (
+  id              TEXT    PRIMARY KEY,    -- 'C1', 'HW3', etc.
+  archetype       TEXT    NOT NULL,
+  name            TEXT    NOT NULL,
+  hook            TEXT,                   -- one-line bio hook for public display (populated when made public)
+  biography       TEXT,                   -- 300-500 word stable character description (populated when made public)
+  status          TEXT    NOT NULL DEFAULT 'active'
+                  CHECK(status IN ('active','paused','retired')),
+  memory_params   TEXT    NOT NULL DEFAULT '{"alpha":0.5,"lambda":0.004,"intensity_floor":8,"max_events":10}',
+  public          INTEGER NOT NULL DEFAULT 0,   -- 1 = available as Personal Circle profile
+  first_run_at    TEXT,                          -- ISO; null until first logged run
+  created_at      TEXT    NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS synperson_events (
+  id              INTEGER PRIMARY KEY AUTOINCREMENT,
+  synperson_id    TEXT    NOT NULL REFERENCES synpersons(id),
+  event_key       TEXT    NOT NULL,       -- 'E001', 'E003b' etc. (from events.md header)
+  narrative_date  TEXT    NOT NULL,       -- 'YYYY-MM' in synperson's internal timeline
+  title           TEXT    NOT NULL,
+  body            TEXT    NOT NULL,
+  intensity       INTEGER NOT NULL CHECK(intensity BETWEEN 1 AND 10),
+  last_recalled_at TEXT,                  -- populated after each logged run
+  retcons         TEXT,                   -- comma-sep event_keys this event revises
+  generated_by    TEXT    NOT NULL DEFAULT 'human',  -- 'human' | 'claude-{model}'
+  created_at      TEXT    NOT NULL,
+  UNIQUE(synperson_id, event_key)
+);
+
+CREATE TABLE IF NOT EXISTS synperson_runs (
+  id              INTEGER PRIMARY KEY AUTOINCREMENT,
+  synperson_id    TEXT    NOT NULL REFERENCES synpersons(id),
+  run_number      INTEGER NOT NULL,       -- 1-indexed per synperson
+  run_data        TEXT    NOT NULL,       -- full v2 JSON (all answers stored)
+  prompt_text     TEXT    NOT NULL,       -- full prompt sent to Claude (audit trail)
+  events_sampled  TEXT    NOT NULL,       -- comma-sep event_keys active during this run
+  model_used      TEXT    NOT NULL,       -- e.g. 'claude-sonnet-4-6'
+  run_type        TEXT    NOT NULL DEFAULT 'logged'
+                  CHECK(run_type IN ('logged','qa')),
+  created_at      TEXT    NOT NULL,
+  UNIQUE(synperson_id, run_number)
+);
+
+CREATE INDEX IF NOT EXISTS idx_synruns_synperson ON synperson_runs(synperson_id, run_number);
+
+-- ── Canonical scoring model snapshots (one row per model version). ──────────
 -- model_json contains the full canonical model object: dimensions, archetypes,
 -- algorithm (steps + tie-breaking), and the question bank with weights at snapshot time.
 -- These are never deleted — old runs are only meaningful if their model remains accessible.

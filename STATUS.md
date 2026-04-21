@@ -1,6 +1,6 @@
 # Quadrantology — Project Status
 
-_Last updated: 2026-04-20 (Session 10)_
+_Last updated: 2026-04-20 (Session 11)_
 
 ## Live
 
@@ -68,15 +68,20 @@ _Last updated: 2026-04-20 (Session 10)_
 
 ## Next Up (Tier 1.9 — synperson research panel)
 
-The synperson system is a 30-person synthetic focus group for longitudinal test research, QA, and eventual public access. All design specs, demographic profiles, and event diaries are complete. Outstanding work before first logged runs:
+The synperson system is a 30-person synthetic focus group for longitudinal test research, QA, and eventual public access. All design specs, demographic profiles, event diaries, and scripts are complete. First QA pass done (20% hit rate). Improvement plan in progress.
 
-- [x] **Write 30 `events.md` files** — ✅ Done (Session 10): all 30 files written, 15 seed events each, up to April 2026.
-- [ ] **Public synperson page** (`docs/synpersons.html`) — present the panel publicly so visitors can watch the simulation research evolve in real time. Contents: panel overview, per-synperson card (bio stub, archetype, nationality/role), results history that populates as runs accumulate. Static HTML for now; can be pre-rendered from the YAML + events data before D1 is wired.
-- [ ] **Apply D1 schema migration** — Add `synpersons`, `synperson_events`, `synperson_runs` tables (SQL in `DATAMODEL.md`; not yet in `worker/schema.sql`).
-- [ ] **Build `scripts/synperson/` suite** — `run-test.py` (logged + QA modes), `evolve-events.py`, `sync-to-d1.py`, `run-panel.py`, `memory.py`, `scoring.py`. See roadmap spec for full interface.
-- [ ] **First logged run pass** — Run all 30 synpersons once; inspect archetype distribution against expected archetypes; tune memory model parameters if needed.
+- [x] **Write 30 `events.md` files** — ✅ Done (Session 10).
+- [x] **Build `scripts/synperson/` suite** — ✅ Done (Session 11): `memory.py`, `scoring.py`, `run-test.py`, `evolve-events.py`, `sync-to-d1.py`, `run-panel.py` all written and syntax-verified.
+- [x] **First QA run pass** — ✅ Done (Session 11): all 30 run, 6/30 matched assigned archetype (20%). Pipeline is functional; hit rate needs improvement.
+- [ ] **Track A — Memory model tuning** — `intensity_floor` 8→6, `alpha` 0.5→0.2, `max_events` 10→12; remove 4-relationship cap in prompt.
+- [ ] **Track B — Behavioral anchor field** — add `behavioral_stance` to `_rig_schema.yaml` and all 30 `rig.yaml` files; redesign prompt to surface it first.
+- [ ] **Track C — Events response beats** — audit all 30 `events.md` files for wrong-archetype behavioral responses; add explicit reaction beats.
+- [ ] **Track D — Archetype description alignment** — analysis complete (Session 11). Rewrite behavioral anchor text using math-derived behavioral signatures (see devlog). Do before Track B.
+- [ ] **Apply D1 schema migration** — Add `synpersons`, `synperson_events`, `synperson_runs` tables.
+- [ ] **First logged run pass** — After tracks A–D, run all 30 logged; target ≥50% archetype match.
+- [ ] **Public synperson page** (`docs/synpersons.html`) — panel overview + per-synperson cards; static HTML.
 
-Files complete: `synpersons/_rig_schema.yaml`, `_events_schema.md`, `_research_protocol.md`, all 30 `rig.yaml` demographic profiles, all 30 `events.md` event diaries.
+**Track D key findings (question-weight analysis):** The "deontological" ethics dimension in the test encodes principled hands-on action + self-reliance — NOT rule-following. The Investigator description (currently: "likes clear rules") is wrong; that's virtue ethics (Legalist). Holy Warrior has no patience for *corruption*, not for rules. The E/V axis turns on restlessness vs. outrage, and crucially: Exit archetypes *leave* toxic situations (Q021:b); Voice archetypes *stay and fight* (Q021:a). See Session 11 devlog for full analysis.
 
 ## Later (Tier 2 — enrichment)
 
