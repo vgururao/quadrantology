@@ -6,6 +6,16 @@ Items that require manual action outside of a Claude Code session (CF dashboard,
 
 ## Pending
 
+### Theory dialogue — ethics dimension definitions
+
+Have a dedicated session to map out the full theoretical grounding of the three ethics dimensions before writing behavioral anchor text (Track D/B). Known starting points:
+
+- **Virtue** = mimetic ethics: moral development through emulating idols and exemplars. You become good by watching and imitating good people, not by reasoning about rules or consequences.
+- **Deontological** = behavioral ethics: morality is embodied in how you act, not in outcomes or models. Hackers and Investigators define themselves by their behaviors — the right way to do things is intrinsically important, independent of goals or idol-proximity.
+- **Consequentialist** = goal ethics: the moral weight is in outcomes. Contrarians and Operators evaluate actions by what they achieve.
+
+Questions to explore: how does the mimetic/behavioral/goal split interact with the Exit/Voice axis? Are there canonical thinkers or traditions that map cleanly to each cell? Does the Hirschman Exit/Voice framing have a natural ethics theory complement? What does this imply about how each archetype talks about *failure* — idol-betrayal (virtue), wrong-method (deont), or missed-target (conseq)?
+
 ### Activate research + admin features (CF Pages dashboard)
 After the session 3 deploy, two manual steps are needed before the admin UI and research scaffolding work on staging:
 
