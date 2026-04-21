@@ -27,6 +27,18 @@ Review all questions — live and calibrating — against the theoretical defini
 
 Do this audit *after* the theory dialogue session, when the dimension definitions are crisp. Use the synperson QA hit-rate results as a diagnostic tool: if a particular archetype is systematically missed, look for questions that are producing false signal for that archetype.
 
+**Implicit E/V bias in pure-ethics questions**
+
+Questions that only score on ethics dimensions (no E/V weight) may still have an implicit E/V bias — the tension between the two options may be more legible or emotionally natural to one side of the E/V axis than the other. Example: a C vs D question framed around "ruthless efficiency vs. principled craft" encodes a Contrarian/Hacker tension. It may not feel like a real dilemma to an Operator or Investigator — they pick an answer but it's noise, not signal.
+
+Two-part fix:
+1. **Acknowledge the bias explicitly**: add a small same-direction E/V weight (e.g. `[0.1, 0, 0, 1, 0]` / `[0.1, 0, 0, 0, 1]`) to both options of a question that is implicitly Exit-biased. This makes the bias visible in the data model rather than invisible in the question text.
+2. **Write mirror questions**: for each biased C/D question, write a companion question that poses the *same* C vs D distinction but from a Voice perspective — so the Operator/Investigator tension is the one being probed. Balance the pool: Exit-biased C/D questions and Voice-biased C/D questions should appear in roughly equal numbers.
+
+Same logic applies to V/D and V/C questions. Check whether any virtue questions are implicitly Exit-biased (Legalist/Hacker tension) or Voice-biased (Holy Warrior/Investigator tension) and apply the same treatment.
+
+This is a question-bank design principle: **every ethics-only question should have a named E/V home**, and the pool should be balanced across homes so no archetype is systematically underserved by the question inventory.
+
 ### Theory dialogue — ethics dimension definitions
 
 Have a dedicated session to map out the full theoretical grounding of the three ethics dimensions before writing behavioral anchor text (Track D/B). Known starting points:
