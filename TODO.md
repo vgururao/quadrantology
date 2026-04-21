@@ -6,6 +6,27 @@ Items that require manual action outside of a Claude Code session (CF dashboard,
 
 ## Pending
 
+### Research goal: synchronize theory ↔ test inventory ↔ synperson narratives
+
+The three components of the research system need to be coherent with each other. Currently they have drifted:
+- **Theory** (archetype definitions, ethics dimension meanings) is partially documented but not fully formalized
+- **Test inventory** (questions in D1, both live and calibrating) was written over time and may encode implicit assumptions that don't match the current theory
+- **Synperson narratives** (rig.yaml profiles, events.md diaries) were written from the narrative archetype descriptions, which themselves may not align with what the question weights actually measure
+
+The synperson panel is the research instrument for detecting and closing these gaps — a well-constructed persona should reliably score its assigned archetype. Low hit rates are a signal of incoherence somewhere in the triangle.
+
+**Audit to-do: question inventory alignment**
+
+Review all questions — live and calibrating — against the theoretical definitions of each dimension:
+- Does each question cleanly discriminate the dimension it's tagged to?
+- Are there questions that are theoretically ambiguous (could be answered consistently by multiple archetypes)?
+- Are the E/V questions encoding Exit-as-restlessness and Voice-as-outrage, or are some using folk definitions (Exit = leaving a job, Voice = speaking up) that don't match?
+- Are the virtue questions encoding mimetic ethics (both modes: HW's exemplar-following and Legalist's codifying)? Or just one mode?
+- Are the deontological questions encoding behavioral self-definition (act-defines-belief), or drifting toward rule-following?
+- Are the consequentialist questions encoding goal-driven pragmatism, or drifting toward mere analysis?
+
+Do this audit *after* the theory dialogue session, when the dimension definitions are crisp. Use the synperson QA hit-rate results as a diagnostic tool: if a particular archetype is systematically missed, look for questions that are producing false signal for that archetype.
+
 ### Theory dialogue — ethics dimension definitions
 
 Have a dedicated session to map out the full theoretical grounding of the three ethics dimensions before writing behavioral anchor text (Track D/B). Known starting points:
