@@ -12,3 +12,7 @@ history/
 
 # Local secrets — never commit
 .env
+
+# Python bytecode
+__pycache__/
+*.pyc
