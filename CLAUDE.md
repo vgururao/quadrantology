@@ -105,7 +105,8 @@ VOCAB.md           — Controlled vocabulary: precise definitions of all terms o
 DESIGN.md          — Product design principles (also published at docs/design_principles.html)
 DATAMODEL.md       — Canonical data model: localStorage, D1 tables, run record formats
 STATUS.md          — Live environments, feature inventory, go-live checklist, known issues
-ROADMAP.md         — Product + theory track roadmap, tiered by priority
+DEV_ROADMAP.md     — Product feature roadmap, tiered by priority
+RESEARCH_ROADMAP.md — Research track: synperson panel + theory formalization backlog
 OPS.md             — Manual action items: CF dashboard, DNS, Stripe, D1 migrations
 ```
 
@@ -308,7 +309,8 @@ When the user says **"wrap up"**, perform all of the following before committing
 | `DESIGN.md` | Only if a new design principle was established or an existing one was revised |
 | `CLAUDE.md` | Repo structure (new files), API routes table, env vars, this artifact inventory if it changed |
 | `STATUS.md` | "What's Working" (move completed items in), Known Issues |
-| `ROADMAP.md` | Reorder/restate roadmap tiers as needed; move completed synperson track items to done |
+| `DEV_ROADMAP.md` | Reorder/restate product tiers as needed |
+| `RESEARCH_ROADMAP.md` | Move completed synperson items to done; update theory track order |
 | `OPS.md` | Add any new manual action items (CF dashboard, DNS, Stripe, D1 migrations); move completed items to Done |
 | `devlog/YYYY-MM-DD-sessionN.md` | New entry covering: what was built, key decisions, files changed |
 

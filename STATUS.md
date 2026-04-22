@@ -64,7 +64,8 @@ _Last updated: 2026-04-22 (Session 13)_
 | `VOCAB.md` | Controlled vocabulary — wins on term definitions, even over THEORY.md |
 | `DESIGN.md` | Founding design principles (also published at `docs/design_principles.html`) |
 | `DATAMODEL.md` | Canonical data model — update before touching code |
-| `ROADMAP.md` | Product and theory track roadmap, tiered by priority |
+| `DEV_ROADMAP.md` | Product feature roadmap, tiered by priority |
+| `RESEARCH_ROADMAP.md` | Research track: synperson panel + theory formalization backlog |
 | `OPS.md` | Manual action items (CF dashboard, DNS, Stripe, D1 migrations) |
 | `CLAUDE.md` | Full technical reference + wrap-up procedure for Claude Code sessions |
 | `docs/data/protocol.json` | Runtime feature parameters (min_runs, circle size, calibration, etc.) |
