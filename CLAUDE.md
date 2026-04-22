@@ -22,7 +22,7 @@ docs/              — Live website (Cloudflare Pages, custom domain quadrantolo
   understand.html  — Understanding Your Results: 13 models as 2×2 grids
   shop.html        — Card deck shop + print-at-home downloads
   game.html        — How to Play (stub)
-  history.html     — Logbook viewer (rename to analytics.html when analytics built)
+  logbook.html     — Logbook viewer (was history.html; meta-refresh redirect in place)
   circle.html      — Personal Circle: up to 8 arc snapshots from contacts
   analysis.html    — Relationship Analysis: computed views over circle + own data
   hacker.html, contrarian.html, legalist.html,
@@ -94,11 +94,19 @@ synpersons/        — Synthetic focus group: 30 persona profiles for longitudin
 
 devlog/            — Session-by-session development log (eventually published)
 
+research/          — Research track: methodology, audit plans, visual spec
+  RESEARCH_DESIGN.md — Synchronization triangle methodology; research system principles
+  AUDIT.md           — Question audit framework: structural/system tests + 11 unit tests per sub-model
+  SYNPERSON_DESIGN.md — Synperson revision plan; tracks A–D; behavioral profile spec
+  VISUAL.md          — Visualization modes (overview) + geometric/SVG spec (canonical reference for all diagrams)
+
 THEORY.md          — Canonical theory reference: master framework, archetype profiles, relationships, all 11 sub-models
 VOCAB.md           — Controlled vocabulary: precise definitions of all terms of art and key references
-AUDIT.md           — Question audit model: structural/system tests + 11 unit tests based on sub-models
-SYNPERSON_DESIGN.md — Plan for revising synperson biographies and events based on theory dialogue
-visualizations.md  — Three canonical visualization modes (nested, side-by-side, 2×2-mirrored); visual depiction rules TBD
+DESIGN.md          — Product design principles (also published at docs/design_principles.html)
+DATAMODEL.md       — Canonical data model: localStorage, D1 tables, run record formats
+STATUS.md          — Live environments, feature inventory, go-live checklist, known issues
+ROADMAP.md         — Product + theory track roadmap, tiered by priority
+OPS.md             — Manual action items: CF dashboard, DNS, Stripe, D1 migrations
 ```
 
 ## Deployment
@@ -220,7 +228,7 @@ Calibration threshold (`protocol.json > calibration.min_samples`, default 100): 
 
 Dimensions (index order): `[exit, voice, virtue, consequentialist, deontological]`
 
-**Pending review:** Q011 answer A and Q023 answer B have all-zero weight vectors — see `TODO.md`.
+**Note:** Q011 answer A and Q023 answer B were all-zero weight vectors; corrected in D1 and `questions.json` (Session 3).
 
 ### Own run records
 
@@ -299,8 +307,9 @@ When the user says **"wrap up"**, perform all of the following before committing
 | `DATAMODEL.md` | Any new/changed data structures, fields, localStorage keys, or D1 tables |
 | `DESIGN.md` | Only if a new design principle was established or an existing one was revised |
 | `CLAUDE.md` | Repo structure (new files), API routes table, env vars, this artifact inventory if it changed |
-| `STATUS.md` | "What's Working" (move completed items in), roadmap tiers (reorder/restate as needed), Known Issues |
-| `TODO.md` | Add any new manual action items (CF dashboard, DNS, Stripe, content review); move completed items to Done |
+| `STATUS.md` | "What's Working" (move completed items in), Known Issues |
+| `ROADMAP.md` | Reorder/restate roadmap tiers as needed; move completed synperson track items to done |
+| `OPS.md` | Add any new manual action items (CF dashboard, DNS, Stripe, D1 migrations); move completed items to Done |
 | `devlog/YYYY-MM-DD-sessionN.md` | New entry covering: what was built, key decisions, files changed |
 
 ### 2. Commit all changed files
