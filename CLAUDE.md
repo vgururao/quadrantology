@@ -98,6 +98,7 @@ THEORY.md          — Canonical theory reference: master framework, archetype p
 VOCAB.md           — Controlled vocabulary: precise definitions of all terms of art and key references
 AUDIT.md           — Question audit model: structural/system tests + 11 unit tests based on sub-models
 SYNPERSON_DESIGN.md — Plan for revising synperson biographies and events based on theory dialogue
+visualizations.md  — Three canonical visualization modes (nested, side-by-side, 2×2-mirrored); visual depiction rules TBD
 ```
 
 ## Deployment

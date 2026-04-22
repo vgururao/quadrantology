@@ -1,6 +1,6 @@
 # Quadrantology — Project Status
 
-_Last updated: 2026-04-21 (Session 12)_
+_Last updated: 2026-04-22 (Session 13)_
 
 ## Live
 
@@ -84,6 +84,32 @@ The synperson system is a 30-person synthetic focus group for longitudinal test 
 - [ ] **Public synperson page** (`docs/synpersons.html`) — panel overview + per-synperson cards.
 
 **Question audit plan:** `AUDIT.md` documents a two-layer audit framework: structural/system tests (pool-level) + 11 unit tests (per-question, one per sub-model). Run after synperson revision to distinguish biography/events problems from question pool problems.
+
+## Theory Track — Backlog (unscheduled sessions)
+
+Items ordered by dependency. Items 6 and 9 can run in parallel once item 5 is done; item 10 follows 9; item 2 follows both 3 and 5.
+
+- [ ] **1. Finish edge table emotion and annotation entries** — Fill the 8 blank cells in the Edge Table in `THEORY.md`: emotion labels for L→H and I→HW (intra-triangle), and energy/emotion labels for all 6 Nemesis/Frustrator pairs. These are the final gaps in the formal graph structure before the topology is complete.
+
+- [ ] **2. Mathematical framework** — Describe the full model as a directed graph with formal transition operators. Language: 6 vertices, two directed 3-cycles, mirror reflection operator, composition operator k∈{−1,0,+1} generating the 3 cross-triangle relation types. Express switching crises as edge traversal with energy weights. Output: a self-contained `MATH.md` (or new section in `THEORY.md`). Foundation for items 3–10.
+
+- [ ] **3. Visualizations as projections** — Derive each of the three visualization modes (nested, side-by-side, 2×2-mirrored) as projections of the mathematical model: which graph properties each mode preserves, which it discards. Append to `visualizations.md` (currently only describes modes descriptively). This makes the visualization choices principled rather than ad hoc.
+
+- [ ] **4. Build clean component visualizations** — Implement the canonical diagram set in SVG (or equivalent): the two-triangle graph with vertices, directed edges, relation type color coding, energy weight encoding for switching crises, and emotion labels. Build all three modes from the same data source. Replace current one-off diagrams in `assets/`. These become the master assets for all downstream presentations.
+
+- [ ] **5. Update all model descriptions with topology/geometry language** — Rewrite the 11 sub-model descriptions in `THEORY.md` (and eventually `understand.html`) to use the new variable language consistently: Temporal Horizon, Scarcity Structure, E/V as the three defining axes; ethics vertex as derived. Introduce any additional dependent variables the sub-models define (energy type, epistemic type, signaling mode, etc.) explicitly as derived from the three primary variables. Creates a uniform "derived from coordinates" structure across all models.
+
+- [ ] **6. Ground test questions in relationship discrimination** — For each question in the bank, identify which of the 5 relationship directions it discriminates (Supplier, Receiver, Evil Twin, Nemesis, Frustrator) in addition to which dimensions it scores. A question that only discriminates intra-triangle is structurally weaker than one that discriminates across Evil Twin or Nemesis pairs. Annotate `AUDIT.md` and question notes in D1. Foundation for item 7.
+
+- [ ] **7. Improve sampling model with relationship coverage** — Redesign the sampling algorithm (`/api/sample-questions`) so each run tests the respondent in all 5 relationship directions, not just by dimension weight balance. A run that only varies intra-triangle questions cannot distinguish Nemesis from Frustrator pairs. Requires item 6's annotations as input to the sampler.
+
+- [ ] **8. Rethink synpersona and event history model with transition grammar** — Revise `SYNPERSON_DESIGN.md` to incorporate: (a) the formal relationship types as the basis for interpersonal events (events should fire along named relationship edges), (b) the emotion labels from the edge table as the affective grammar of transitions, and (c) the switching crisis model as the basis for major life events that shift a persona's modal expression. Generate a small set of canonical event templates per edge type. This replaces the current ad hoc event design with a theory-derived grammar.
+
+- [ ] **9. Update site theory and archetype pages** — Rewrite `theory.html` and all 6 archetype pages (`hacker.html`, etc.) on both `master` and `gh-pages` to use the current controlled vocabulary (Evil Twin, Nemesis, Frustrator, Supplier, Receiver — no Frenemy, no Evil Triplet, no superior/subordinate). Incorporate clean component visualizations from item 4. Requires items 4 and 5.
+
+- [ ] **10. Build new slide deck** — Produce a new canonical slide deck replacing the superseded `deathAndTaxes.pptx`-era materials. Structure: opening 2×2, formal graph model, 6 archetypes (with behavioral profiles), 5 relationship types, 11 sub-models, switching crises with emotion grammar, test methodology. Uses visualizations from item 4. Final synthesis of all theory track work.
+
+---
 
 ## Later (Tier 2 — enrichment)
 

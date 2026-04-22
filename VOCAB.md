@@ -16,11 +16,15 @@
 
 **Infinite Game** — A game played to keep playing, with no terminal condition. Requires both Life and Play axes in their open/expansive orientation simultaneously. From Carse.
 
-**Nemesis** — Relationship type. Opposite archetype on the other triangle, at a different vertex. Cannot both win in conflict — one must lose. Pairs: Hacker ↔ Holy Warrior, Contrarian ↔ Investigator, Legalist ↔ Operator.
+**Supplier** — Relationship type. Same triangle, −1 step in home cycle. The partner who gives information to you. Information gradient only — do not imply status hierarchy.
 
-**Frenemy** — Relationship type. Same ethics vertex on the opposite triangle. Similar ethical orientation, constant disagreement about methods. Can collaborate toward a shared goal while arguing all the way. Pairs: Hacker ↔ Investigator, Contrarian ↔ Operator, Legalist ↔ Holy Warrior.
+**Receiver** — Relationship type. Same triangle, +1 step in home cycle. The partner you give information to. Information gradient only — do not imply status hierarchy.
 
-**Evil Triplet** — Relationship type. Same triangle. Need each other to complete the cycle and hand off batons, but with sibling frictions. Each is strong where the other is weak.
+**Evil Twin** — Relationship type. Same ethics vertex on the opposite triangle. Formal definition: pure mirror reflection (k=0) across the E/V axis. Dynamic: *pointed the wrong way* — both occupy the same ethics vertex but their information vectors run in opposite directions; each receives from the direction the other supplies to. Pairs: Hacker ↔ Investigator, Contrarian ↔ Operator, Legalist ↔ Holy Warrior.
+
+**Nemesis** — Relationship type. Cross-triangle, different ethics vertex. Formal definition: IS your supplier's evil twin (equivalently: your evil twin's receiver; k=−1 composed with mirror). Dynamic: each perceives the other as resembling their supplier, so each expects to receive — mutual deadlock, both silent. The deepest incompatibility: cannot both win. Pairs: Hacker ↔ Holy Warrior, Contrarian ↔ Investigator, Legalist ↔ Operator.
+
+**Frustrator** — Relationship type. Cross-triangle, different ethics vertex. Formal definition: IS your receiver's evil twin (equivalently: your evil twin's supplier; k=+1 composed with mirror). Dynamic: each perceives the other as resembling their receiver, so each tries to give — mutual broadcast, talking past each other. Pairs: Hacker ↔ Operator, Contrarian ↔ Holy Warrior, Legalist ↔ Investigator.
 
 **MBTI** — A medium-abstraction personality model that measures behavioral tendencies in the consequentialist/Goals domain only. Maps cleanly onto the Life/Taxes and Death/Play quadrants but breaks down at the process extreme (Life/Play — too granular) and the virtue/philosophy extreme (Death/Taxes — too abstract). Do not use MBTI as a proxy for the full Quadrantology model — it only measures the consequentialist dimension.
 
