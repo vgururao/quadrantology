@@ -39,6 +39,12 @@ Same logic applies to V/D and V/C questions. Check whether any virtue questions 
 
 This is a question-bank design principle: **every ethics-only question should have a named E/V home**, and the pool should be balanced across homes so no archetype is systematically underserved by the question inventory.
 
+### Theory dialogue — Approach Mode / Retreat Mode
+
+From the slide deck: "Approach Mode: You are running toward life. Retreat Mode: You are running away from life." Not yet explained. Needs a dedicated dialogue session to work out how this maps onto the archetypes and the Death and Taxes 2x2. Is this a per-archetype disposition, a situational state, or something else?
+
+---
+
 ### Theory dialogue — ethics dimension definitions
 
 Have a dedicated session to map out the full theoretical grounding of the three ethics dimensions before writing behavioral anchor text (Track D/B). Known starting points:

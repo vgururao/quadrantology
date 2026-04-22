@@ -93,6 +93,11 @@ synpersons/        — Synthetic focus group: 30 persona profiles for longitudin
     research_log.md  — Editorial change log (created on first logged run)
 
 devlog/            — Session-by-session development log (eventually published)
+
+THEORY.md          — Canonical theory reference: master framework, archetype profiles, relationships, all 11 sub-models
+VOCAB.md           — Controlled vocabulary: precise definitions of all terms of art and key references
+AUDIT.md           — Question audit model: structural/system tests + 11 unit tests based on sub-models
+SYNPERSON_DESIGN.md — Plan for revising synperson biographies and events based on theory dialogue
 ```
 
 ## Deployment

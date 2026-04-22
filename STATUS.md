@@ -1,6 +1,6 @@
 # Quadrantology — Project Status
 
-_Last updated: 2026-04-20 (Session 11)_
+_Last updated: 2026-04-21 (Session 12)_
 
 ## Live
 
@@ -68,20 +68,22 @@ _Last updated: 2026-04-20 (Session 11)_
 
 ## Next Up (Tier 1.9 — synperson research panel)
 
-The synperson system is a 30-person synthetic focus group for longitudinal test research, QA, and eventual public access. All design specs, demographic profiles, event diaries, and scripts are complete. First QA pass done (20% hit rate). Improvement plan in progress.
+The synperson system is a 30-person synthetic focus group for longitudinal test research, QA, and eventual public access. All design specs, demographic profiles, event diaries, and scripts are complete. First QA pass done (20% hit rate). Theory fully articulated (Session 12). Synperson revision plan in `SYNPERSON_DESIGN.md`.
 
 - [x] **Write 30 `events.md` files** — ✅ Done (Session 10).
-- [x] **Build `scripts/synperson/` suite** — ✅ Done (Session 11): `memory.py`, `scoring.py`, `run-test.py`, `evolve-events.py`, `sync-to-d1.py`, `run-panel.py` all written and syntax-verified.
-- [x] **First QA run pass** — ✅ Done (Session 11): all 30 run, 6/30 matched assigned archetype (20%). Pipeline is functional; hit rate needs improvement.
-- [ ] **Track A — Memory model tuning** — `intensity_floor` 8→6, `alpha` 0.5→0.2, `max_events` 10→12; remove 4-relationship cap in prompt.
-- [ ] **Track B — Behavioral anchor field** — add `behavioral_stance` to `_rig_schema.yaml` and all 30 `rig.yaml` files; redesign prompt to surface it first.
-- [ ] **Track C — Events response beats** — audit all 30 `events.md` files for wrong-archetype behavioral responses; add explicit reaction beats.
-- [ ] **Track D — Archetype description alignment** — analysis complete (Session 11). Rewrite behavioral anchor text using math-derived behavioral signatures (see devlog). Do before Track B.
+- [x] **Build `scripts/synperson/` suite** — ✅ Done (Session 11).
+- [x] **First QA run pass** — ✅ Done (Session 11): 6/30 matched (20%). Pipeline functional; hit rate needs improvement.
+- [x] **Theory dialogue** — ✅ Done (Session 12). Full theoretical grounding of all 6 archetypes, 11 sub-models, relationship types, controlled vocabulary. See `THEORY.md`, `VOCAB.md`, `devlog/2026-04-21-theory-dialogue.md`.
+- [ ] **Write 6 archetype behavioral profiles** — One per archetype, ~400-600 words, theory-derived, character-level. Foundation for all biography and events revision. See `SYNPERSON_DESIGN.md` Step 1.
+- [ ] **Track D — Archetype description alignment** — Rewrite behavioral anchor text using theory-derived profiles. Do before Track B.
+- [ ] **Track B — Behavioral anchor field** — Add `behavioral_stance` + theory-derived fields to `_rig_schema.yaml` and all 30 `rig.yaml` files. Update `run-test.py` prompt.
+- [ ] **Track A — Memory model tuning** — `intensity_floor` 8→6, `alpha` 0.5→0.2, `max_events` 10→12; remove 4-relationship cap.
+- [ ] **Track C — Events response beats** — Audit all 30 `events.md` files for wrong-archetype behavioral responses; add reaction beats.
 - [ ] **Apply D1 schema migration** — Add `synpersons`, `synperson_events`, `synperson_runs` tables.
 - [ ] **First logged run pass** — After tracks A–D, run all 30 logged; target ≥50% archetype match.
-- [ ] **Public synperson page** (`docs/synpersons.html`) — panel overview + per-synperson cards; static HTML.
+- [ ] **Public synperson page** (`docs/synpersons.html`) — panel overview + per-synperson cards.
 
-**Track D key findings (question-weight analysis):** The "deontological" ethics dimension in the test encodes principled hands-on action + self-reliance — NOT rule-following. The Investigator description (currently: "likes clear rules") is wrong; that's virtue ethics (Legalist). Holy Warrior has no patience for *corruption*, not for rules. The E/V axis turns on restlessness vs. outrage, and crucially: Exit archetypes *leave* toxic situations (Q021:b); Voice archetypes *stay and fight* (Q021:a). See Session 11 devlog for full analysis.
+**Question audit plan:** `AUDIT.md` documents a two-layer audit framework: structural/system tests (pool-level) + 11 unit tests (per-question, one per sub-model). Run after synperson revision to distinguish biography/events problems from question pool problems.
 
 ## Later (Tier 2 — enrichment)
 
