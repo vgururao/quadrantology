@@ -37,6 +37,26 @@ _Last updated: 2026-04-22 (Session 13)_
 - **Build stamp** (`docs/v.js`) — discreet `vX.Y.Z · date` fixed bottom-right on every page; semantic versioning: `gh-pages` is v1.x.x, `master` is v2.x.x-dev
 - **Select-then-confirm question flow** (both branches) — choice buttons set JS-controlled `.selected` class; always-visible Back/Next nav with disabled states; "Response changed!" notification on answer revision; fixes touch `:active` state persistence on mobile
 
+## V2 Release Definition
+
+V2 is the first full public release on the Cloudflare Pages stack (`master` branch). It is ready for release when all of the following gates are cleared. Gates are listed in dependency order; earlier gates unblock later ones.
+
+| # | Gate | Status | Ref |
+|---|---|---|---|
+| 1 | **100 audited questions in D1**, validated against the model | ⬜ | `RESEARCH_ROADMAP.md` |
+| 2 | **Sharing feature** — URL fragment arc share + `r.html` renderer | ⬜ | `DEV_ROADMAP.md` Tier 1 |
+| 3 | **Personal Circle** — functional with real share URLs; demo dummy entries already present | 🟡 | `DEV_ROADMAP.md` Tier 1 |
+| 4 | **Free and subscriber tiers** — subscription state enforced; paywall presents all three product tiers | ⬜ | `DEV_ROADMAP.md` Tier 1.5 |
+| 5 | **Multi-track context capability** — context declaration, relationship sets, format_version 2 run records, multi-track logbook display | ⬜ | `DEV_ROADMAP.md` Tier 1.5 |
+| 6 | **Full privacy-preserving logbook architecture** — context/relationship data never leaves logbook; research submissions stripped; format_version 2 enforced | 🟡 | `DATAMODEL.md` spec complete; implementation pending |
+| 7 | **Public theory model bundled with logbook export** — CC BY 4.0 canonical model JSON (`quadrantology-model-v1.json`) published and embedded in every logbook download alongside scoring model; sufficient for independent user analysis offline | ⬜ | `OPS.md`; `DATAMODEL.md` |
+
+**Legend:** ✅ done · 🟡 partial · ⬜ not started
+
+**Note:** The Go-Live Checklist below covers deployment steps (DNS, Stripe, CF). The gates above are product readiness gates. Both must be complete before V2 ships.
+
+---
+
 ## Go-Live Checklist
 
 - [ ] Apply D1 schema migrations (`worker/schema.sql` then `worker/seed-questions.sql`) — see `OPS.md`

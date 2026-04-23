@@ -4,11 +4,21 @@ _Last updated: 2026-04-22 (Session 14)_
 
 Research track roadmap: synperson panel and theory formalization. Development track is in `DEV_ROADMAP.md`. Research methodology is in `research/RESEARCH_DESIGN.md`.
 
+Items marked **[V2 gate]** are required for the V2 public release. See `STATUS.md` for the full gate list and status. Synpersons are a V3 feature — the panel work below is post-V2.
+
 ---
 
-## Immediate — Synperson Panel (Tier 1.9)
+## [V2 gate] — 100 Audited Questions
 
-The synperson system is a 30-person synthetic focus group for longitudinal test research, QA, and eventual public access. All design specs, demographic profiles, event diaries, and scripts are complete. First QA pass done (20% hit rate). Theory fully articulated (Session 12). Synperson revision plan in `research/SYNPERSON_DESIGN.md`.
+Before V2 ships, the question bank must reach 100 questions that have been audited against the current model. "Audited" means each question has been reviewed against the theoretical definitions in `THEORY.md` using the framework in `research/AUDIT.md`: does it cleanly discriminate the dimension(s) it encodes, with no implicit bias that contradicts current theory? Questions currently in `draft` status (Q029–Q063) need text written and then audited before promotion to `calibrating` or `live`.
+
+The audit framework (`research/AUDIT.md`) must be run at the pool level (structural tests S1–S7) as well as per-question (unit tests U1–U11) before this gate is cleared.
+
+---
+
+## Post-V2 — Synperson Panel
+
+**Scope: V3.** Do not start until V2 ships. The synperson system is a 30-person synthetic focus group for longitudinal test research, QA, and eventual public access. All design specs, demographic profiles, event diaries, and scripts are complete. First QA pass done (20% hit rate). Theory fully articulated (Session 12). Synperson revision plan in `research/SYNPERSON_DESIGN.md`.
 
 **Completed:**
 - [x] Write 30 `events.md` files — Done (Session 10)
