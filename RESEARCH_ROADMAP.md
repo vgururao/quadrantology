@@ -38,6 +38,8 @@ Items ordered by dependency. Items 6 and 9 can run in parallel once item 5 is do
 
 - [ ] **0a. Ethics dimension definitions** — Dedicated dialogue session to map out the full theoretical grounding of the three ethics dimensions before writing behavioral anchor text. Known starting points: Virtue = mimetic ethics, Deontological = behavioral ethics, Consequentialist = goal ethics. Open questions: how does the mimetic/behavioral/goal split interact with the E/V axis? What does each archetype's failure mode look like (idol-betrayal vs wrong-method vs missed-target)? How does the codifying/mimetic virtue split show up in test answers?
 
+- [ ] **0c. Stress and ease response vibes** — For each of the 6 Supplier/Receiver pairs, work out the specific mood or vibe of the stress response (supplier impersonating receiver) and ease response (receiver impersonating supplier). The concept and column structure are already in THEORY.md; only the cell content is missing. Starting prompt: what does a Hacker look like when stressed into Contrarian mode? How does that differ from a Legalist sliding back into Contrarian ease? What's the analogous pattern on the Voice side?
+
 - [ ] **0b. Approach Mode / Retreat Mode** — From the slide deck: "Approach Mode: You are running toward life. Retreat Mode: You are running away from life." Not yet explained. Needs a dedicated session to work out how this maps onto the archetypes and the Death and Taxes 2×2. Is this a per-archetype disposition, a situational state, or something else?
 
 **Main sequence:**

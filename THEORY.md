@@ -96,23 +96,25 @@ All 15 undirected pairs. Direction convention: for Supplier/Receiver pairs, forw
 
 Edge annotations are the baton-pass heuristics from the GpvTriangle diagram (Ribbonfarm 2014) — they name the principle governing the handoff, not the felt experience. Emotion labels are the directional felt experience of movement along that edge.
 
-| Pair | Relation | Axes differ | Energy | Edge annotation | fwd → emotion | ← fwd emotion |
-|---|---|---|---|---|---|---|
-| **H → C** | Supplier/Receiver | Ethics | LOW | "Hacking and Improvisation" | Cynicism | Curiosity |
-| **C → L** | Supplier/Receiver | Ethics | LOW | "Courage to quit" *(Seth Godin)* | Resignation | Restlessness |
-| **L → H** | Supplier/Receiver | Ethics | LOW | "Innocent until proven guilty" *(legal system, due process)* | — | — |
-| **I → HW** | Supplier/Receiver | Ethics | LOW | "People over process" *(Agile manifesto)* | — | — |
-| **HW → O** | Supplier/Receiver | Ethics | LOW | "Be somebody or do something" *(John Boyd)* | Anger | Guilt/Shame |
-| **O → I** | Supplier/Receiver | Ethics | LOW | "Systems over Goals" *(Scott Adams)* | Doubt | Fear |
-| **H → I** | Evil Twin | E/V | MEDIUM | — | Responsibility | Disillusionment |
-| **L → HW** | Evil Twin | E/V | MEDIUM | — | Awe | Absurdity |
-| **C → O** | Evil Twin | E/V | HIGH | — | (multipath) | Loss of Faith? |
-| **H → HW** | Nemesis | Both | ? | — | — | — |
-| **C → I** | Nemesis | Both | ? | — | — | — |
-| **L → O** | Nemesis | Both | ? | — | — | — |
-| **H → O** | Frustrator | Both | ? | — | — | — |
-| **C → HW** | Frustrator | Both | ? | — | — | — |
-| **L → I** | Frustrator | Both | ? | — | — | — |
+Columns `supplier stress` and `receiver ease` record the stress/relaxation response vibes for each Supplier/Receiver pair (see Relationships section). TBD pending theory dialogue session. Not applicable to cross-triangle pairs.
+
+| Pair | Relation | Axes differ | Energy | Edge annotation | fwd → emotion | ← fwd emotion | supplier stress | receiver ease |
+|---|---|---|---|---|---|---|---|---|
+| **H → C** | Supplier/Receiver | Ethics | LOW | "Hacking and Improvisation" | Cynicism | Curiosity | — | — |
+| **C → L** | Supplier/Receiver | Ethics | LOW | "Courage to quit" *(Seth Godin)* | Resignation | Restlessness | — | — |
+| **L → H** | Supplier/Receiver | Ethics | LOW | "Innocent until proven guilty" *(legal system, due process)* | — | — | — | — |
+| **I → HW** | Supplier/Receiver | Ethics | LOW | "People over process" *(Agile manifesto)* | — | — | — | — |
+| **HW → O** | Supplier/Receiver | Ethics | LOW | "Be somebody or do something" *(John Boyd)* | Anger | Guilt/Shame | — | — |
+| **O → I** | Supplier/Receiver | Ethics | LOW | "Systems over Goals" *(Scott Adams)* | Doubt | Fear | — | — |
+| **H → I** | Evil Twin | E/V | MEDIUM | — | Responsibility | Disillusionment | n/a | n/a |
+| **L → HW** | Evil Twin | E/V | MEDIUM | — | Awe | Absurdity | n/a | n/a |
+| **C → O** | Evil Twin | E/V | HIGH | — | (multipath) | Loss of Faith? | n/a | n/a |
+| **H → HW** | Nemesis | Both | ? | — | — | — | n/a | n/a |
+| **C → I** | Nemesis | Both | ? | — | — | — | n/a | n/a |
+| **L → O** | Nemesis | Both | ? | — | — | — | n/a | n/a |
+| **H → O** | Frustrator | Both | ? | — | — | — | n/a | n/a |
+| **C → HW** | Frustrator | Both | ? | — | — | — | n/a | n/a |
+| **L → I** | Frustrator | Both | ? | — | — | — | n/a | n/a |
 
 Edge annotations exist only for the six intra-triangle edges. Cross-triangle edges have no baton-pass heuristic — they are crisis transitions or structural relations, not cycle handoffs.
 
@@ -205,6 +207,18 @@ Voice-side frictions are more painful than Exit-side frictions because they deal
 
 ### Receiver
 Same triangle, +1 step in the home cycle. The partner you give information to. Information and burden travel together: the baton handoff passes the edge annotation principle (e.g., "Hacking and Improvisation," "People over process") along with the accumulated costs of the previous phase.
+
+### Stress and Relaxation Responses
+
+An enneagram-inspired dynamic operating on the Supplier/Receiver axis: under stress or ease, an archetype temporarily does the work of a cycle neighbor — imperfectly, in its own idiom.
+
+**Under stress** — an archetype reaches forward and imperfectly takes on the work of its **Receiver**. The supplier brings their own character to the receiver's role: a Hacker under stress starts philosophizing like a Contrarian, but with urgency and expedience rather than intellectual rigor. The receiver's work gets done in the supplier's idiom.
+
+**Under ease** — an archetype falls back and imperfectly takes on the work of its **Supplier**. The receiver drifts into the upstream mode: a Contrarian at ease gets hands-on like a Hacker, but retains more big-picture awareness than a Hacker would bring. The supplier's work gets done in the receiver's idiom.
+
+The specific mood or vibe of each response depends on the particular pair — a Hacker reaching toward Contrarian under stress reads differently than an Investigator reaching toward Holy Warrior. These vibes belong in the edge table (`supplier stress` and `receiver ease` columns) and are TBD pending a dedicated theory dialogue session.
+
+*Enneagram parallel:* disintegration (stress) and integration (security) directions. Key differences from Enneagram: (a) movement is always to the immediate cycle neighbor, never arbitrary; (b) direction is determined by the information-flow cycle; (c) "imperfect" means doing the neighbor's job in one's own idiom, not necessarily expressing that type's negative traits.
 
 ### Evil Twin
 Same ethics vertex on the opposite triangle. Formal definition: pure mirror reflection (k=0) across the E/V axis. Both archetypes occupy the same ethical position, but their information vectors run in opposite directions — each receives from the direction the other supplies to.

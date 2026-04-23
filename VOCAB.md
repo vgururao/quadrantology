@@ -20,6 +20,10 @@
 
 **Receiver** — Relationship type. Same triangle, +1 step in home cycle. The partner you give information to. Information gradient only — do not imply status hierarchy.
 
+**Stress response** — Under stress conditions, an archetype imperfectly takes on the work of its Receiver, doing that work in its own idiom. The specific vibe or character of this impersonation depends on the particular Supplier/Receiver pair. See edge table in THEORY.md (`supplier stress` column). Enneagram parallel: disintegration direction.
+
+**Ease response** — Under relaxed/secure conditions, an archetype imperfectly takes on the work of its Supplier, doing that work in its own idiom. The specific vibe or character of this impersonation depends on the particular pair. See edge table in THEORY.md (`receiver ease` column). Enneagram parallel: integration direction.
+
 **Evil Twin** — Relationship type. Same ethics vertex on the opposite triangle. Formal definition: pure mirror reflection (k=0) across the E/V axis. Dynamic: *pointed the wrong way* — both occupy the same ethics vertex but their information vectors run in opposite directions; each receives from the direction the other supplies to. Pairs: Hacker ↔ Investigator, Contrarian ↔ Operator, Legalist ↔ Holy Warrior.
 
 **Nemesis** — Relationship type. Cross-triangle, different ethics vertex. Formal definition: IS your supplier's evil twin (equivalently: your evil twin's receiver; k=−1 composed with mirror). Dynamic: each perceives the other as resembling their supplier, so each expects to receive — mutual deadlock, both silent. The deepest incompatibility: cannot both win. Pairs: Hacker ↔ Holy Warrior, Contrarian ↔ Investigator, Legalist ↔ Operator.
