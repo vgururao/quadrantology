@@ -8,6 +8,20 @@ Items marked **[V2 gate]** are required for the V2 public release. See `STATUS.m
 
 ---
 
+## gh-pages Maintenance (v1 live site, `quadrantology.com`)
+
+Work done in the `gh-pages` git worktree. These are editorial/copy updates to the production v1 site — no new features, no backend changes. Do before V2 ships so the live site reflects current theory and sets up the V2 upgrade path.
+
+1. **Archetype page relationship labels** — Update all 6 archetype pages (`hacker.html`, `contrarian.html`, etc.) to use current controlled vocabulary for all 5 relationship types: Supplier, Receiver, Evil Twin, Nemesis, Frustrator. Current pages use stale or incomplete labels. Rubric: each archetype page should name and briefly describe all 5 relationships from that archetype's perspective.
+
+2. **Theory page light edit** — Update `theory.html` to use current controlled vocabulary (Evil Twin, Nemesis, Frustrator, Supplier, Receiver) wherever relationship types are named. Remove or correct any language that contradicts current THEORY.md. This is a terminology pass only — full rewrite is V2 gate 8.
+
+3. **Test result page light edit** — Tighten result page copy: clarify the tracker framing (this is one data point, not a verdict), name the archetype's key relationships (Supplier and Receiver at minimum), and remove any language that overstates certainty of a single run. Keep it brief.
+
+4. **V2 upgrade copy** — Improve V2 CTA on `index.html` and `test.html` (via `docs/data/v2-cta.html`). Replace generic sign-up text with copy that explains what's new: context-aware tracking, Personal Circle, multi-run arc, relationship analysis. Position V2 as the longitudinal product; frame V1 as a preview. Should create genuine pull, not just announce a waitlist.
+
+---
+
 ## Tier 1 — Pre-onboarding (do next)
 
 1. **[V2 gate] URL fragment sharing + `r.html`** — "Share my arc" generates a ~220-char URL fragment with name + most recent 3 archetypes + summary scores. `r.html` renders received arcs client-side and has an "Add to Circle" button. Prerequisite for circle.html to be usable by real people. Requires `min_runs_to_share` completed runs. Name set at share time, not persisted.
