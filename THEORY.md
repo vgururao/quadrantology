@@ -348,9 +348,11 @@ A user who takes the test three times in a "work" context and three times in a "
 
 A person's natural archetypal orientation is not revealed by any single run but by the cross-context pattern: which context produces the most stable, high-confidence archetype assignment? Which context generates the most variance or stress-response expression?
 
-The hypothesis: your natural archetype is most clearly expressed in the context where you are most at ease — where you score with the highest confidence and the fewest signs of stress-response behavior. The ease response (falling back into Supplier work) is most likely to appear in contexts where you feel safe; the stress response (reaching forward into Receiver work) is most likely to appear in demanding or threatening contexts.
+The hypothesis: your natural archetype is most clearly expressed in contexts of routine, middling stress — neither under acute pressure nor under unusual ease. Both extra stress and extra relaxation are deviations from the baseline. The stress response (reaching into Receiver work) appears under elevated pressure; the ease response (falling back into Supplier work) appears under unusual safety or slack. A context that is either too demanding or too comfortable will suppress the natural archetype in favor of a neighboring one.
 
-This connects the context model to the Supplier/Receiver stress and ease response theory: multi-track data makes it possible to distinguish "I am a Hacker" from "I act like a Hacker when under pressure at work (stress response) but I'm actually a Contrarian when relaxed at home."
+Natural preference is therefore not revealed by the most relaxed context or the most stable one in isolation, but by the context that feels most *normal* — habitual engagement with ordinary stakes and ordinary friction. Cross-context comparison makes this visible: if a user expresses a consistent archetype across three different contexts, that convergence at routine stress levels is strong evidence of natural orientation.
+
+This connects the context model to the Supplier/Receiver stress and ease response theory: multi-track data makes it possible to distinguish "I am a Contrarian" from "I reach toward Legalist behavior under work pressure (stress response) and drift toward Hacker behavior when I'm unusually relaxed (ease response) — both are deviations from my routine self."
 
 ### Relationship Context as Signal
 
