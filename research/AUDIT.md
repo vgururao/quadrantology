@@ -34,8 +34,8 @@ The goal is threefold:
 | Relationship | Pairs | Expected discriminability |
 |---|---|---|
 | Nemesis | H↔HW, C↔I, L↔O | Highest — these cannot both win |
-| Frenemy | H↔I, C↔O, L↔HW | Medium — same vertex, opposite triangle |
-| Evil Triplet | H↔C, C↔L, L↔H, I↔HW, HW↔O, O↔I | Lower — same triangle, complementary |
+| Evil Twin | H↔I, C↔O, L↔HW | Medium — same ethics vertex, opposite triangle; pointed the wrong way |
+| Supplier/Receiver | H↔C, C↔L, L↔H, I↔HW, HW↔O, O↔I | Lower — same triangle, complementary; information-flow partners |
 
 ---
 

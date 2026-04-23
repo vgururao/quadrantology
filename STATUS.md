@@ -43,7 +43,8 @@ V2 is the first full public release on the Cloudflare Pages stack (`master` bran
 
 | # | Gate | Status | Ref |
 |---|---|---|---|
-| 1 | **100 audited questions in D1**, validated against the model | ⬜ | `RESEARCH_ROADMAP.md` |
+| — | **Theory model baseline** *(research prerequisite, not a product feature)* — ethics dimension definitions settled via dialogue, edge table complete, 11 sub-models in consistent variable language. Prerequisite for the question audit; blocks gate 1. | ⬜ | `RESEARCH_ROADMAP.md` Theory track |
+| 1 | **100 audited questions in D1**, validated against the model *(depends on theory baseline)* | ⬜ | `RESEARCH_ROADMAP.md` |
 | 2 | **Sharing feature** — URL fragment arc share + `r.html` renderer | ⬜ | `DEV_ROADMAP.md` Tier 1 |
 | 3 | **Personal Circle** — functional with real share URLs; demo dummy entries already present | 🟡 | `DEV_ROADMAP.md` Tier 1 |
 | 4 | **Free and subscriber tiers** — subscription state enforced; paywall presents all three product tiers | ⬜ | `DEV_ROADMAP.md` Tier 1.5 |
