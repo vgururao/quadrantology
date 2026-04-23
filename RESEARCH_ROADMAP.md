@@ -26,6 +26,10 @@ The synperson system is a 30-person synthetic focus group for longitudinal test 
 - [ ] **First logged run pass** — After tracks A–D, run all 30 logged; target ≥50% archetype match.
 - [ ] **Public synperson page** (`docs/synpersons.html`) — panel overview + per-synperson cards.
 
+**Context implications for synpersons:** synpersons already have implicit contexts (workplace, family) in their `rig.yaml` and `events.md`. When the context-aware run model ships, `run-test.py` should declare a context before each run — using the synperson's primary institutional setting as the default. The `relationships` field in the run context should be populated from the synperson's declared relationships in `rig.yaml`. This makes synperson QA runs context-aware from the start, producing richer research data and testing the inheritance flow.
+
+**Research data note:** opted-in research submissions should never include relationship data (nicknames, guessed archetypes of real people). Context `label` and `id` are also excluded. The only context-derived signal that may appear in research submissions is a de-identified context type (e.g., a user-selected category like "work" / "family" / "other"), if the user explicitly opts in to that level of disclosure.
+
 **Question audit:** `research/AUDIT.md` documents the two-layer audit framework (structural/system tests + 11 unit tests per sub-model). Run this after synperson revision to distinguish biography/events problems from question pool problems.
 
 ---
@@ -37,6 +41,8 @@ Items ordered by dependency. Items 6 and 9 can run in parallel once item 5 is do
 **Preparatory sessions (do before items 1–10):**
 
 - [ ] **0a. Ethics dimension definitions** — Dedicated dialogue session to map out the full theoretical grounding of the three ethics dimensions before writing behavioral anchor text. Known starting points: Virtue = mimetic ethics, Deontological = behavioral ethics, Consequentialist = goal ethics. Open questions: how does the mimetic/behavioral/goal split interact with the E/V axis? What does each archetype's failure mode look like (idol-betrayal vs wrong-method vs missed-target)? How does the codifying/mimetic virtue split show up in test answers?
+
+- [ ] **0d. Confidence scoring methodology** — Work out how `archetype_distribution` is computed from dimension scores. The assigned archetype is the argmax, but the full distribution needs a principled derivation: softmax over raw scores? Normalized margin? Should confidence also reflect question sample diversity (a run that only tested E/V questions is less confident about ethics vertex than one that covered all dimensions)? Connects to the context-aware run model: multi-context data will eventually let us validate confidence scoring empirically.
 
 - [ ] **0c. Stress and ease response vibes** — For each of the 6 Supplier/Receiver pairs, work out the specific mood or vibe of the stress response (supplier impersonating receiver) and ease response (receiver impersonating supplier). The concept and column structure are already in THEORY.md; only the cell content is missing. Starting prompt: what does a Hacker look like when stressed into Contrarian mode? How does that differ from a Legalist sliding back into Contrarian ease? What's the analogous pattern on the Voice side?
 

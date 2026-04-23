@@ -330,6 +330,34 @@ Two new transition arrows in diagrams:
 
 *Note: The whole model has a second-law-of-thermodynamics flavor. Entropy always increases at the system level — no archetype wins against it, they just have different relationships to it and different degrees of self-awareness about it.*
 
+---
+
+## Contextual Archetypal Expression
+
+Archetypal behaviors are functions of context, not fixed traits. A person does not have a single archetype — they have a profile of archetypal tendencies that vary by institutional and relational context. The "work self" and the "family self" may express different archetypes with different degrees of confidence and comfort.
+
+This is theoretically consistent with the model: the two axes (Temporal Horizon and Scarcity Structure) describe motivational orientation toward a situation, not an intrinsic property of a person. Different institutional contexts present different combinations of constraint, horizon, and stake — naturally eliciting different archetypal responses from the same person.
+
+### The Test as a Contextual Measurement
+
+Every run of the questionnaire is implicitly a measurement of the taker in some context — the institutional frame and relational network they have in mind as they answer. Making this context explicit (named, persistent, and attached to the run record) converts a potentially confounded measurement into a clean one.
+
+A user who takes the test three times in a "work" context and three times in a "family" context has six measurements, not one arc. The work arc and the family arc may diverge, converge, or oscillate on independent rhythms.
+
+### Natural Preference as Cross-Context Signal
+
+A person's natural archetypal orientation is not revealed by any single run but by the cross-context pattern: which context produces the most stable, high-confidence archetype assignment? Which context generates the most variance or stress-response expression?
+
+The hypothesis: your natural archetype is most clearly expressed in the context where you are most at ease — where you score with the highest confidence and the fewest signs of stress-response behavior. The ease response (falling back into Supplier work) is most likely to appear in contexts where you feel safe; the stress response (reaching forward into Receiver work) is most likely to appear in demanding or threatening contexts.
+
+This connects the context model to the Supplier/Receiver stress and ease response theory: multi-track data makes it possible to distinguish "I am a Hacker" from "I act like a Hacker when under pressure at work (stress response) but I'm actually a Contrarian when relaxed at home."
+
+### Relationship Context as Signal
+
+Declaring a relationship network alongside each run (nicknames + guessed archetypes of key people in that context) provides a second layer of signal. The archetypal composition of someone's immediate social environment is not independent of their own expression — Hackers tend to find themselves near Contrarians, Legalists tend to work with Holy Warriors. A relationship network that is coherent with the taker's archetype is weak corroborating evidence; a relationship network that is consistently incoherent is a signal of either misidentification or situational stress expression.
+
+Relationship data is always self-reported and private. It never informs scoring, only interpretation.
+
 ### Model 1: Cognitive Orientation
 
 | | Taxes | Play |

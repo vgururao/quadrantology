@@ -28,6 +28,8 @@ Product feature roadmap, ordered by priority tier. Research track is in `RESEARC
 
 ## Tier 2 — Enrichment
 
+- **Context-aware test runs** — Each run can have a declared context (named institutional/relational frame) and a relationship set (nicknamed people + guessed archetypes + confidence). Contexts are persistent, reusable, and editable via inheritance across runs. Run records are extended with `context_id`, `context_snapshot`, and `archetype_distribution` fields (format_version 2 — see DATAMODEL.md). Multi-track logbook display shows separate arc per context; cross-context confidence comparison is the primary natural-preference signal. Relationship data is logbook-only: never in share URLs, research submissions, or circle exports. Implementation sequence: (1) data model in DATAMODEL.md ✅, (2) context declaration UI in test intro, (3) inheritance/edit flow, (4) run record extension, (5) multi-track logbook display, (6) cross-context analytics.
+
 - **Analytics page** — `logbook.html` serves as a stub for now (log of results, no chart). The full analytics page (trendline chart + commentary, unlocked at `min_runs`, richer at 5 and 10 runs) is deferred until the question bank, sampling logic, and subscription gating are solid.
 - **Bulk org admin UI** — admin page for generating code batches, viewing usage, exporting lists. Builds on existing `/api/admin/generate-codes`.
 

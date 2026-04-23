@@ -111,6 +111,87 @@ Appended to `quadrantology_history` each time the user completes a test. Newest 
 
 ---
 
+## Test Contexts and Relationships
+
+Stored in `quadrantology_contexts`. A context is a named, persistent institutional/relational frame that a user declares when taking a test. Contexts are reusable across runs via editable inheritance: when starting a new run the user can load a prior context, edit it (add/remove people, update archetype guesses), and proceed. The edited snapshot is frozen into the run record; the stored context may or may not be updated depending on user choice.
+
+### localStorage key: `quadrantology_contexts`
+
+Array of context objects, ordered by most-recently-used:
+
+```json
+{
+  "id":          "<client-generated UUID>",
+  "version":     "context-v1",
+  "created":     "<ISO 8601>",
+  "updated":     "<ISO 8601>",
+  "label":       "work — Acme Corp",
+  "description": "",
+  "relationships": [
+    {
+      "nickname":   "my manager",
+      "archetype":  "Contrarian",
+      "confidence": 0.7,
+      "notes":      ""
+    }
+  ]
+}
+```
+
+**Field notes:**
+- `id`: client-generated, used to group runs taken under the same context for multi-track trending
+- `label`: user-assigned, short, displayed in logbook track headers
+- `description`: optional freeform; not displayed by default
+- `relationships[].archetype`: the user's guess at this person's archetype; nullable if unknown
+- `relationships[].confidence`: user's self-reported certainty in their guess, 0.0–1.0; nullable if no guess
+- `relationships[].notes`: private freeform; never exported outside the logbook
+- Contexts may be renamed, edited, or deleted. Deletion does not alter historical run records (which embed a `context_snapshot`).
+
+**Privacy:** relationship data (nicknames + archetype guesses) is more sensitive than archetype scores. It must never appear in share URLs, research submissions, Personal Circle exports, or any payload outside the full logbook download.
+
+### Run record extension: context fields
+
+Added as `format_version: 2` fields on the v2 run record. All fields are nullable for backward compatibility with runs taken before context support was added.
+
+```json
+{
+  "version":        2,
+  "format_version": 2,
+  ...existing v2 fields...,
+
+  "context_id": "<UUID matching a quadrantology_contexts entry, or null>",
+  "context_snapshot": {
+    "label": "work — Acme Corp",
+    "relationships": [
+      {
+        "nickname":   "my manager",
+        "archetype":  "Contrarian",
+        "confidence": 0.7
+      }
+    ]
+  },
+
+  "archetype_distribution": {
+    "Hacker":       0.42,
+    "Contrarian":   0.18,
+    "Legalist":     0.12,
+    "Investigator": 0.15,
+    "HolyWarrior":  0.08,
+    "Operator":     0.05
+  }
+}
+```
+
+**Field notes:**
+- `context_id`: cross-reference to the stored context for grouping runs in multi-track display. Nullable (run taken without a context).
+- `context_snapshot`: a frozen copy of the context at run time. The run is self-describing even if the stored context is later edited or deleted. Includes only `label` and `relationships` — not the context `description` or metadata.
+- `context_snapshot.relationships[].notes`: omitted from the snapshot (too verbose; the full notes are in the stored context). Only nickname, archetype, and confidence are snapshotted.
+- `archetype_distribution`: probability-style map over all 6 archetypes, summing to 1.0. Derived from dimension scores at run time using the same algorithm that assigns `archetype` (the assigned archetype is the argmax). Replaces the implicit notion that scoring produces a single label — it always produces a distribution. Stored on every run going forward; absent on v2 `format_version: 1` records.
+
+**Inheritance flow:** "Inherit previous context" in the test intro loads the most recent `context_snapshot` from prior runs in the same context (by `context_id`), presents it as an editable form, and prefills `context_id`. The user may: (a) proceed without changes — the same snapshot is reused; (b) edit relationships and save to the stored context — both the stored context and the run's snapshot reflect the edit; (c) edit without saving — only the run's snapshot changes, the stored context is not updated.
+
+---
+
 ## Personal Circle Entries
 
 Stored in `quadrantology_circle`. Each entry is a point-in-time arc snapshot received from another person's share URL. Adding an entry requires a subscription; receiving and viewing a share URL is free.

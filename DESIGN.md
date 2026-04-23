@@ -53,4 +53,14 @@ The scoring algorithm is documented precisely enough that a competent programmer
 
 ---
 
+## 8. Archetypal expression is context-specific
+
+A person does not have a single archetype. They have a profile of archetypal tendencies that vary by institutional and relational context. The product should embrace this multiplicity rather than averaging it away into a single score.
+
+Every test run is a contextual measurement. Making the context explicit — named, persistent, attached to the run — converts an ambiguous measurement into a clean one. A user with three work runs and three family runs has two arcs, not one confused one. Multi-track trend display (separate arc per context) is not a complication of the core feature; it IS the core feature for users with more than one context.
+
+Natural preference is revealed comparatively across contexts, not by any single run or context. The context that produces the most stable, high-confidence archetype assignment over time is the strongest indicator of natural orientation. The context that produces the most variance or stress-response expression is a signal of situational pressure, not natural preference.
+
+**Privacy extension:** relationship data (the nicknames and guessed archetypes of real people in the user's life) is categorically more sensitive than archetype scores. It must never leave the logbook in any form — not in share URLs, not in research submissions, not in Personal Circle exports, not in Coach Mode imports unless the client explicitly includes it. The logbook download is the only authorized export path for relationship data.
+
 *Add principles here as they emerge from product decisions.*
