@@ -51,6 +51,7 @@ V2 is the first full public release on the Cloudflare Pages stack (`master` bran
 | 5 | **Multi-track context capability** — context declaration, relationship sets, format_version 2 run records, multi-track logbook display | ⬜ | `DEV_ROADMAP.md` Tier 1.5 |
 | 6 | **Full privacy-preserving logbook architecture** — context/relationship data never leaves logbook; research submissions stripped; format_version 2 enforced | 🟡 | `DATAMODEL.md` spec complete; implementation pending |
 | 7 | **Public theory model bundled with logbook export** — CC BY 4.0 canonical model JSON (`quadrantology-model-v1.json`) published and embedded in every logbook download alongside scoring model; sufficient for independent user analysis offline | ⬜ | `OPS.md`; `DATAMODEL.md` |
+| 8 | **Rewritten theory and archetype pages + embedded slide deck** — `theory.html` and all 6 archetype pages rewritten to current controlled vocabulary and theory; new canonical slide deck built and embedded in `theory.html`. Depends on theory baseline (SVG diagrams, sub-model language). Spans research track (content) and dev track (HTML). | ⬜ | `RESEARCH_ROADMAP.md` items 4, 9, 10 |
 
 **Legend:** ✅ done · 🟡 partial · ⬜ not started
 

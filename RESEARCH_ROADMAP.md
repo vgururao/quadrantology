@@ -78,7 +78,7 @@ Items ordered by dependency. Items 6 and 9 can run in parallel once item 5 is do
 
 - [ ] **3. Visualizations as projections** `[post-V2]` — Derive each of the three visualization modes (nested, side-by-side, 2×2-mirrored) as formal projections of the mathematical model: which graph properties each mode preserves, which it discards. Append to `research/VISUAL.md`. Makes visualization choices principled rather than ad hoc.
 
-- [ ] **4. Build canonical SVG diagram set** `[post-V2]` — Implement all diagrams: two-triangle graph with vertices, directed edges, relation type color coding, energy weight encoding for switching crises, emotion labels. Build all three modes from the same data source. Replace current one-off diagrams in `assets/`.
+- [ ] **4. Build canonical SVG diagram set** `[V2 blocker — prerequisite for items 9 and 10]` — Implement all diagrams: two-triangle graph with vertices, directed edges, relation type color coding, energy weight encoding for switching crises, emotion labels. Build all three modes from the same data source. Replace current one-off diagrams in `assets/`.
 
 - [ ] **5. Rewrite sub-models with consistent variable language** `[pre-audit — V2 blocker]` — Rewrite the 11 sub-model descriptions in `THEORY.md` (and eventually `understand.html`) using Temporal Horizon, Scarcity Structure, E/V as the three primary axes with all other variables explicitly derived from them.
 
@@ -88,6 +88,6 @@ Items ordered by dependency. Items 6 and 9 can run in parallel once item 5 is do
 
 - [ ] **8. Rethink synperson event grammar** `[post-V2]` — Revise `research/SYNPERSON_DESIGN.md` to use formal relationship types as the basis for interpersonal events, edge-table emotion labels as the affective grammar of transitions, and switching crisis model as the basis for major life events. Generate canonical event templates per edge type.
 
-- [ ] **9. Update site theory and archetype pages** `[post-V2]` — Rewrite `theory.html` and all 6 archetype pages on both `master` and `gh-pages` to use current controlled vocabulary (Evil Twin, Nemesis, Frustrator, Supplier, Receiver). Incorporate canonical SVG diagrams from item 4. Requires items 4 and 5.
+- [ ] **9. Update site theory and archetype pages** `[V2 gate — see STATUS.md gate 8]` — Rewrite `theory.html` and all 6 archetype pages on both `master` and `gh-pages` to use current controlled vocabulary (Evil Twin, Nemesis, Frustrator, Supplier, Receiver). Incorporate canonical SVG diagrams from item 4. Requires items 4 and 5.
 
-- [ ] **10. Build new slide deck** `[post-V2]` — Produce the canonical slide deck replacing superseded `deathAndTaxes.pptx`-era materials. Structure: opening 2×2, formal graph model, 6 archetypes with behavioral profiles, 5 relationship types, 11 sub-models, switching crises with emotion grammar, test methodology. Final synthesis of all theory track work.
+- [ ] **10. Build new slide deck and embed in `theory.html`** `[V2 gate — see STATUS.md gate 8]` — Produce the canonical slide deck replacing superseded `deathAndTaxes.pptx`-era materials. Structure: opening 2×2, formal graph model, 6 archetypes with behavioral profiles, 5 relationship types, 11 sub-models, switching crises with emotion grammar, test methodology. Final synthesis of all theory track work.
